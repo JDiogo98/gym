@@ -1,6 +1,7 @@
 "use client";
 
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { Area, AreaChart } from "recharts";
 
 import {
   ChartConfig,
@@ -8,8 +9,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { BadgeDollarSign } from "lucide-react";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card";
+import { BadgeDollarSign, TrendingUp } from "lucide-react";
 
 const chartData = [
   { month: "Janeiro", treinador1: 35, treinador2: 28, treinador3: 17 },
@@ -45,41 +46,72 @@ export default function MainChart() {
   return (
     <Card className="flex-1">
       <CardHeader>
-        <div className="flex items-center justify-center">
-          <CardTitle className="text-lg sm:text-xl text-gray-800 select-none">Desempenho dos/as treinadores/as</CardTitle>
-          <BadgeDollarSign className="ml-auto w-4 h-4"></BadgeDollarSign>
-        </div>
+        <CardTitle>Desempenho dos/as treinadores/as</CardTitle>
+        <CardDescription>
+          Relatório dos últimos 6 meses
+        </CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig} className="h-[250px]">
-          <BarChart accessibilityLayer data={chartData}>
-            <CartesianGrid vertical={true} />
+        <ChartContainer config={chartConfig}>
+          <AreaChart
+            accessibilityLayer
+            data={chartData}
+            margin={{
+              left: 12,
+              right: 12,
+            }}
+          >
+            <CartesianGrid vertical={false} />
             <XAxis
               dataKey="month"
               tickLine={false}
-              tickMargin={10}
               axisLine={false}
+              tickMargin={8}
               tickFormatter={(value) => value.slice(0, 3)}
             />
-            <ChartTooltip content={<ChartTooltipContent />} />
-            <Bar
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent indicator="dot" />}
+            />
+            <Area
               dataKey="treinador1"
+              type="natural"
               fill="var(--color-treinador1)"
-              radius={4}
+              fillOpacity={0.4}
+              stroke="var(--color-treinador1)"
+              stackId="a"
             />
-            <Bar
+            <Area
               dataKey="treinador2"
+              type="natural"
               fill="var(--color-treinador2)"
-              radius={4}
+              fillOpacity={0.4}
+              stroke="var(--color-treinador2)"
+              stackId="a"
             />
-            <Bar
+            <Area
               dataKey="treinador3"
+              type="natural"
               fill="var(--color-treinador3)"
-              radius={4}
+              fillOpacity={0.4}
+              stroke="var(--color-treinador3)"
+              stackId="a"
             />
-          </BarChart>
+          </AreaChart>
         </ChartContainer>
       </CardContent>
+      <CardFooter>
+        <div className="flex w-full items-start gap-2 text-sm">
+          <div className="grid gap-2">
+            <div className="flex items-center gap-2 font-medium leading-none">
+              Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+            </div>
+            <div className="flex items-center gap-2 leading-none text-muted-foreground">
+              January - June 2024
+            </div>
+          </div>
+        </div>
+      </CardFooter>
     </Card>
   );
 }

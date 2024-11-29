@@ -23,9 +23,9 @@ export function InformationCard({
 }: InformationCardProps) {
   return (
     <div>
-      <Card className="flex-1">
+      <Card className="flex-1 h-full">
         <CardHeader>
-          <div className="flex items-center justify-center">
+          <div className="text-base flex items-center justify-center">
             <CardTitle className="text-xl  text-gray-800 select-none">
               {title}
             </CardTitle>
@@ -36,12 +36,20 @@ export function InformationCard({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="text-lg sm:text-xl font-bold select-none">
-            {content}
-          </p>
+          <p className="text-lg sm:text-xl font-bold select-none">{content}</p>
         </CardContent>
         <CardFooter className="text-base sm:text-s text-gray-500 select-none">
-          <p>{evolution}</p>
+          <p
+            className={`${
+              evolution.startsWith("-")
+                ? "text-red-600"
+                : evolution.startsWith("+")
+                ? "text-green-600"
+                : "text-gray-400"
+            }`}
+          >
+            {evolution}
+          </p>
         </CardFooter>
       </Card>
     </div>

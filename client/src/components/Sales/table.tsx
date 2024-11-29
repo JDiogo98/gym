@@ -146,14 +146,14 @@ async function getData(): Promise<Payment[]> {
   ];
 }
 
-export default async function DemoPage() {
+export default async function LastTrains() {
   const data = await getData();
 
   return (
-    <ScrollArea className="h-[250px] rounded-md border p-4">
-      <div className="mx-auto py-10">
+    <div className="h-full flex">
+      <ScrollArea className="flex-1 max-h-[350px] overflow-y-auto rounded-md border">
         <DataTable columns={columns} data={data} />
-      </div>
-    </ScrollArea>
+      </ScrollArea>
+    </div>
   );
 }

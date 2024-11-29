@@ -33,15 +33,15 @@ const CardsInfo = [
 
 export default function Component() {
   return (
-    <div className="sm:ml-14 p-4">
-      <section className="grip grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="p-4 flex-1 ">
+      <section className="grip grid-cols-2 lg:grid-cols-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {CardsInfo.map((card) => (
             <InformationCard {...card} />
           ))}
         </div>
       </section>
-      <section className="mt-4 flex flex-col lg:flex-row gap-4">
+      <section className="mt-4 grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-4">
         <MainChart />
         <Sales />
       </section>

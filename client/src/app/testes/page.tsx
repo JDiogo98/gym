@@ -8,13 +8,11 @@ export default function Testes() {
   useEffect(() => {
     // Fazendo a requisição GET com Axios
     axios
-      .get("http://localhost:5000/api/data")
+      .get("api/data")
       .then((response) => setData(response.data))
       .catch((error) => console.error("Erro:", error));
   }, []);
 
-
-  
   return (
     <div>
       <h1>Resposta do Servidor:</h1>
