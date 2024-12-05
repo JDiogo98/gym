@@ -6,13 +6,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { EuroIcon } from "lucide-react";
+import { EuroIcon, Icon, LucideIcon } from "lucide-react";
 
 interface InformationCardProps {
   title?: string;
   description?: string;
   content?: string;
   evolution?: string;
+  icon?: LucideIcon;
 }
 
 export function InformationCard({
@@ -20,6 +21,7 @@ export function InformationCard({
   description = "",
   content = "",
   evolution = "",
+  icon: Icon, // Renomeado para usá-lo diretamente
 }: InformationCardProps) {
   return (
     <div>
@@ -29,7 +31,7 @@ export function InformationCard({
             <CardTitle className="text-xl  text-gray-800 select-none">
               {title}
             </CardTitle>
-            <EuroIcon className="ml-auto w-4 h-4"></EuroIcon>
+            {Icon && <Icon className="ml-auto w-5 h-5" />}
           </div>
           <CardDescription className="select-none text-base">
             {description}

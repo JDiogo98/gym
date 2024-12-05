@@ -1,6 +1,6 @@
 "use client";
 
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, Pie, XAxis } from "recharts";
 import { Area, AreaChart } from "recharts";
 
 import {
@@ -9,8 +9,15 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card";
-import { BadgeDollarSign, TrendingUp } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
+import { BadgeDollarSign, PieChartIcon, TrendingUp } from "lucide-react";
 
 const chartData = [
   { month: "Janeiro", treinador1: 35, treinador2: 28, treinador3: 17 },
@@ -46,8 +53,13 @@ export default function MainChart() {
   return (
     <Card className="flex-1">
       <CardHeader>
-        <CardTitle>Desempenho dos/as treinadores/as</CardTitle>
-        <CardDescription>
+        <div className="text-base flex items-center justify-center">
+          <CardTitle className="text-xl  text-gray-800 select-none">
+            Desempenho dos/as treinadores/as
+          </CardTitle>
+          <PieChartIcon className="ml-auto w-5 h-5"></PieChartIcon>
+        </div>
+        <CardDescription className="select-none text-base">
           Relatório dos últimos 6 meses
         </CardDescription>
       </CardHeader>

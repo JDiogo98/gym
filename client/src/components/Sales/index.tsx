@@ -1,12 +1,10 @@
-import { BadgeDollarSign, CircleDollarSign } from "lucide-react";
+import { BadgeDollarSign, CalendarClockIcon, CircleDollarSign } from "lucide-react";
 import {
   Card,
-  CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import DemoPage from "./table";
+import LastTrains from "./table";
 
 export function Sales() {
   return (
@@ -16,12 +14,10 @@ export function Sales() {
           <CardTitle className="text-lg sm:text-xl text-gray-700 select-none">
             Ultimos Treinos
           </CardTitle>
-          <BadgeDollarSign className="ml-auto w-4 h-4"></BadgeDollarSign>
+          <CalendarClockIcon className="ml-auto w-5 h-5"></CalendarClockIcon>
         </div>
       </CardHeader>
-      <CardContent>
-        <DemoPage></DemoPage>
-      </CardContent>
+        <LastTrains></LastTrains>
     </Card>
   );
 }

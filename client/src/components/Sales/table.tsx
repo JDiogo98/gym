@@ -150,7 +150,7 @@ export default async function LastTrains() {
   const data = await getData();
 
   return (
-    <div className="h-full flex">
+    <div className="flex flex-1 mx-3">
       <ScrollArea className="flex-1 max-h-[350px] overflow-y-auto rounded-md border">
         <DataTable columns={columns} data={data} />
       </ScrollArea>

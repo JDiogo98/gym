@@ -13,7 +13,13 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, MoreHorizontal, Sheet } from "lucide-react";
+import {
+  ArrowUpDown,
+  ChevronDown,
+  FileSearchIcon,
+  MoreHorizontal,
+  Sheet,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -36,8 +42,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { SheetEdit } from "@/components/Sheet";
 import { DeleteButton } from "@/components/DeleteButton";
+import { EditClient } from "@/components/Sheet/EditClient";
+import Link from "next/link";
 
 export const data: clientsData[] = [
   {
@@ -467,59 +474,105 @@ export const columns: ColumnDef<clientsData>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="capitalize ml-3 select-none font-bold">
+      <div className="capitalize ml-2 select-none text-xs lg:text-sm text-bold">
         {row.getValue("client")}
       </div>
     ),
   },
   {
     accessorKey: "coach",
-    header: "Treinador/a",
+    header: ({ column }) => {
+      return (
+        <Button
+          className="select-none hidden lg:flex"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Treinador
+          <ArrowUpDown />
+        </Button>
+      );
+    },
     cell: ({ row }) => (
-      <div className="capitalize select-none">{row.getValue("coach")}</div>
+      <div className="capitalize select-none hidden lg:flex">{row.getValue("coach")}</div>
     ),
   },
   {
     accessorKey: "registrationDate",
-    header: "Data de inscrição",
+    header: ({ column }) => {
+      return (
+        <Button
+          className="select-none hidden lg:flex"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Data de inscrição
+          <ArrowUpDown />
+        </Button>
+      );
+    },
     cell: ({ row }) => (
-      <div className="capitalize select-none">
+      <div className="capitalize select-none hidden lg:flex">
         {row.getValue("registrationDate")}
       </div>
     ),
   },
   {
     accessorKey: "academy",
-    header: "Academia",
+    header: ({ column }) => {
+      return (
+        <Button
+          className="select-none hidden lg:flex"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Academia
+          <ArrowUpDown />
+        </Button>
+      );
+    },
     cell: ({ row }) => (
-      <div className="capitalize select-none">{row.getValue("academy")}</div>
+      <div className="capitalize select-none hidden lg:flex">{row.getValue("academy")}</div>
     ),
   },
   {
     accessorKey: "lastTraining",
-    header: () => <div className="text-right select-none">Último Treino</div>,
-    cell: ({ row }) => {
+    header: ({ column }) => {
       return (
-        <div className="text-right font-medium select-none">
-          {row.getValue("lastTraining")}
-        </div>
+        <Button
+          className="select-none"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Último Treino
+          <ArrowUpDown />
+        </Button>
       );
     },
+    cell: ({ row }) => (
+      <div className="font-medium select-none">
+        {row.getValue("lastTraining")}
+      </div>
+    ),
   },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
       return (
-        <div className="flex justify-end gap-3">
-          <SheetEdit clientData={row.original}></SheetEdit>
-          <DeleteButton></DeleteButton>
+        <div className="flex justify-end gap-1  ">
+          <Link href={`clients/${row.original.id}`}>
+            <Button variant="outline">
+              <FileSearchIcon></FileSearchIcon>
+            </Button>
+          </Link>
+          <EditClient clientData={row.original} />
+          <DeleteButton />
         </div>
       );
     },
   },
 ];
-
 export default function ClientsTable() {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -549,18 +602,20 @@ export default function ClientsTable() {
   });
 
   return (
-    <div className="flex-1 p-4 lg:p-6 m-3">
+    <div className="p-4 lg:p-6">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filtrar..."
-          value={table.getState().globalFilter ?? ""}
-          onChange={(event) => table.setGlobalFilter(event.target.value)}
+          placeholder="Filtrar Clientes..."
+          value={(table.getColumn("client")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("client")?.setFilterValue(event.target.value)
+          }
           className="max-w-sm"
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
-              Colunas <ChevronDown />
+              Columns <ChevronDown />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -636,20 +691,8 @@ export default function ClientsTable() {
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">
-          De{" "}
-          {table.getState().pagination.pageIndex *
-            table.getState().pagination.pageSize +
-            1}
-          a{" "}
-          {Math.min(
-            (table.getState().pagination.pageIndex + 1) *
-              table.getState().pagination.pageSize,
-            table.getFilteredRowModel().rows.length
-          )}{" "}
-          de{" "}
-          {table.getFilteredRowModel().rows.length ||
-            table.getCoreRowModel().rows.length}{" "}
-          cliente(s).
+          {table.getFilteredSelectedRowModel().rows.length} of{" "}
+          {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
         <div className="space-x-2">
           <Button

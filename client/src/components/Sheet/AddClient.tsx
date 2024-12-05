@@ -19,25 +19,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-
-interface SheetEditProps {
-  clientData: clientsData;
-}
+import { PlusIcon } from "lucide-react";
 
 const academys = ["Coimbra", "Porto", "Braga"];
 const Trainers = ["Rafael Oliveira", "Carlos Nogueira", "Mariana Alves"];
 
-export function SheetEdit({ clientData }: SheetEditProps) {
+export function AddClient() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline">Editar</Button>
+        <Button variant="outline">
+          <PlusIcon></PlusIcon>
+          Adicionar
+        </Button>
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>
-          <SheetTitle>Editar cliente</SheetTitle>
+          <SheetTitle>Adicionar cliente</SheetTitle>
           <SheetDescription>
-            Faça alterações no perfil do cliente aqui. Clique em salvar quando
+            Adicione um novo perfil de cliente aqui. Clique em salvar quando
             terminar.
           </SheetDescription>
         </SheetHeader>
@@ -46,7 +46,7 @@ export function SheetEdit({ clientData }: SheetEditProps) {
             <Label htmlFor="client" className="text-right">
               Nome
             </Label>
-            <Input id="name" value={clientData.client} className="col-span-3" />
+            <Input id="name" className="col-span-3" />
           </div>
 
           <div className="grid grid-cols-4 items-center gap-4">
@@ -55,7 +55,7 @@ export function SheetEdit({ clientData }: SheetEditProps) {
             </Label>
             <Select>
               <SelectTrigger className="col-span-3">
-                <SelectValue placeholder={clientData.coach} />
+                <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 {Trainers.map((coach) => (
@@ -71,7 +71,7 @@ export function SheetEdit({ clientData }: SheetEditProps) {
             </Label>
             <Select>
               <SelectTrigger className="col-span-3">
-                <SelectValue placeholder={clientData.academy} />
+                <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 {academys.map((academy) => (
