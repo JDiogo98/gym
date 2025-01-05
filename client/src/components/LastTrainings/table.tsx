@@ -151,7 +151,7 @@ export default async function LastTrains() {
 
   return (
     <div className="flex flex-1 mx-3">
-      <ScrollArea className="flex-1 max-h-[350px] overflow-y-auto rounded-md border">
+      <ScrollArea className="flex-1 max-h-[350px]">
         <DataTable columns={columns} data={data} />
       </ScrollArea>
     </div>

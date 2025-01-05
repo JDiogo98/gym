@@ -13,25 +13,9 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import {
-  ArrowUpDown,
-  ChevronDown,
-  FileSearchIcon,
-  MoreHorizontal,
-  Sheet,
-} from "lucide-react";
+import { ArrowUpDown, FileSearchIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -45,6 +29,14 @@ import {
 import { DeleteButton } from "@/components/DeleteButton";
 import { EditClient } from "@/components/Sheet/EditClient";
 import Link from "next/link";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 export const data: clientsData[] = [
   {
@@ -458,99 +450,97 @@ export type clientsData = {
   coach: string;
 };
 
+const textClasses = "content-start select-none text-xs sm:text-sm ";
+
+export const buttonClasses = "p-1 sm:p-2 md:p-3 lg:p-4";
+
 export const columns: ColumnDef<clientsData>[] = [
   {
     accessorKey: "client",
-    header: ({ column }) => {
-      return (
-        <Button
-          className="select-none"
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Cliente
-          <ArrowUpDown />
-        </Button>
-      );
-    },
+    header: ({ column }) => (
+      <Button
+        className={`${textClasses}`}
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Cliente
+        <ArrowUpDown />
+      </Button>
+    ),
     cell: ({ row }) => (
-      <div className="capitalize ml-2 select-none text-xs lg:text-sm text-bold">
+      <div className={`capitalize ml-4 font-semibold ${textClasses}`}>
         {row.getValue("client")}
       </div>
     ),
   },
   {
     accessorKey: "coach",
-    header: ({ column }) => {
-      return (
-        <Button
-          className="select-none hidden lg:flex"
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Treinador
-          <ArrowUpDown />
-        </Button>
-      );
-    },
+    header: ({ column }) => (
+      <Button
+        className={`${textClasses} hidden lg:flex`}
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Treinador
+        <ArrowUpDown />
+      </Button>
+    ),
     cell: ({ row }) => (
-      <div className="capitalize select-none hidden lg:flex">{row.getValue("coach")}</div>
+      <div className={`capitalize hidden lg:flex ml-4  ${textClasses}`}>
+        {row.getValue("coach")}
+      </div>
     ),
   },
   {
     accessorKey: "registrationDate",
-    header: ({ column }) => {
-      return (
-        <Button
-          className="select-none hidden lg:flex"
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Data de inscrição
-          <ArrowUpDown />
-        </Button>
-      );
-    },
+    header: ({ column }) => (
+      <Button
+        className={`${textClasses} hidden lg:flex`}
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Inscrição
+        <ArrowUpDown />
+      </Button>
+    ),
     cell: ({ row }) => (
-      <div className="capitalize select-none hidden lg:flex">
+      <div className={`capitalize hidden  lg:flex ml-4 ${textClasses}`}>
         {row.getValue("registrationDate")}
       </div>
     ),
   },
   {
     accessorKey: "academy",
-    header: ({ column }) => {
-      return (
-        <Button
-          className="select-none hidden lg:flex"
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Academia
-          <ArrowUpDown />
-        </Button>
-      );
-    },
+    header: ({ column }) => (
+      <Button
+        className={`${textClasses} hidden lg:flex`}
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Academia
+        <ArrowUpDown />
+      </Button>
+    ),
     cell: ({ row }) => (
-      <div className="capitalize select-none hidden lg:flex">{row.getValue("academy")}</div>
+      <div className={`capitalize hidden lg:flex ml-4 ${textClasses}`}>
+        {row.getValue("academy")}
+      </div>
     ),
   },
   {
     accessorKey: "lastTraining",
-    header: ({ column }) => {
-      return (
-        <Button
-          className="select-none"
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Último Treino
-          <ArrowUpDown />
-        </Button>
-      );
-    },
+    header: ({ column }) => (
+      <Button
+        className={textClasses}
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Último
+        <ArrowUpDown />
+      </Button>
+    ),
     cell: ({ row }) => (
-      <div className="font-medium select-none">
+      <div className={`font-medium ml-4 ${textClasses}`}>
         {row.getValue("lastTraining")}
       </div>
     ),
@@ -558,21 +548,20 @@ export const columns: ColumnDef<clientsData>[] = [
   {
     id: "actions",
     enableHiding: false,
-    cell: ({ row }) => {
-      return (
-        <div className="flex justify-end gap-1  ">
-          <Link href={`clients/${row.original.id}`}>
-            <Button variant="outline">
-              <FileSearchIcon></FileSearchIcon>
-            </Button>
-          </Link>
-          <EditClient clientData={row.original} />
-          <DeleteButton />
-        </div>
-      );
-    },
+    cell: ({ row }) => (
+      <div className="flex justify-end gap-1">
+        <Link href={`clients/${row.original.id}`}>
+          <Button className={buttonClasses} variant="outline">
+            <FileSearchIcon />
+          </Button>
+        </Link>
+        <EditClient clientData={row.original} />
+        <DeleteButton />
+      </div>
+    ),
   },
 ];
+
 export default function ClientsTable() {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -602,7 +591,7 @@ export default function ClientsTable() {
   });
 
   return (
-    <div className="p-4 lg:p-6">
+    <div className="p-4 lg:p-6 min-w-full">
       <div className="flex items-center py-4">
         <Input
           placeholder="Filtrar Clientes..."
@@ -612,32 +601,6 @@ export default function ClientsTable() {
           }
           className="max-w-sm"
         />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Columns <ChevronDown />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
       </div>
       <div className="rounded-md border">
         <Table>
@@ -689,30 +652,39 @@ export default function ClientsTable() {
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
-        </div>
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Anterior
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Seguinte
-          </Button>
-        </div>
-      </div>
+      <Pagination className="mt-5 flex justify-start">
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              href="#"
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            />
+          </PaginationItem>
+          {Array.from({ length: table.getPageCount() }, (_, i) => i + 1).map(
+            (pageNumber) => (
+              <PaginationItem key={pageNumber}>
+                <PaginationLink
+                  href="#"
+                  onClick={() => table.setPageIndex(pageNumber - 1)}
+                  isActive={
+                    table.getState().pagination.pageIndex === pageNumber - 1
+                  }
+                >
+                  {pageNumber}
+                </PaginationLink>
+              </PaginationItem>
+            )
+          )}
+          <PaginationItem>
+            <PaginationNext
+              href="#"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
     </div>
   );
 }

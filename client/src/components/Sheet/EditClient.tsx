@@ -1,4 +1,4 @@
-import { clientsData } from "@/app/clients/page";
+import { buttonClasses, clientsData } from "@/app/clients/page";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -34,7 +34,7 @@ export function EditClient({ clientData }: SheetEditProps) {
       <SheetTrigger asChild>
         <Button
           variant="default"
-          className="bg-gray-500 text-white hover:bg-gray-700 transition-all duration-300 rounded-md"
+          className={`bg-gray-500 text-white hover:bg-gray-700 transition-all duration-300 rounded-md ${buttonClasses}`}
         >
           <ClipboardEditIcon />
         </Button>

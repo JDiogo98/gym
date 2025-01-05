@@ -1,3 +1,4 @@
+import { buttonClasses } from "@/app/clients/page";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,7 +17,7 @@ export function DeleteButton() {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive">
+        <Button variant="destructive" className={buttonClasses}>
           <Trash2Icon></Trash2Icon>
         </Button>
       </AlertDialogTrigger>
