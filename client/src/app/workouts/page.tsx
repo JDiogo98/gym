@@ -10,8 +10,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Table,
   TableBody,
@@ -20,16 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from "recharts";
+
 import Link from "next/link";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
@@ -111,7 +100,6 @@ export default function DashboardPage() {
               <SelectItem value="pedro">Pedro Oliveira</SelectItem>
             </SelectContent>
           </Select>
-
           <Select>
             <SelectTrigger className="w-full lg:w-[300px]">
               <SelectValue placeholder="Tipo de treino" />

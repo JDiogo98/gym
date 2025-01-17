@@ -14,24 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
-import {
-  Line,
-  LineChart,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-} from "recharts";
-import PhysicalEvolution from "@/components/ClientInformation/wheightEvolution";
+
 import {
   Select,
   SelectContent,
@@ -39,10 +22,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import WheightEvolution from "@/components/ClientInformation/wheightEvolution";
+import TrainingEvolution from "@/components/ClientInformation/trainingEvolution";
+import {
+  ActivityIcon,
+  ClipboardEditIcon,
+  PieChartIcon,
+  SaveIcon,
+} from "lucide-react";
+import { DeleteButton } from "@/components/DeleteButton";
 
 // Simulated data - in a real app, this would come from an API or database
 const clienteData = {
-  id: 1,
+  id: "1",
   name: "João Silva",
   sex: "Homem",
   contact: "912345678",
@@ -98,7 +90,7 @@ export default function DetalhesCliente() {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="p-4 w-full">
       <h1 className="text-2xl font-bold mb-6">{Title}</h1>
       <Card className="mb-6 w-full">
         <CardHeader>
@@ -157,53 +149,39 @@ export default function DetalhesCliente() {
               />
             </div>
           </div>
-          <div className="mt-4">
+          <div className="mt-4 flex gap-4">
             {editando ? (
-              <Button onClick={handleSave}>Salvar</Button>
+              <Button onClick={handleSave}>
+                <SaveIcon>n</SaveIcon>
+                Salvar
+              </Button>
             ) : (
-              <Button onClick={handleEdit}>Editar</Button>
+              <Button onClick={handleEdit}>
+                <ClipboardEditIcon />
+                Editar
+              </Button>
             )}
+            <DeleteButton
+              id={cliente.id}
+              name={cliente.name}
+              showText={true}
+            ></DeleteButton>
           </div>
         </CardContent>
       </Card>
       <div className="grid gap-4">
         <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <PhysicalEvolution></PhysicalEvolution>
-          <Card>
-            <CardHeader>
-              <CardTitle>Treinos Realizados</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ChartContainer
-                config={{
-                  quantidade: {
-                    label: "Quantidade de Treinos",
-                    color: "hsl(var(--chart-3))",
-                  },
-                }}
-                className=""
-              >
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={cliente.treinosRealizados}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="mes" />
-                    <YAxis />
-                    <ChartTooltip content={<ChartTooltipContent />} />
-                    <Legend />
-                    <Bar
-                      dataKey="quantidade"
-                      fill="var(--color-quantidade)"
-                      name="Quantidade de Treinos"
-                    />
-                  </BarChart>
-                </ResponsiveContainer>
-              </ChartContainer>
-            </CardContent>
-          </Card>
+          <WheightEvolution></WheightEvolution>
+          <TrainingEvolution></TrainingEvolution>
         </section>
         <Card className="mb-6">
           <CardHeader>
-            <CardTitle>Últimos Treinos</CardTitle>
+            <div className="text-base flex items-center justify-center">
+              <CardTitle className="text-xl  text-gray-800 select-none">
+                Últimos Treinos
+              </CardTitle>
+              <ActivityIcon className="ml-auto w-5 h-5"></ActivityIcon>
+            </div>{" "}
           </CardHeader>
           <CardContent>
             <Table>

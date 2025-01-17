@@ -1,14 +1,6 @@
 "use client";
-
-import { CartesianGrid, XAxis, YAxis } from "recharts";
-import { Area, AreaChart } from "recharts";
-
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
+import { TrendingUp, DumbbellIcon, TrendingDown } from "lucide-react";
+import { CartesianGrid, LabelList, Line, LineChart, XAxis } from "recharts";
 import {
   Card,
   CardContent,
@@ -16,34 +8,39 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../ui/card";
-import { PieChartIcon, TrendingUp } from "lucide-react";
+} from "@/components/ui/card";
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
 
 const chartData = [
-  { month: "Janeiro", wheight: 65 },
-  { month: "Março", wheight: 68 },
-  { month: "Abril", wheight: 63 },
-  { month: "Maio", wheight: 68 },
-  { month: "Junho", wheight: 62 },
-  { month: "Julho", wheight: 66 },
-  { month: "Agosto", wheight: 65 },
-  { month: "Setembro", wheight: 69 },
-  { month: "Outubro", wheight: 64 },
-  { month: "Novembro", wheight: 61 },
-  { month: "Dezembro", wheight: 60 },
+  { month: "Janeiro", tranings: 15 },
+  { month: "Março", tranings: 18 },
+  { month: "Abril", tranings: 13 },
+  { month: "Maio", tranings: 18 },
+  { month: "Junho", tranings: 12 },
+  { month: "Julho", tranings: 16 },
+  { month: "Agosto", tranings: 15 },
+  { month: "Setembro", tranings: 19 },
+  { month: "Outubro", tranings: 14 },
+  { month: "Novembro", tranings: 11 },
+  { month: "Dezembro", tranings: 10 },
 ];
 
 const chartConfig = {
-  wheight: {
-    label: "Peso",
+  trainings: {
+    label: "Treinos",
     color: "#ffac38",
   },
 } satisfies ChartConfig;
 
-export default function WheightEvolution() {
-  const title = "Evolução do Peso";
-  const description = "Evolução dos últimos 12 meses";
-  const progress = "Aumento de 5.3% no último mês";
+export default function TrainingEvolution() {
+  const title = "Treinos realizados";
+  const description = "Quatidade de treinos dos últimos 12 meses";
+  const progress = "Diminuição de 1% no último mês";
   const lastSixMonthsRange = "janeiro a dezembro de 2024";
 
   return (
@@ -53,7 +50,7 @@ export default function WheightEvolution() {
           <CardTitle className="text-xl  text-gray-800 select-none">
             {title}
           </CardTitle>
-          <PieChartIcon className="ml-auto w-5 h-5"></PieChartIcon>
+          <DumbbellIcon className="ml-auto w-5 h-5"></DumbbellIcon>
         </div>
         <CardDescription className="select-none text-base">
           {description}
@@ -61,11 +58,12 @@ export default function WheightEvolution() {
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <AreaChart
+          <LineChart
             accessibilityLayer
             data={chartData}
             margin={{
-              left: -20,
+              top: 20,
+              left: 12,
               right: 12,
             }}
           >
@@ -77,26 +75,30 @@ export default function WheightEvolution() {
               tickMargin={8}
               tickFormatter={(value) => value.slice(0, 3)}
             />
-            <YAxis
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              tickCount={3}
-            />
             <ChartTooltip
               cursor={false}
-              content={<ChartTooltipContent indicator="dot" />}
+              content={<ChartTooltipContent indicator="line" />}
             />
-
-            <Area
-              dataKey="wheight"
+            <Line
+              dataKey="tranings"
               type="natural"
-              fill="var(--color-wheight)"
-              fillOpacity={0.4}
-              stroke="var(--color-wheight)"
-              stackId="a"
-            />
-          </AreaChart>
+              stroke="var(--color-trainings)"
+              strokeWidth={2}
+              dot={{
+                fill: "var(--color-trainings)",
+              }}
+              activeDot={{
+                r: 6,
+              }}
+            >
+              <LabelList
+                position="top"
+                offset={12}
+                className="fill-foreground"
+                fontSize={12}
+              />
+            </Line>
+          </LineChart>
         </ChartContainer>
       </CardContent>
       <CardFooter>
@@ -104,7 +106,7 @@ export default function WheightEvolution() {
           <div className="grid gap-2">
             <div className="flex items-center gap-2 font-medium leading-none">
               {progress}
-              <TrendingUp className="h-4 w-4" />
+              <TrendingDown className="h-4 w-4" />
             </div>
             <div className="flex items-center gap-2 leading-none text-muted-foreground">
               {lastSixMonthsRange}

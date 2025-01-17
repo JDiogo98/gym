@@ -49,7 +49,7 @@ const CardsInfo = [
 
 export default function Component() {
   return (
-    <div className="h-screen cp-4 flex-1 px-4">
+    <div className="min-h-full flex-1 p-6 py-12 container">
       <section className="grid-cols-2 lg:grid-cols-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {CardsInfo.map((card) => (

@@ -1,25 +1,83 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
+import Carousel from "@/components/RegistationPage/Carousel";
+import AlternativeRegistration from "@/components/RegistationPage/AlternativeRegistation";
+import PinValidation from "@/components/RegistationPage/PinValidation";
 
-function App() {
-  const [message, setMessage] = useState("");
+export default function WorkoutRegistrationPage() {
+  const [showPinValidation, setShowPinValidation] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const { toast } = useToast();
 
-  // Fazendo a requisição GET para a API do servidor Express
-  useEffect(() => {
-    // A URL relativa será automaticamente resolvida para http://localhost:5000/api/message
-    fetch("/api/message")
-      .then((response) => response.json()) // Converte a resposta para JSON
-      .then((data) => setMessage(data.message)) // Atualiza o estado com a mensagem
-      .catch((error) => console.error("Erro:", error));
-  }, []);
+  const handlePhoneSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (phoneNumber.length === 9) {
+      // Aqui você normalmente validaria o número de telefone e enviaria um PIN
+      // Para este exemplo, vamos apenas mostrar a validação do PIN
+      setShowPinValidation(true);
+    } else {
+      toast({
+        title: "Número inválido",
+        description:
+          "Por favor, insira um número de telefone válido com 9 dígitos.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handlePinValidated = () => {
+    // Aqui você normalmente registraria o treino
+    toast({
+      title: "Treino registrado com sucesso!",
+      description: "Seu treino foi registrado na base de dados.",
+    });
+    setShowPinValidation(false);
+    setPhoneNumber("");
+  };
 
   return (
-    <div>
-      <h1>Mensagem do Servidor:</h1>
-      {message ? <p>{message}</p> : <p>Carregando...</p>}
+    <div className="min-h-screen bg-background flex flex-col md:flex-row">
+      <div className="md:w-1/2">
+        <Carousel />
+      </div>
+      <div className="md:w-1/2 p-4 flex flex-col justify-center items-center">
+        <AlternativeRegistration />
+        <div className="w-full max-w-sm space-y-4">
+          <h1 className="text-xl font-bold text-center">Registro de Treino</h1>
+          {!showPinValidation ? (
+            <form onSubmit={handlePhoneSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <label
+                  htmlFor="phone"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Digite seu número de telefone:
+                </label>
+                <Input
+                  id="phone"
+                  type="number"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  placeholder="Número de telefone"
+                  className="w-full"
+                  min="100000000"
+                  max="999999999"
+                  required
+                />
+              </div>
+              <Button type="submit" className="w-full">
+                Submeter
+              </Button>
+            </form>
+          ) : (
+            <PinValidation onValidated={handlePinValidated} />
+          )}
+        </div>
+      </div>
     </div>
   );
 }
-
-export default App;

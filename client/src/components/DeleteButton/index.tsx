@@ -12,13 +12,19 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Trash2Icon } from "lucide-react";
+interface DeleteButtonProps {
+  id: string;
+  name: string;
+  showText?: boolean;
+}
 
-export function DeleteButton({ id, name }: { id: string; name: string }) {
+export function DeleteButton({ id, name, showText = false }: DeleteButtonProps) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button variant="destructive" className={buttonClasses}>
           <Trash2Icon />
+          {showText && <span>Eliminar</span>} 
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
@@ -35,7 +41,6 @@ export function DeleteButton({ id, name }: { id: string; name: string }) {
           <AlertDialogCancel>Cancelar</AlertDialogCancel>
           <AlertDialogAction
             onClick={() => {
-              // Aqui você pode chamar a função de exclusão com o id
               console.log(`Config de eliminar o cliente ${id}`);
             }}
           >

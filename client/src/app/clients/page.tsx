@@ -556,7 +556,7 @@ export const columns: ColumnDef<clientsData>[] = [
           </Button>
         </Link>
         <EditClient clientData={row.original} />
-        <DeleteButton />
+        <DeleteButton id={row.original.id} name={row.original.client} />
       </div>
     ),
   },
@@ -652,39 +652,44 @@ export default function ClientsTable() {
           </TableBody>
         </Table>
       </div>
-      <Pagination className="mt-5 flex justify-start">
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious
-              href="#"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            />
-          </PaginationItem>
-          {Array.from({ length: table.getPageCount() }, (_, i) => i + 1).map(
-            (pageNumber) => (
-              <PaginationItem key={pageNumber}>
-                <PaginationLink
-                  href="#"
-                  onClick={() => table.setPageIndex(pageNumber - 1)}
-                  isActive={
-                    table.getState().pagination.pageIndex === pageNumber - 1
-                  }
-                >
-                  {pageNumber}
-                </PaginationLink>
-              </PaginationItem>
-            )
-          )}
-          <PaginationItem>
-            <PaginationNext
-              href="#"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
+      <div className="flex justify-evenly">
+        <Pagination className="mt-5 flex justify-start">
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                href="#"
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
+              />
+            </PaginationItem>
+            {Array.from({ length: table.getPageCount() }, (_, i) => i + 1).map(
+              (pageNumber) => (
+                <PaginationItem key={pageNumber}>
+                  <PaginationLink
+                    href="#"
+                    onClick={() => table.setPageIndex(pageNumber - 1)}
+                    isActive={
+                      table.getState().pagination.pageIndex === pageNumber - 1
+                    }
+                  >
+                    {pageNumber}
+                  </PaginationLink>
+                </PaginationItem>
+              )
+            )}
+            <PaginationItem>
+              <PaginationNext
+                href="#"
+                onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+        <Link className="mt-5 flex" href={"/clients/add"}>
+          <Button variant="outline">Adicionar Cliente</Button>
+        </Link>
+      </div>
     </div>
   );
 }
