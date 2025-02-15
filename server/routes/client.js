@@ -106,7 +106,7 @@ router.get("/:id", async (req, res) => {
       where: { id: clientId },
       include: [
         {
-          model: AcademyID,
+          model: Academy,
           as: "academy",
           attributes: ["name"],
         },

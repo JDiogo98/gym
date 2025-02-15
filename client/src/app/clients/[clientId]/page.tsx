@@ -38,6 +38,7 @@ import { Toaster, toast } from "sonner";
 import UserNotFound from "@/components/UserNotFound";
 import LoadingSpinner from "@/components/Loading";
 import { describe } from "node:test";
+import { ClientInterface } from "../../../../types/client";
 
 const clienteData = {
   id: "1",
