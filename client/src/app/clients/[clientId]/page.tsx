@@ -145,10 +145,10 @@ export default function DetalhesCliente() {
         toast.error("Não foi possível encontrar os dados do cliente.", {
           duration: 5000,
           description: error.response.data.error,
-        }),
-          setTimeout(() => {
-            window.history.back();
-          }, 5000);
+        });
+        setTimeout(() => {
+          window.history.back();
+        }, 5000);
       });
   }, [clientId]);
 
@@ -192,6 +192,7 @@ export default function DetalhesCliente() {
                     <SelectContent>
                       <SelectItem value="M">Masculino</SelectItem>
                       <SelectItem value="F">Feminino</SelectItem>
+                      <SelectItem value="O">Outro</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -277,7 +278,6 @@ export default function DetalhesCliente() {
           </CardContent>
         </Card>
       </div> */}
-      <Toaster />
     </div>
   );
 }

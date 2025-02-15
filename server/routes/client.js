@@ -119,7 +119,9 @@ router.get("/:id", async (req, res) => {
     });
 
     if (!client) {
-      return res.status(404).json({ error: "Cliente não encontrado." });
+      return res
+        .status(404)
+        .json({ error: "Cliente não existe na Base de Dados." });
     }
 
     // JD - Responder com os dados do cliente
