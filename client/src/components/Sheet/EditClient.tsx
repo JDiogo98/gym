@@ -1,4 +1,4 @@
-import { buttonClasses, clientsData } from "@/app/clients/page";
+import { buttonClasses } from "@/app/clients/page";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -52,7 +52,7 @@ export function EditClient({ clientData }: SheetEditProps) {
             <Label htmlFor="client" className="text-right">
               Nome
             </Label>
-            <Input id="name" value={clientData.client} className="col-span-3" />
+            <Input id="name" value={clientData.name} className="col-span-3" />
           </div>
 
           <div className="grid grid-cols-4 items-center gap-4">

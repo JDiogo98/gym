@@ -40,7 +40,7 @@ export default function WorkoutRegistrationPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col md:flex-row">
+    <div className="bg-background flex flex-col md:flex-row flex-1">
       <div className="md:w-1/2">
         <Carousel />
       </div>

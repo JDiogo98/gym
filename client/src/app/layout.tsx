@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/ui/app-sidebar";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -14,7 +15,6 @@ const geistMono = localFont({
   variable: "--font-geist-mono",
   weight: "100 900",
 });
-
 
 export default function RootLayout({
   children,
@@ -30,6 +30,7 @@ export default function RootLayout({
             <SidebarTrigger />
             {children}
           </main>
+          <Toaster richColors />
         </SidebarProvider>
       </body>
     </html>

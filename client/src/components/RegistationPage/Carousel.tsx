@@ -44,9 +44,9 @@ export default function Carousel({
       <div ref={carouselRef} className="overflow-hidden h-full">
         <div className="flex h-full">
           {[...Array(5)].map((_, index) => (
-            <div key={index} className="flex-[0_0_100%] min-w-0 h-full">
+            <div key={index} className="flex-[0_0_100%]">
               <img
-                src={`../../../public/CarouselImg/Image-${index + 1}.jpg`}
+                src={`../../../CarouselImg/Image-${index + 1}.jpg`}
                 alt={`Imagem ${index + 1}`}
                 className="w-full h-full object-cover"
               />
