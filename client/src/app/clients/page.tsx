@@ -39,28 +39,30 @@ import {
 } from "@/components/ui/pagination";
 import { Toaster } from "@/components/ui/toaster";
 
-import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
 import LoadingSpinner from "@/components/Loading";
 import api from "../../../lib/api";
+import dayjs from "dayjs";
 
 export type clientsDataTypes = {
   id: number; // O id agora parece ser um número
   name: string;
-  phoneNumber: string;
+  phone_number: string;
   sex: "M" | "F" | "Other"; // Valores possíveis para o campo sex
-  lastTraining: string | null;
-  birthDate: string;
-  registrationDate: string; // Data de registro
-  createdAt: string; // Data de criação
-  updatedAt: string; // Data de atualização
-  academyId: number; // Id da academia
-  coachId: number; // Id do treinador
+  birth_date: string;
+  registration_date: string; // Data de registro
+  created_at: string; // Data de criação
+  updated_at: string; // Data de atualização
+  academy_id: number; // Id da academia
+  coach_id: number; // Id do treinador
   academy: {
     name: string; // Nome da academia
   };
   coach: {
     name: string; // Nome do treinador
+  };
+  trainings: {
+    date: string; // Data do último treino
   };
 };
 
@@ -82,8 +84,6 @@ export default function ClientsTable() {
   const [clientsData, setClientsData] = React.useState<
     clientsDataTypes[] | null
   >(null);
-
-  const { toast } = useToast();
 
   const columns: ColumnDef<clientsDataTypes>[] = [
     {
@@ -124,7 +124,7 @@ export default function ClientsTable() {
       ),
     },
     {
-      accessorKey: "registrationDate",
+      accessorKey: "registration_date",
       header: ({ column }) => (
         <Button
           className={`${textClasses} hidden lg:flex`}
@@ -136,8 +136,8 @@ export default function ClientsTable() {
         </Button>
       ),
       cell: ({ row }) => (
-        <div className={`capitalize hidden  lg:flex ml-4 ${textClasses}`}>
-          {row.getValue("registrationDate")}
+        <div className={`capitalize hidden lg:flex ml-4 ${textClasses}`}>
+          {dayjs(row.getValue("registration_date")).format("DD/MM/YYYY")}
         </div>
       ),
     },
@@ -161,7 +161,7 @@ export default function ClientsTable() {
       ),
     },
     {
-      accessorKey: "lastTraining",
+      accessorKey: "trainings",
       header: ({ column }) => (
         <Button
           className={textClasses}
@@ -172,11 +172,28 @@ export default function ClientsTable() {
           <ArrowUpDown />
         </Button>
       ),
-      cell: ({ row }) => (
-        <div className={`font-medium ml-4 ${textClasses}`}>
-          {row.getValue("lastTraining") ?? "Sem treinos"}
-        </div>
-      ),
+      cell: ({ row }) => {
+        const trainings = row.getValue(
+          "trainings"
+        ) as clientsDataTypes["trainings"][];
+
+        // Verifica se há treinos e pega o mais recente
+        const lastTraining =
+          trainings.length > 0
+            ? trainings.sort(
+                (a, b) =>
+                  new Date(b.date).getTime() - new Date(a.date).getTime()
+              )[0].date
+            : "Sem treinos";
+
+        return (
+          <div className={`font-medium ml-4 ${textClasses}`}>
+            {lastTraining !== "Sem treinos"
+              ? dayjs(lastTraining).format("DD/MM/YYYY")
+              : "Sem treinos"}
+          </div>
+        );
+      },
     },
     {
       id: "actions",
@@ -190,7 +207,7 @@ export default function ClientsTable() {
           </Link>
           <EditClient clientData={row.original} />
           <DeleteButton
-            id={row.original.id}
+            id={row.original.id.toString()}
             name={row.original.name}
             handleDelete={() =>
               handleDeleteClient(row.original.id, row.original.name)

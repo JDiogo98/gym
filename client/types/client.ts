@@ -1,13 +1,13 @@
 export interface ClientInterface {
   id: number | string;
   name: string;
-  phoneNumber: string;
+  phone_number: string;
   sex: string;
   academy: number;
   coach: number;
-  lastTraining: Date | null;
-  birthDate: Date;
-  registrationDate: Date;
-  createdAt: Date;
-  updatedAt: Date;
+  last_training: Date | null;
+  birth_date: Date;
+  registration_date: Date;
+  created_at: Date;
+  updated_at: Date;
 }

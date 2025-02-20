@@ -4,11 +4,10 @@ const db = require("./models");
 const PORT = process.env.PORT || 3001;
 
 db.sequelize
-  .sync() // Apaga e recria todas as tabelas
+  .sync({ force: false })
   .then(() => {
     console.log("Banco de dados sincronizado com sucesso!");
 
-    // Inicia o servidor
     app.listen(PORT, () => {
       console.log(`Servidor rodando na porta ${PORT}`);
     });

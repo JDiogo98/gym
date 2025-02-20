@@ -1,12 +1,12 @@
 module.exports = (sequelize, DataTypes) => {
-  const Clients = sequelize.define(
+  const Client = sequelize.define(
     "Client",
     {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      phoneNumber: {
+      phone_number: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
@@ -15,15 +15,15 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      lastTraining: {
+      last_training: {
         type: DataTypes.DATE,
         allowNull: true,
       },
-      birthDate: {
+      birth_date: {
         type: DataTypes.DATE,
         allowNull: false,
       },
-      registrationDate: {
+      registration_date: {
         type: DataTypes.DATE,
         allowNull: false,
         defaultValue: DataTypes.NOW,
@@ -35,13 +35,19 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   // Relacionamentos - Devem ser definidos externamente
-  Clients.associate = (models) => {
-    Clients.belongsTo(models.Academy, {
-      foreignKey: "academyId",
+  Client.associate = (models) => {
+    Client.belongsTo(models.Academy, {
+      foreignKey: "academy_id",
       as: "academy",
     });
-    Clients.belongsTo(models.Coach, { foreignKey: "coachId", as: "coach" });
+    Client.belongsTo(models.Coach, {
+      foreignKey: "coach_id",
+      as: "coach",
+    });
+    Client.hasMany(models.Training, {
+      foreignKey: "client_id",
+      as: "trainings",
+    });
   };
-
-  return Clients;
+  return Client;
 };

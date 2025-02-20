@@ -7,49 +7,49 @@ async function populateDatabase() {
       name: "Academia Central",
       address: "Rua Principal, 123",
       location: "Lisboa",
-      zipCode: "1000-100",
+      zip_code: "1000-100",
     });
 
     const academy2 = await Academy.create({
       name: "Academia Norte",
       address: "Avenida Norte, 456",
       location: "Porto",
-      zipCode: "2000-200",
+      zip_code: "2000-200",
     });
 
     const coach1 = await Coach.create({
       name: "Carlos Silva",
-      phoneNumber: "912345678",
+      phone_number: "912345678",
       sex: "M",
-      birthDate: "1985-05-15",
+      birth_date: "1985-05-15",
     });
 
     const coach2 = await Coach.create({
       name: "Ana Martins",
-      phoneNumber: "923456789",
+      phone_number: "923456789",
       sex: "F",
-      birthDate: "1990-07-20",
+      birth_date: "1990-07-20",
     });
 
     // JD -  Inserir dados na tabela Client
     await Client.create({
       name: "João Pereira",
-      phoneNumber: "931234567",
+      phone_number: "931234567",
       sex: "M",
-      birthDate: "1995-04-01",
-      registrationDate: new Date(),
-      academyId: academy1.id,
-      coachId: coach1.id,
+      birth_date: "1995-04-01",
+      registration_date: new Date(),
+      academy_id: academy1.id,
+      coach_id: coach1.id,
     });
 
     await Client.create({
       name: "Maria Costa",
-      phoneNumber: "937654321",
+      phone_number: "937654321",
       sex: "F",
-      birthDate: "1992-08-10",
-      registrationDate: new Date(),
-      academyId: academy2.id,
-      coachId: coach2.id,
+      birth_date: "1992-08-10",
+      registration_date: new Date(),
+      academy_id: academy2.id,
+      coach_id: coach2.id,
     });
 
     console.log("Banco de dados populado com sucesso!");

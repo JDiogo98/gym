@@ -10,9 +10,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      type: {
-        type: DataTypes.STRING,
-      },
       notes: {
         type: DataTypes.STRING,
       },
@@ -23,8 +20,19 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   Training.associate = (models) => {
-    Training.belongsTo(models.Client, { foreignKey: "clientId" });
-    Training.belongsTo(models.Coach, { foreignKey: "coachId" });
+    Training.belongsTo(models.Client, {
+      foreignKey: "client_id",
+      as: "client",
+    });
+    Training.belongsTo(models.Coach, { foreignKey: "coach_id", as: "coach" });
+    Training.belongsTo(models.Academy, {
+      foreignKey: "academy_id",
+      as: "academy",
+    });
+    Training.belongsTo(models.TrainingType, {
+      foreignKey: "training_type_id",
+      as: "trainingType",
+    });
   };
 
   return Training;

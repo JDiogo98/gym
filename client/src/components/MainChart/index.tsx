@@ -55,6 +55,13 @@ export default function MainChart() {
   const progress = "Aumento de 5.3% no último mês";
   const lastSixMonthsRange = "agosto a dezembro de 2024";
 
+
+
+
+
+
+  
+
   return (
     <Card className="flex-1">
       <CardHeader>

@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      zipCode: {
+      zip_code: {
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -27,19 +27,22 @@ module.exports = (sequelize, DataTypes) => {
     {
       timestamps: true,
       defaultScope: {
-        attributes: { exclude: ["visible"] }, // JD -  Oculta "visible" por padrão
+        attributes: { exclude: ["visible"] }, // Oculta "visible" por padrão
       },
       scopes: {
         withHiddenFields: {
-          attributes: { include: ["visible"] }, // JD -  Permite obter o  "visible" quando necessário
+          attributes: { include: ["visible"] }, // Permite obter "visible" quando necessário
         },
       },
     }
   );
 
-  // JD - Definição de Associação (Uma academia tem vários clientes)
+  // Definição de Associação: Uma academia tem vários clientes
   Academy.associate = (models) => {
-    Academy.hasMany(models.Client, { foreignKey: "academyId", as: "clients" });
+    Academy.hasMany(models.Client, {
+      foreignKey: "academy_id",
+      as: "clients",
+    });
   };
 
   return Academy;

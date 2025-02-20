@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      phoneNumber: {
+      phone_number: {
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      birthDate: {
+      birth_date: {
         type: DataTypes.DATE,
         allowNull: false,
       },
@@ -40,10 +40,10 @@ module.exports = (sequelize, DataTypes) => {
   // Relacionamentos - Devem ser definidos externamente
   Coach.associate = (models) => {
     // JD - Coaches com Academies
-    Coach.belongsTo(models.Academy, { foreignKey: "academyId" });
+    Coach.belongsTo(models.Academy, { foreignKey: "academy_id" });
 
     // JD - Definição de Associação Coaches com Clients
-    Coach.hasMany(models.Client, { foreignKey: "coachId" });
+    Coach.hasMany(models.Client, { foreignKey: "coach_id" });
   };
 
   return Coach;

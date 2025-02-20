@@ -10,12 +10,12 @@ import PinValidation from "@/components/RegistationPage/PinValidation";
 
 export default function WorkoutRegistrationPage() {
   const [showPinValidation, setShowPinValidation] = useState(false);
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [phone_number, setphone_number] = useState("");
   const { toast } = useToast();
 
   const handlePhoneSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (phoneNumber.length === 9) {
+    if (phone_number.length === 9) {
       // Aqui você normalmente validaria o número de telefone e enviaria um PIN
       // Para este exemplo, vamos apenas mostrar a validação do PIN
       setShowPinValidation(true);
@@ -36,7 +36,7 @@ export default function WorkoutRegistrationPage() {
       description: "Seu treino foi registrado na base de dados.",
     });
     setShowPinValidation(false);
-    setPhoneNumber("");
+    setphone_number("");
   };
 
   return (
@@ -60,8 +60,8 @@ export default function WorkoutRegistrationPage() {
                 <Input
                   id="phone"
                   type="number"
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  value={phone_number}
+                  onChange={(e) => setphone_number(e.target.value)}
                   placeholder="Número de telefone"
                   className="w-full"
                   min="100000000"

@@ -43,7 +43,7 @@ const formSchema = z.object({
   name: z.string().min(2, {
     message: "O nome deve ter pelo menos 2 caracteres.",
   }),
-  phoneNumber: z
+  phone_number: z
     .string()
     .trim()
     .min(9, {
@@ -52,17 +52,17 @@ const formSchema = z.object({
     .max(9, {
       message: "O número de telefone deve ter 9 dígitos.",
     }),
-  birthDate: z.date({
+  birth_date: z.date({
     required_error: "A data de nascimento é obrigatória.",
   }),
-  registrationDate: z.date({
+  registration_date: z.date({
     required_error: "A data de inscrição é obrigatória.",
   }),
   sex: z.enum(["M", "F", "O"], {
     required_error: "Por favor, selecione um gênero.",
   }),
-  academyId: z.string().nullable().optional(),
-  coachId: z.string().nullable().optional(),
+  academy_id: z.string().nullable().optional(),
+  coach_id: z.string().nullable().optional(),
 });
 
 export default function AddClientPage() {
@@ -78,12 +78,12 @@ export default function AddClientPage() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      phoneNumber: "",
-      birthDate: undefined,
-      registrationDate: undefined,
+      phone_number: "",
+      birth_date: undefined,
+      registration_date: undefined,
       sex: undefined,
-      academyId: null,
-      coachId: null,
+      academy_id: null,
+      coach_id: null,
     },
   });
 
@@ -91,8 +91,8 @@ export default function AddClientPage() {
     // JD - Garantir que os valores de academia e treinador são números inteiros
     const formattedValues = {
       ...values,
-      academyId: values.academyId ? parseInt(values.academyId) : null,
-      coachId: values.coachId ? parseInt(values.coachId) : null,
+      academy_id: values.academy_id ? parseInt(values.academy_id) : null,
+      coach_id: values.coach_id ? parseInt(values.coach_id) : null,
     };
 
     console.log("aqui os valores", formattedValues);
@@ -163,7 +163,7 @@ export default function AddClientPage() {
             />
             <FormField
               control={form.control}
-              name="phoneNumber"
+              name="phone_number"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>N.º Telemóvel</FormLabel>
@@ -176,7 +176,7 @@ export default function AddClientPage() {
             />
             <FormField
               control={form.control}
-              name="birthDate"
+              name="birth_date"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>Data de Nascimento</FormLabel>
@@ -218,7 +218,7 @@ export default function AddClientPage() {
 
             <FormField
               control={form.control}
-              name="registrationDate"
+              name="registration_date"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>Data de Inscrição</FormLabel>
@@ -294,7 +294,7 @@ export default function AddClientPage() {
             />
             <FormField
               control={form.control}
-              name="academyId"
+              name="academy_id"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Academia (opcional)</FormLabel>
@@ -307,12 +307,12 @@ export default function AddClientPage() {
                     <SelectContent>
                       <SelectItem value={null}>Nenhuma academia</SelectItem>
                       {avaliableAcademies &&
-                        avaliableAcademies.map((academyId) => (
+                        avaliableAcademies.map((academy_id) => (
                           <SelectItem
-                            key={academyId.id}
-                            value={academyId.id.toString()}
+                            key={academy_id.id}
+                            value={academy_id.id.toString()}
                           >
-                            {academyId.name}
+                            {academy_id.name}
                           </SelectItem>
                         ))}
                     </SelectContent>
@@ -323,7 +323,7 @@ export default function AddClientPage() {
             />
             <FormField
               control={form.control}
-              name="coachId"
+              name="coach_id"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Treinador (opcional)</FormLabel>
@@ -339,12 +339,12 @@ export default function AddClientPage() {
                     <SelectContent>
                       <SelectItem value={null}>Nenhum treinador</SelectItem>
                       {avaliableCoaches &&
-                        avaliableCoaches.map((coachId) => (
+                        avaliableCoaches.map((coach_id) => (
                           <SelectItem
-                            key={coachId.id}
-                            value={coachId.id.toString()}
+                            key={coach_id.id}
+                            value={coach_id.id.toString()}
                           >
-                            {coachId.name}
+                            {coach_id.name}
                           </SelectItem>
                         ))}
                     </SelectContent>

@@ -199,9 +199,9 @@ export default function DetalhesCliente() {
                 <div>
                   <Label htmlFor="contact">Telemóvel</Label>
                   <Input
-                    id="phoneNumber"
-                    name="phoneNumber"
-                    value={clientData.phoneNumber}
+                    id="phone_number"
+                    name="phone_number"
+                    value={clientData.phone_number}
                     onChange={handleChange}
                     disabled={!editMode}
                   />
@@ -210,9 +210,9 @@ export default function DetalhesCliente() {
               <div>
                 <Label htmlFor="dataInscricao">Data de Inscrição</Label>
                 <Input
-                  id="registrationDate"
-                  name="registrationDate"
-                  value={clientData.registrationDate}
+                  id="registration_date"
+                  name="registration_date"
+                  value={clientData.registration_date}
                   onChange={handleChange}
                   disabled={!editMode}
                 />

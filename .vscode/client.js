@@ -40,43 +40,43 @@ router.post("/", async (req, res) => {
   try {
     const {
       name,
-      phoneNumber,
-      birthDate,
-      registrationDate,
+      phone_number,
+      birth_date,
+      registration_date,
       sex,
       academy,
       coach,
     } = req.body;
 
     // JD - Validação simples dos campos obrigatórios
-    if (!name || !phoneNumber || !birthDate || !registrationDate || !sex) {
+    if (!name || !phone_number || !birth_date || !registration_date || !sex) {
       return res
         .status(400)
         .json({ error: "Todos os campos são obrigatórios." });
     }
 
     // JD - Garantir que as datas sejam convertidas corretamente
-    const formattedBirthDate = new Date(birthDate);
-    const formattedRegistrationDate = new Date(registrationDate);
+    const formattedbirth_date = new Date(birth_date);
+    const formattedregistration_date = new Date(registration_date);
 
     // Formatar as datas para garantir que são aceitas pelo Sequelize
-    if (isNaN(formattedBirthDate) || isNaN(formattedRegistrationDate)) {
+    if (isNaN(formattedbirth_date) || isNaN(formattedregistration_date)) {
       return res.status(400).json({ error: "Formato de data inválido." });
     }
 
     // Garantir que os campos 'academy' e 'coach' sejam inteiros
     const formattedClient = {
       name,
-      phoneNumber,
-      birthDate: formattedBirthDate,
-      registrationDate: formattedRegistrationDate,
+      phone_number,
+      birth_date: formattedbirth_date,
+      registration_date: formattedregistration_date,
       sex,
       academy: parseInt(academy), // Certifique-se de que os valores são inteiros
       coach: parseInt(coach), // Certifique-se de que os valores são inteiros
     };
 
     // Verificar se o número de telefone já existe
-    const existingClient = await client.findOne({ where: { phoneNumber } });
+    const existingClient = await client.findOne({ where: { phone_number } });
     if (existingClient) {
       return res
         .status(400)
@@ -140,9 +140,9 @@ router.put("/:id", async (req, res) => {
 
     const {
       name,
-      phoneNumber,
-      birthDate,
-      registrationDate,
+      phone_number,
+      birth_date,
+      registration_date,
       sex,
       academy,
       coach,
@@ -156,11 +156,11 @@ router.put("/:id", async (req, res) => {
 
     // Atualizar os campos do cliente
     client.name = name || client.name;
-    client.phoneNumber = phoneNumber || client.phoneNumber;
-    client.birthDate = birthDate ? new Date(birthDate) : client.birthDate;
-    client.registrationDate = registrationDate
-      ? new Date(registrationDate)
-      : client.registrationDate;
+    client.phone_number = phone_number || client.phone_number;
+    client.birth_date = birth_date ? new Date(birth_date) : client.birth_date;
+    client.registration_date = registration_date
+      ? new Date(registration_date)
+      : client.registration_date;
     client.sex = sex || client.sex;
     client.academy = academy ? parseInt(academy) : client.academy;
     client.coach = coach ? parseInt(coach) : client.coach;
