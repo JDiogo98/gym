@@ -2,48 +2,62 @@ module.exports = (sequelize, DataTypes) => {
   const Coach = sequelize.define(
     "Coach",
     {
-      name: {
+      coachId: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        field: "coach_id",
+      },
+      coachName: {
         type: DataTypes.STRING,
         allowNull: false,
+        field: "coach_name",
       },
-      phone_number: {
+      coachPhoneNumber: {
         type: DataTypes.STRING,
         allowNull: false,
+        field: "coach_phone_number",
       },
-      sex: {
+      coachSex: {
         type: DataTypes.STRING,
         allowNull: false,
+        field: "coach_sex",
       },
-      birth_date: {
+      coachBirthDate: {
         type: DataTypes.DATE,
         allowNull: false,
+        field: "coach_birth_date",
       },
-      visible: {
+      coachVisible: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: true,
+        field: "coach_visible",
       },
     },
     {
       timestamps: true,
+      underscored: true,
       defaultScope: {
-        attributes: { exclude: ["visible"] }, // JD -  Oculta "visible" por padrão
+        attributes: { exclude: ["coachVisible"] },
       },
       scopes: {
         withHiddenFields: {
-          attributes: { include: ["visible"] }, // JD -  Permite obter o  "visible" quando necessário
+          attributes: { include: ["coachVisible"] },
         },
       },
     }
   );
 
-  // Relacionamentos - Devem ser definidos externamente
   Coach.associate = (models) => {
-    // JD - Coaches com Academies
-    Coach.belongsTo(models.Academy, { foreignKey: "academy_id" });
-
-    // JD - Definição de Associação Coaches com Clients
-    Coach.hasMany(models.Client, { foreignKey: "coach_id" });
+    Coach.hasMany(models.Client, {
+      foreignKey: "coachId",
+      as: "clients",
+    });
+    Coach.hasMany(models.Training, {
+      foreignKey: "coachId",
+      as: "trainings",
+    });
   };
 
   return Coach;

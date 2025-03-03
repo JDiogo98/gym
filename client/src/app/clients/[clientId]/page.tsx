@@ -33,12 +33,12 @@ import { DeleteButton } from "@/components/DeleteButton";
 import { useParams } from "next/navigation";
 import api from "@/../../client/lib/api";
 
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 
 import UserNotFound from "@/components/UserNotFound";
 import LoadingSpinner from "@/components/Loading";
-import { describe } from "node:test";
 import { ClientInterface } from "../../../../types/client";
+import dayjs from "dayjs";
 
 const clienteData = {
   id: "1",
@@ -104,16 +104,16 @@ export default function DetalhesCliente() {
 
     if (clientData) {
       api
-        .put(`api/clients/${clientData.id}`, clientData)
+        .put(`api/clients/${clientData.clientId}`, clientData)
         .then((response) => {
           setClient(response.data);
           toast.success(
-            `Os dados do/a ${clientData.name} foram atualizados com sucesso!`
+            `Os dados do/a ${clientData.clientName} foram atualizados com sucesso!`
           );
         })
         .catch((error) => {
           toast.error(
-            `Não foi possível atualizar os dados do/a ${clientData.name}, tente novamente.`,
+            `Não foi possível atualizar os dados do/a ${clientData.clientName}, tente novamente.`,
             {
               description: error.response.data.error,
             }
@@ -172,7 +172,7 @@ export default function DetalhesCliente() {
                   <Input
                     id="name"
                     name="name"
-                    value={clientData.name}
+                    value={clientData.clientName}
                     onChange={handleChange}
                     disabled={!editMode}
                   />
@@ -180,9 +180,9 @@ export default function DetalhesCliente() {
                 <div>
                   <Label htmlFor="sex">Sexo</Label>
                   <Select
-                    value={clientData.sex}
+                    value={clientData.clientSex}
                     onValueChange={(value) =>
-                      setClient({ ...clientData, sex: value })
+                      setClient({ ...clientData, clientSex: value })
                     }
                     disabled={!editMode}
                   >
@@ -199,9 +199,9 @@ export default function DetalhesCliente() {
                 <div>
                   <Label htmlFor="contact">Telemóvel</Label>
                   <Input
-                    id="phone_number"
-                    name="phone_number"
-                    value={clientData.phone_number}
+                    id="clientPhoneNumber"
+                    name="clientPhoneNumber"
+                    value={clientData.clientPhoneNumber}
                     onChange={handleChange}
                     disabled={!editMode}
                   />
@@ -210,11 +210,18 @@ export default function DetalhesCliente() {
               <div>
                 <Label htmlFor="dataInscricao">Data de Inscrição</Label>
                 <Input
-                  id="registration_date"
-                  name="registration_date"
-                  value={clientData.registration_date}
+                  id="clientRegistrationDate"
+                  name="clientRegistrationDate"
+                  value={
+                    clientData.clientRegistrationDate
+                      ? dayjs(clientData.clientRegistrationDate).format(
+                          "YYYY-MM-DD"
+                        )
+                      : ""
+                  }
                   onChange={handleChange}
                   disabled={!editMode}
+                  type="date"
                 />
               </div>
             </div>
@@ -231,8 +238,8 @@ export default function DetalhesCliente() {
                 </Button>
               )}
               <DeleteButton
-                id={String(clientData.id)}
-                name={clientData.name}
+                id={String(clientData.clientId)}
+                name={clientData.clientName}
                 showText={true}
                 handleDelete={() => handleDelete} // Aqui não faz nada porque não é necessário
               ></DeleteButton>
@@ -250,7 +257,7 @@ export default function DetalhesCliente() {
         <Card className="mb-6">
           <CardHeader>
             <div className="text-base flex items-center justify-center">
-              <CardTitle className="text-xl  text-gray-800 select-none">
+              <CardTitle className="text-xl select-none">
                 Últimos Treinos
               </CardTitle>
               <ActivityIcon className="ml-auto w-5 h-5"></ActivityIcon>
@@ -266,7 +273,7 @@ export default function DetalhesCliente() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {cliente.ultimosTreinos.map((treino, index) => (
+                {clienteData.ultimosTreinos.map((treino, index) => (
                   <TableRow key={index}>
                     <TableCell>{treino.data}</TableCell>
                     <TableCell>{treino.tipo}</TableCell>

@@ -1,3 +1,5 @@
+"use client";
+
 import LoadingSpinner from "@/components/Loading";
 import {
   Card,

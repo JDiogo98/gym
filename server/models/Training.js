@@ -2,35 +2,48 @@ module.exports = (sequelize, DataTypes) => {
   const Training = sequelize.define(
     "Training",
     {
-      date: {
+      trainingId: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        field: "training_id",
+      },
+      trainingDate: {
         type: DataTypes.DATE,
         allowNull: false,
+        field: "training_date",
       },
-      duration: {
+      trainingDuration: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        field: "training_duration",
       },
-      notes: {
+      trainingNotes: {
         type: DataTypes.STRING,
+        field: "training_notes",
       },
     },
     {
       timestamps: true,
+      underscored: true,
     }
   );
 
   Training.associate = (models) => {
     Training.belongsTo(models.Client, {
-      foreignKey: "client_id",
+      foreignKey: "clientId",
       as: "client",
     });
-    Training.belongsTo(models.Coach, { foreignKey: "coach_id", as: "coach" });
+    Training.belongsTo(models.Coach, {
+      foreignKey: "coachId",
+      as: "coach",
+    });
     Training.belongsTo(models.Academy, {
-      foreignKey: "academy_id",
+      foreignKey: "academyId",
       as: "academy",
     });
     Training.belongsTo(models.TrainingType, {
-      foreignKey: "training_type_id",
+      foreignKey: "trainingTypeId",
       as: "trainingType",
     });
   };

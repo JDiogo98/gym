@@ -1,15 +1,31 @@
 "use client";
 
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import React, { useState } from "react";
+
+import { LastTrainigs } from "@/components/LastTrainings";
+import api from "../../../lib/api";
+import { toast } from "sonner";
+import { TrainingInterface } from "@/components/LastTrainings/columns";
+import WorkoutCards, { WorkoutCardProps } from "./workoutCards";
+import CoachesTotalTrainings from "@/components/WorkoutsData/CoachesChart";
+
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+
+import FiltersComponent, { FiltersInterface } from "./filters";
+
 import {
   Table,
   TableBody,
@@ -18,177 +34,115 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { CalendarIcon } from "lucide-react";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
-import { cn } from "@/lib/utils";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { CoachesTotalTrainigs } from "@/components/WorkoutsData/CoachesChart";
 
-
-const topClients = [
-  { name: "Ana Rodrigues", workouts: 20 },
-  { name: "Carlos Mendes", workouts: 18 },
-  { name: "Beatriz Ferreira", workouts: 15 },
-  { name: "Daniel Costa", workouts: 12 },
-  { name: "Eva Martins", workouts: 10 },
-];
-
-export default function DashboardPage() {
-  const [dateRange, setDateRange] = useState<{ from: Date; to: Date }>({
-    from: new Date(new Date().setDate(new Date().getDate() - 30)),
-    to: new Date(),
+export default function WorkoutsPage() {
+  const [filters, setFilters] = useState<FiltersInterface>({
+    startDate: null,
+    endDate: null,
+    coachId: null,
+    trainingTypeId: null,
+    academyId: null,
   });
 
+  const topClients = [
+    { name: "João Silva", workouts: 15 },
+    { name: "Maria Oliveira", workouts: 23 },
+    { name: "Carlos Santos", workouts: 10 },
+    { name: "Fernanda Souza", workouts: 30 },
+    { name: "Ana Costa", workouts: 18 },
+  ];
+  const [loading, setLoading] = useState<boolean>(true);
+
+  const [coachesTotalTrainings, setCoachesTotalTrainings] = useState<
+    { coach: string; totalTraining: number }[] | null
+  >(null);
+
+  const [cardStats, setCardStats] = useState<WorkoutCardProps[] | null>(null);
+
+  // JD - Use Effect para buscar dados da página
+  React.useEffect(() => {
+    let isMounted = true;
+    setLoading(true);
+
+    const fetchFilteredData = async () => {
+      try {
+        const [filteredLastTrainings, filteredCardStats] = await Promise.all([
+          api.get("/api/workout/filteredLastTrainings", {
+            params: {
+              startDate:
+                filters.startDate ||
+                new Date(new Date().setDate(new Date().getDate() - 30)),
+              endDate: filters.endDate || new Date(),
+              coachId: filters.coachId || null,
+              trainingTypeId: filters.trainingTypeId || null,
+              academyId: filters.academyId || null,
+            },
+          }),
+          api.get("api/workout/filteredCardsInfo", {
+            params: {
+              startDate:
+                filters.startDate ||
+                new Date(new Date().setDate(new Date().getDate() - 30)),
+              endDate: filters.endDate || new Date(),
+              coachId: filters.coachId || null,
+              trainingTypeId: filters.trainingTypeId || null,
+              academyId: filters.academyId || null,
+            },
+          }),
+          // api.get("api/workout/coachesChart", {
+          //   params: {
+          //     startDate:
+          //       filters.startDate ||
+          //       new Date(new Date().setDate(new Date().getDate() - 30)),
+          //     endDate: filters.endDate || new Date(),
+          //     coachId: filters.coachId || null,
+          //     trainingTypeId: filters.trainingTypeId || null,
+          //     academyId: filters.academyId || null,
+          //   },
+          // }),
+        ]);
+
+        if (isMounted) {
+          setTimeout(() => {
+            setCardStats(filteredCardStats.data);
+            // setCoachesTotalTrainings(filteredCoachesTotalTrainigs.data);
+            setLoading(false);
+          }, 1000);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        toast.error("Ocorreu um erro ao buscar os dados.");
+      }
+    };
+
+    fetchFilteredData();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [filters]);
+
   return (
-    <div className="container mx-auto p-4">
+    <div className="container p-4">
       <h1 className="text-2xl font-bold mb-6">Resumo dos Treinos</h1>
 
-      <div className="grid gap-4 mb-6">
-        <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:flex lg:space-x-4">
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant={"outline"}
-                className={cn(
-                  "w-full lg:w-[300px] justify-start text-left font-normal",
-                  !dateRange && "text-muted-foreground"
-                )}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {dateRange?.from ? (
-                  dateRange.to ? (
-                    <>
-                      {format(dateRange.from, "LLL dd, y", { locale: ptBR })} -{" "}
-                      {format(dateRange.to, "LLL dd, y", { locale: ptBR })}
-                    </>
-                  ) : (
-                    format(dateRange.from, "LLL dd, y", { locale: ptBR })
-                  )
-                ) : (
-                  <span>Selecione um intervalo</span>
-                )}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
-              <Calendar
-                initialFocus
-                mode="range"
-                defaultMonth={dateRange?.from}
-                selected={dateRange}
-                onSelect={setDateRange}
-                numberOfMonths={2}
-              />
-            </PopoverContent>
-          </Popover>
+      <FiltersComponent setFilters={setFilters} />
 
-          <Select>
-            <SelectTrigger className="w-full lg:w-[300px]">
-              <SelectValue placeholder="Selecione o treinador" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Todos os treinadores</SelectItem>
-              <SelectItem value="joao">João Silva</SelectItem>
-              <SelectItem value="maria">Maria Santos</SelectItem>
-              <SelectItem value="pedro">Pedro Oliveira</SelectItem>
-            </SelectContent>
-          </Select>
-          <Select>
-            <SelectTrigger className="w-full lg:w-[300px]">
-              <SelectValue placeholder="Tipo de treino" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Todos os tipos</SelectItem>
-              <SelectItem value="cardio">Cardio</SelectItem>
-              <SelectItem value="strength">Musculação</SelectItem>
-              <SelectItem value="yoga">Yoga</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Select>
-            <SelectTrigger className="w-full lg:w-[300px]">
-              <SelectValue placeholder="Academia" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Todas as localizações</SelectItem>
-              <SelectItem value="coimbra">Coimbra</SelectItem>
-              <SelectItem value="porto">Porto</SelectItem>
-              <SelectItem value="west">Leiria</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+      <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mb-6">
+        <WorkoutCards loading={loading} stats={cardStats}></WorkoutCards>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-6">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Total de Treinos
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">35</div>
-            <p className="text-xs text-muted-foreground">
-              +20% em relação ao período anterior
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Clientes Ativos
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">12</div>
-            <p className="text-xs text-muted-foreground">
-              +5% em relação ao período anterior
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Média de Treinos por Cliente
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">2.8</div>
-            <p className="text-xs text-muted-foreground">
-              +0.3 em relação ao período anterior
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Nota Média dos Treinos
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">4.6</div>
-            <p className="text-xs text-muted-foreground">
-              +0.2 em relação ao período anterior
-            </p>
-          </CardContent>
-        </Card>
-      </div>
+      <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-[1fr_2fr] mb-6">
+        <CoachesTotalTrainings filters={filters} />
 
-      <div className="grid gap-4 md:grid-cols-[1fr_3fr] mb-6">
-        <CoachesTotalTrainigs></CoachesTotalTrainigs>
         <Card>
           <CardHeader>
             <CardTitle>Top Clientes por Número de Treinos</CardTitle>
           </CardHeader>
-          <CardContent>
-            <Table>
+          <CardContent className="overflow-x-auto">
+            <Table className="min-w-[300px]">
               <TableHeader>
                 <TableRow>
                   <TableHead>Nome</TableHead>
@@ -219,44 +173,9 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
       </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Últimos Treinos</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Data</TableHead>
-                <TableHead>Cliente</TableHead>
-                <TableHead>Treinador</TableHead>
-                <TableHead>Tipo</TableHead>
-                <TableHead>Localização</TableHead>
-                <TableHead></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {[...Array(5)].map((_, index) => (
-                <TableRow key={index}>
-                  <TableCell>
-                    {format(new Date(2024, 2, 15 - index), "dd/MM/yyyy")}
-                  </TableCell>
-                  <TableCell>Cliente {index + 1}</TableCell>
-                  <TableCell>Treinador {(index % 3) + 1}</TableCell>
-                  <TableCell>Tipo {(index % 3) + 1}</TableCell>
-                  <TableCell>Localização {(index % 3) + 1}</TableCell>
-                  <TableCell>
-                    <Button variant="link" asChild>
-                      <Link href={`/workouts/${index + 1}`}>Ver detalhes</Link>
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+      <div className="flex-1">
+        <LastTrainigs filters={filters} />
+      </div>
     </div>
   );
 }

@@ -2,46 +2,62 @@ module.exports = (sequelize, DataTypes) => {
   const Academy = sequelize.define(
     "Academy",
     {
-      name: {
+      academyId: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        field: "academy_id",
+      },
+      academyName: {
         type: DataTypes.STRING,
         allowNull: false,
+        field: "academy_name",
       },
-      address: {
+      academyAddress: {
         type: DataTypes.STRING,
         allowNull: false,
+        field: "academy_address",
       },
-      location: {
+      academyLocation: {
         type: DataTypes.STRING,
         allowNull: false,
+        field: "academy_location",
       },
-      zip_code: {
+      academyZipCode: {
         type: DataTypes.STRING,
         allowNull: false,
+        field: "academy_zip_code",
       },
-      visible: {
+      academyVisible: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: true,
+        field: "academy_visible",
       },
     },
     {
       timestamps: true,
+      underscored: true,
+      tableName: "academies",
       defaultScope: {
-        attributes: { exclude: ["visible"] }, // Oculta "visible" por padrão
+        attributes: { exclude: ["academyVisible"] },
       },
       scopes: {
         withHiddenFields: {
-          attributes: { include: ["visible"] }, // Permite obter "visible" quando necessário
+          attributes: { include: ["academyVisible"] },
         },
       },
     }
   );
 
-  // Definição de Associação: Uma academia tem vários clientes
   Academy.associate = (models) => {
     Academy.hasMany(models.Client, {
-      foreignKey: "academy_id",
+      foreignKey: "academyId",
       as: "clients",
+    });
+    Academy.hasMany(models.Training, {
+      foreignKey: "academyId",
+      as: "trainings",
     });
   };
 

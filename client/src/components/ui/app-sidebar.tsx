@@ -58,7 +58,7 @@ export function AppSidebar() {
       <SidebarHeader />
       <SidebarContent>
         <SidebarGroup />
-        <SidebarGroupLabel className="sm:text-base lg:text-l text-slate-900 mb-3">
+        <SidebarGroupLabel className="sm:text-base lg:text-l mb-3 ml-4">
           Navegação
         </SidebarGroupLabel>
         <SidebarGroupContent>
@@ -67,7 +67,7 @@ export function AppSidebar() {
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton asChild>
                   <a href={item.url}>
-                    <item.icon className="text-slate-950" />
+                    <item.icon className="h-6 w-7 ml-4 " />
                     <p className="sm:text-base mx-3 lg:text-l">{item.title}</p>
                   </a>
                 </SidebarMenuButton>

@@ -11,7 +11,6 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import axios from "axios";
 import { Trash2Icon } from "lucide-react";
 import { toast } from "sonner";
 import api from "../../../lib/api";

@@ -1,3 +1,5 @@
+"use client";
+
 import LoadingSpinner from "@/components/Loading";
 import {
   Card,
@@ -39,7 +41,9 @@ export function ThisMonthCard() {
   return (
     <div>
       <Card className="flex-1 h-full">
-        {loading && <LoadingSpinner text="Carregar treinos..."></LoadingSpinner>}
+        {loading && (
+          <LoadingSpinner text="Carregar treinos..."></LoadingSpinner>
+        )}
         {response && (
           <div>
             <CardHeader>

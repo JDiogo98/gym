@@ -7,17 +7,16 @@ import { useToast } from "@/hooks/use-toast";
 import Carousel from "@/components/RegistationPage/Carousel";
 import AlternativeRegistration from "@/components/RegistationPage/AlternativeRegistation";
 import PinValidation from "@/components/RegistationPage/PinValidation";
+import React from "react";
 
 export default function WorkoutRegistrationPage() {
   const [showPinValidation, setShowPinValidation] = useState(false);
-  const [phone_number, setphone_number] = useState("");
+  const [phone_number, setphone_number] = useState("9");
   const { toast } = useToast();
 
   const handlePhoneSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (phone_number.length === 9) {
-      // Aqui você normalmente validaria o número de telefone e enviaria um PIN
-      // Para este exemplo, vamos apenas mostrar a validação do PIN
       setShowPinValidation(true);
     } else {
       toast({
@@ -30,13 +29,24 @@ export default function WorkoutRegistrationPage() {
   };
 
   const handlePinValidated = () => {
-    // Aqui você normalmente registraria o treino
     toast({
       title: "Treino registrado com sucesso!",
       description: "Seu treino foi registrado na base de dados.",
     });
     setShowPinValidation(false);
-    setphone_number("");
+    setphone_number("9");
+  };
+
+  const handleNumberClick = (num: string) => {
+    if (phone_number.length < 9) {
+      setphone_number((prev) => prev + num);
+    }
+  };
+
+  const handleDelete = () => {
+    if (phone_number.length > 1) {
+      setphone_number((prev) => prev.slice(0, -1));
+    }
   };
 
   return (
@@ -59,15 +69,25 @@ export default function WorkoutRegistrationPage() {
                 </label>
                 <Input
                   id="phone"
-                  type="number"
+                  type="text"
                   value={phone_number}
-                  onChange={(e) => setphone_number(e.target.value)}
-                  placeholder="Número de telefone"
+                  readOnly
                   className="w-full"
-                  min="100000000"
-                  max="999999999"
-                  required
                 />
+                <div className="grid grid-cols-3 gap-2">
+                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((num) => (
+                    <div
+                      key={num}
+                      onClick={() => handleNumberClick(num.toString())}
+                      className="w-full h-16 flex items-center justify-center bg-gray-200 hover:bg-gray-300 text-lg font-semibold rounded-md shadow-md cursor-pointer"
+                    >
+                      {num}
+                    </div>
+                  ))}
+                </div>
+                <Button onClick={handleDelete} className="col-span-3">
+                  Apagar
+                </Button>
               </div>
               <Button type="submit" className="w-full">
                 Submeter

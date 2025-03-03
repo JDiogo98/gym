@@ -1,7 +1,7 @@
 const express = require("express");
 const dayjs = require("dayjs");
 
-const { Client, Training, Coach, Academy } = require("../models");
+const { Client, Training, Coach, Academy, TrainingType } = require("../models");
 const { Op } = require("sequelize");
 
 const router = express.Router();
@@ -14,23 +14,39 @@ router.get("/lastTrainings", async (req, res) => {
         {
           model: Client,
           as: "client",
-          attributes: ["name"],
+          attributes: ["clientName"],
+          required: true,
         },
         {
           model: Coach,
           as: "coach",
-          attributes: ["name"],
+          attributes: ["coachName"],
+          required: true,
+        },
+        {
+          model: Academy,
+          as: "academy",
+          attributes: ["academyName"],
+          required: true,
+        },
+        {
+          model: TrainingType,
+          as: "trainingType",
+          attributes: ["trainingTypeName"],
+          required: true,
         },
       ],
       limit: 30,
-      order: [["date", "ASC"]],
+      order: [["trainingDate", "DESC"]],
     });
 
     const formattedTrainings = listOfLast30Trainings.map((training) => ({
-      id: training.id,
-      date: dayjs(training.date).format("DD/MM - HH:mm"),
-      client: training.client.name,
-      coach: training.coach.name,
+      traningId: training.trainingId,
+      trainingDate: dayjs(training.trainingDate).format("DD/MM - HH:mm"),
+      trainingClient: training.client.clientName,
+      trainingCoach: training.coach.coachName,
+      trainingAcademy: training.academy.academyName,
+      trainingTrainingTypeName: training.trainingType.trainingTypeName,
     }));
 
     res.status(200).json(formattedTrainings);
@@ -48,7 +64,7 @@ router.get("/activeClients", async (req, res) => {
 
     const clientsLast30Days = await Training.findAll({
       where: {
-        date: {
+        trainingDate: {
           [Op.gte]: thirtyDaysAgo,
         },
       },
@@ -56,15 +72,15 @@ router.get("/activeClients", async (req, res) => {
         {
           model: Client,
           as: "client",
-          attributes: ["id"],
+          attributes: ["clientId"],
         },
       ],
-      group: ["client.id"],
+      group: ["clientId"],
     });
 
     const clientsPrevious30Days = await Training.findAll({
       where: {
-        date: {
+        trainingDate: {
           [Op.gte]: sixtyDaysAgo,
           [Op.lt]: thirtyDaysAgo,
         },
@@ -73,10 +89,10 @@ router.get("/activeClients", async (req, res) => {
         {
           model: Client,
           as: "client",
-          attributes: ["id"],
+          attributes: ["clientId"],
         },
       ],
-      group: ["client.id"],
+      group: ["clientId"],
     });
 
     const activeClientsLast30Days = clientsLast30Days.length;
@@ -114,7 +130,7 @@ router.get("/thisMonth", async (req, res) => {
 
     const trainingsThisMonth = await Training.findAll({
       where: {
-        date: {
+        trainingDate: {
           [Op.gte]: startOfCurrentMonth,
         },
       },
@@ -122,7 +138,7 @@ router.get("/thisMonth", async (req, res) => {
 
     const trainingsPreviousMonth = await Training.findAll({
       where: {
-        date: {
+        trainingDate: {
           [Op.gte]: startOfPreviousMonth,
           [Op.lt]: startOfCurrentMonth,
         },
@@ -156,7 +172,7 @@ router.get("/averageTrainings", async (req, res) => {
 
     const trainingsLast30Days = await Training.findAll({
       where: {
-        date: {
+        trainingDate: {
           [Op.gte]: thirtyDaysAgo,
         },
       },
@@ -164,14 +180,14 @@ router.get("/averageTrainings", async (req, res) => {
         {
           model: Client,
           as: "client",
-          attributes: ["id"],
+          attributes: ["clientId"],
         },
       ],
     });
 
     const trainingsPrevious30Days = await Training.findAll({
       where: {
-        date: {
+        trainingDate: {
           [Op.gte]: sixtyDaysAgo,
           [Op.lt]: thirtyDaysAgo,
         },
@@ -180,16 +196,16 @@ router.get("/averageTrainings", async (req, res) => {
         {
           model: Client,
           as: "client",
-          attributes: ["id"],
+          attributes: ["clientId"],
         },
       ],
     });
 
     const clientsLast30Days = new Set(
-      trainingsLast30Days.map((t) => t.client.id)
+      trainingsLast30Days.map((t) => t.clientId)
     );
     const clientsPrevious30Days = new Set(
-      trainingsPrevious30Days.map((t) => t.client.id)
+      trainingsPrevious30Days.map((t) => t.clientId)
     );
 
     const averageTrainingsLast30Days =

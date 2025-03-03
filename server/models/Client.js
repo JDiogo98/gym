@@ -2,52 +2,62 @@ module.exports = (sequelize, DataTypes) => {
   const Client = sequelize.define(
     "Client",
     {
-      name: {
+      clientId: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        field: "client_id",
+      },
+      clientName: {
         type: DataTypes.STRING,
         allowNull: false,
+        field: "client_name",
       },
-      phone_number: {
+      clientPhoneNumber: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
+        field: "client_phone_number",
       },
-      sex: {
+      clientSex: {
         type: DataTypes.STRING,
         allowNull: false,
+        field: "client_sex",
       },
-      last_training: {
-        type: DataTypes.DATE,
-        allowNull: true,
-      },
-      birth_date: {
+      clientBirthDate: {
         type: DataTypes.DATE,
         allowNull: false,
+        field: "client_birth_date",
       },
-      registration_date: {
+      clientRegistrationDate: {
         type: DataTypes.DATE,
         allowNull: false,
         defaultValue: DataTypes.NOW,
+        field: "client_registration_date",
       },
     },
     {
       timestamps: true,
+      underscored: true,
+      tableName: "clients",
     }
   );
 
-  // Relacionamentos - Devem ser definidos externamente
   Client.associate = (models) => {
     Client.belongsTo(models.Academy, {
-      foreignKey: "academy_id",
+      foreignKey: "academyId",
       as: "academy",
     });
     Client.belongsTo(models.Coach, {
-      foreignKey: "coach_id",
+      foreignKey: "coachId",
       as: "coach",
+      onDelete: "SET NULL",
     });
     Client.hasMany(models.Training, {
-      foreignKey: "client_id",
+      foreignKey: "clientId",
       as: "trainings",
     });
   };
+
   return Client;
 };

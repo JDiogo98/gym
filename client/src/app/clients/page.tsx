@@ -39,31 +39,30 @@ import {
 } from "@/components/ui/pagination";
 import { Toaster } from "@/components/ui/toaster";
 
-import { useToast } from "@/hooks/use-toast";
 import LoadingSpinner from "@/components/Loading";
 import api from "../../../lib/api";
 import dayjs from "dayjs";
 
 export type clientsDataTypes = {
-  id: number; // O id agora parece ser um número
-  name: string;
-  phone_number: string;
-  sex: "M" | "F" | "Other"; // Valores possíveis para o campo sex
-  birth_date: string;
-  registration_date: string; // Data de registro
-  created_at: string; // Data de criação
-  updated_at: string; // Data de atualização
-  academy_id: number; // Id da academia
-  coach_id: number; // Id do treinador
+  clientId: number; // O id agora parece ser um número
+  clientName: string;
+  clientPhoneNumber: string;
+  clientSex: "M" | "F" | "Other"; // Valores possíveis para o campo sex
+  clientBirthDate: string;
+  clientRegistrationDate: string; // Data de registro
+  createdAt: string; // Data de criação
+  updatedAt: string; // Data de atualização
+  academyId: number; // Id da academia
+  coachId: number; // Id do treinador
   academy: {
-    name: string; // Nome da academia
+    academyName: string; // Nome da academia
   };
   coach: {
-    name: string; // Nome do treinador
+    coachName: string; // Nome do treinador
   };
   trainings: {
-    date: string; // Data do último treino
-  };
+    trainingDate: Date;
+  }[];
 };
 
 const textClasses = "content-start select-none text-xs sm:text-sm ";
@@ -87,7 +86,7 @@ export default function ClientsTable() {
 
   const columns: ColumnDef<clientsDataTypes>[] = [
     {
-      accessorKey: "name",
+      accessorKey: "clientName",
       header: ({ column }) => (
         <Button
           className={`${textClasses}`}
@@ -100,7 +99,7 @@ export default function ClientsTable() {
       ),
       cell: ({ row }) => (
         <div className={`capitalize ml-4 font-semibold ${textClasses}`}>
-          {row.getValue("name")}
+          {row.getValue("clientName")}
         </div>
       ),
     },
@@ -118,13 +117,13 @@ export default function ClientsTable() {
       ),
       cell: ({ row }) => (
         <div className={`capitalize hidden lg:flex ml-4 ${textClasses}`}>
-          {(row.getValue("coach") as clientsDataTypes["coach"])?.name ??
+          {(row.getValue("coach") as clientsDataTypes["coach"])?.coachName ??
             "Sem treinador"}
         </div>
       ),
     },
     {
-      accessorKey: "registration_date",
+      accessorKey: "clientRegistrationDate",
       header: ({ column }) => (
         <Button
           className={`${textClasses} hidden lg:flex`}
@@ -137,7 +136,7 @@ export default function ClientsTable() {
       ),
       cell: ({ row }) => (
         <div className={`capitalize hidden lg:flex ml-4 ${textClasses}`}>
-          {dayjs(row.getValue("registration_date")).format("DD/MM/YYYY")}
+          {dayjs(row.getValue("clientRegistrationDate")).format("DD/MM/YYYY")}
         </div>
       ),
     },
@@ -155,8 +154,8 @@ export default function ClientsTable() {
       ),
       cell: ({ row }) => (
         <div className={`capitalize hidden lg:flex ml-4 ${textClasses}`}>
-          {(row.getValue("academy") as clientsDataTypes["academy"])?.name ??
-            "Sem academia"}
+          {(row.getValue("academy") as clientsDataTypes["academy"])
+            ?.academyName ?? "Sem academia"}
         </div>
       ),
     },
@@ -175,21 +174,12 @@ export default function ClientsTable() {
       cell: ({ row }) => {
         const trainings = row.getValue(
           "trainings"
-        ) as clientsDataTypes["trainings"][];
-
-        // Verifica se há treinos e pega o mais recente
-        const lastTraining =
-          trainings.length > 0
-            ? trainings.sort(
-                (a, b) =>
-                  new Date(b.date).getTime() - new Date(a.date).getTime()
-              )[0].date
-            : "Sem treinos";
+        ) as clientsDataTypes["trainings"];
 
         return (
           <div className={`font-medium ml-4 ${textClasses}`}>
-            {lastTraining !== "Sem treinos"
-              ? dayjs(lastTraining).format("DD/MM/YYYY")
+            {trainings[0]?.trainingDate
+              ? dayjs(trainings[0].trainingDate).format("DD/MM/YYYY")
               : "Sem treinos"}
           </div>
         );
@@ -200,17 +190,17 @@ export default function ClientsTable() {
       enableHiding: false,
       cell: ({ row }) => (
         <div className="flex justify-end gap-1">
-          <Link href={`clients/${row.original.id}`}>
+          <Link href={`clients/${row.original.clientId}`}>
             <Button className={buttonClasses} variant="outline">
               <FileSearchIcon />
             </Button>
           </Link>
-          <EditClient clientData={row.original} />
+          {/* <EditClient clientData={row.original} /> */}
           <DeleteButton
-            id={row.original.id.toString()}
-            name={row.original.name}
+            id={row.original.clientId.toString()}
+            name={row.original.clientName}
             handleDelete={() =>
-              handleDeleteClient(row.original.id, row.original.name)
+              handleDeleteClient(row.original.clientId)
             }
           />
         </div>
@@ -218,13 +208,10 @@ export default function ClientsTable() {
     },
   ];
 
-  const handleDeleteClient = (
-    deletedClientId: string | number,
-    name: string
-  ) => {
+  const handleDeleteClient = (deletedClientId: string | number) => {
     setClientsData((prevData) =>
       prevData
-        ? prevData.filter((client) => client.id !== deletedClientId)
+        ? prevData.filter((client) => client.clientId !== deletedClientId)
         : null
     );
   };
@@ -265,9 +252,11 @@ export default function ClientsTable() {
       <div className="flex items-center py-4">
         <Input
           placeholder="Filtrar Clientes..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+          value={
+            (table.getColumn("clientName")?.getFilterValue() as string) ?? ""
+          }
           onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
+            table.getColumn("clientName")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
@@ -338,7 +327,6 @@ export default function ClientsTable() {
               <PaginationPrevious
                 href="#"
                 onClick={() => table.previousPage()}
-                disabled={!table.getCanPreviousPage()}
               />
             </PaginationItem>
             {Array.from({ length: table.getPageCount() }, (_, i) => i + 1).map(
@@ -357,11 +345,7 @@ export default function ClientsTable() {
               )
             )}
             <PaginationItem>
-              <PaginationNext
-                href="#"
-                onClick={() => table.nextPage()}
-                disabled={!table.getCanNextPage()}
-              />
+              <PaginationNext href="#" onClick={() => table.nextPage()} />
             </PaginationItem>
           </PaginationContent>
         </Pagination>

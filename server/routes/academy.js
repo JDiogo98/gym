@@ -3,16 +3,15 @@ const express = require("express");
 const router = express.Router();
 
 const { Academy } = require("../models");
-const { where } = require("sequelize");
 
 // JD - Obter todas as academias visíveis
 router.get("/", async (req, res) => {
   try {
     const listOfAcademys = await Academy.findAll({
       where: {
-        visible: true,
+        academyVisible: true,
       },
-      atributtes: ["id", "name"],
+      atributtes: ["academy_id", "academy_name"],
     });
 
     res.status(200).json(listOfAcademys);

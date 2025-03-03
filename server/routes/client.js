@@ -13,18 +13,18 @@ router.get("/", async (req, res) => {
         {
           model: Academy,
           as: "academy",
-          attributes: ["name"],
+          attributes: ["academyName"],
         },
         {
           model: Coach,
           as: "coach",
-          attributes: ["name"],
+          attributes: ["coachName"],
         },
         {
           model: Training,
           as: "trainings",
-          attributes: ["date"],
-          order: [["date", "DESC"]],
+          attributes: ["trainingDate"],
+          order: [["trainingDate", "DESC"]],
           limit: 1,
         },
       ],
@@ -46,46 +46,57 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const {
-      name,
-      phone_number,
-      birth_date,
-      registration_date,
-      sex,
-      academy_id,
-      coach_id,
+      clientName,
+      clientPhoneNumber,
+      clientBirthDate,
+      clientRegistrationDate,
+      clientSex,
+      academyId,
+      coachId,
     } = req.body;
 
     // JD - Validação simples dos campos obrigatórios
-    if (!name || !phone_number || !birth_date || !registration_date || !sex) {
+    if (
+      !clientName ||
+      !clientPhoneNumber ||
+      !clientBirthDate ||
+      !clientRegistrationDate ||
+      !clientSex
+    ) {
       return res
         .status(400)
         .json({ error: "Nem todos os campos estão preenchidos." });
     }
 
     // JD - Garantir que as datas sejam convertidas corretamente
-    const formattedbirth_date = new Date(birth_date);
-    const formattedregistration_date = new Date(registration_date);
+    const formattedClientBirthDate = new Date(clientBirthDate);
+    const formattedClientRegistrationDate = new Date(clientRegistrationDate);
 
     // Formatar as datas para garantir que são aceitas pelo Sequelize
-    if (isNaN(formattedbirth_date) || isNaN(formattedregistration_date)) {
+    if (
+      isNaN(formattedClientBirthDate) ||
+      isNaN(formattedClientRegistrationDate)
+    ) {
       return res.status(400).json({ error: "Formato de data inválido." });
     }
 
-    // Garantir que os campos 'academy_id' e 'coach_id' sejam inteiros
+    // Garantir que os campos 'academyId' e 'coachId' sejam inteiros
     const formattedClient = {
-      name,
-      phone_number,
-      birth_date: formattedbirth_date,
-      registration_date: formattedregistration_date,
-      sex,
-      academy_id: academy_id ? parseInt(academy_id) : null, // JD - Os valores devem ser inteiros ou null
-      coach_id: coach_id ? parseInt(coach_id) : null, // JD - Os valores devem ser inteiros ou null
+      clientName,
+      clientPhoneNumber,
+      clientBirthDate: formattedClientBirthDate,
+      clientRegistrationDate: formattedClientRegistrationDate,
+      clientSex,
+      academyId: academyId ? parseInt(academyId) : null, // JD - Os valores devem ser inteiros ou null
+      coachId: coachId ? parseInt(coachId) : null, // JD - Os valores devem ser inteiros ou null
     };
 
     console.log(formattedClient);
 
     // Verificar se o número de telefone já existe
-    const existingClient = await Client.findOne({ where: { phone_number } });
+    const existingClient = await Client.findOne({
+      where: { clientPhoneNumber },
+    });
     if (existingClient) {
       return res
         .status(400)
@@ -110,17 +121,17 @@ router.get("/:id", async (req, res) => {
 
     // JD - Verificar se o cliente existe
     const client = await Client.findOne({
-      where: { id: clientId },
+      where: { clientId: clientId },
       include: [
         {
           model: Academy,
           as: "academy",
-          attributes: ["name"],
+          attributes: ["academyName"],
         },
         {
           model: Coach,
           as: "coach",
-          attributes: ["name"],
+          attributes: ["coachName"],
         },
       ],
     });
@@ -150,13 +161,13 @@ router.put("/:id", async (req, res) => {
     }
 
     const {
-      name,
-      phone_number,
-      birth_date,
-      registration_date,
-      sex,
-      academy_id,
-      coach_id,
+      clientName,
+      clientPhoneNumber,
+      clientBirthDate,
+      clientRegistrationDate,
+      clientSex,
+      academyId,
+      coachId,
     } = req.body;
 
     // Verificar se o cliente existe
@@ -166,15 +177,17 @@ router.put("/:id", async (req, res) => {
     }
 
     // Atualizar os campos do cliente
-    client.name = name || client.name;
-    client.phone_number = phone_number || client.phone_number;
-    client.birth_date = birth_date ? new Date(birth_date) : client.birth_date;
-    client.registration_date = registration_date
-      ? new Date(registration_date)
-      : client.registration_date;
-    client.sex = sex || client.sex;
-    client.academy_id = academy_id ? parseInt(academy_id) : client.academy_id;
-    client.coach_id = coach_id ? parseInt(coach_id) : client.coach_id;
+    client.clientName = clientName || client.clientName;
+    client.clientPhoneNumber = clientPhoneNumber || client.clientPhoneNumber;
+    client.clientBirthDate = clientBirthDate
+      ? new Date(clientBirthDate)
+      : client.clientBirthDate;
+    client.clientRegistrationDate = clientRegistrationDate
+      ? new Date(clientRegistrationDate)
+      : client.clientRegistrationDate;
+    client.clientSex = clientSex || client.clientSex;
+    client.academyId = academyId ? parseInt(academyId) : client.academyId;
+    client.coachId = coachId ? parseInt(coachId) : client.coachId;
 
     // Salvar as alterações no banco de dados
     await client.save();
@@ -203,7 +216,7 @@ router.delete("/:id", async (req, res) => {
     }
 
     // JD - Eliminar o cliente
-    await Client.destroy({ where: { id: clientId } });
+    await Client.destroy({ where: { clientId: clientId } });
 
     // JD - Responder com sucesso
     res.status(200).json({ message: "Cliente eliminado com sucesso." });

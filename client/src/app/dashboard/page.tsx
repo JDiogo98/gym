@@ -9,7 +9,7 @@ import { AverageTrainings } from "./InfoCards/AverageTrainings";
 
 export default function Component() {
   return (
-    <div className="min-h-full flex-1 p-6 py-12 container">
+    <div className=" p-6 py-12 container">
       <section className="grid-cols-2 lg:grid-cols-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <ActiveClientsCard />
@@ -19,7 +19,7 @@ export default function Component() {
       </section>
       <section className="mt-4 grid grid-cols-1 lg:grid-cols-[1fr_3fr] gap-4">
         <MainChart />
-        <LastTrainigs />
+        <LastTrainigs filters={undefined} />
       </section>
     </div>
   );

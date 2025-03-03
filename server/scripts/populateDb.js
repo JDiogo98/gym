@@ -5,64 +5,64 @@ async function populateDatabase() {
     // JD -  Inserir dados na tabela Academy (10 Academias)
     const academies = [
       {
-        name: "Academia Central",
-        address: "Rua Principal, 123",
-        location: "Lisboa",
-        zip_code: "1000-100",
+        academyName: "Academia Central",
+        academyAddress: "Rua Principal, 123",
+        academyLocation: "Lisboa",
+        academyZipCode: "1000-100",
       },
       {
-        name: "Academia Norte",
-        address: "Avenida Norte, 456",
-        location: "Porto",
-        zip_code: "2000-200",
+        academyName: "Academia Norte",
+        academyAddress: "Avenida Norte, 456",
+        academyLocation: "Porto",
+        academyZipCode: "2000-200",
       },
       {
-        name: "Academia do Sul",
-        address: "Rua do Sul, 789",
-        location: "Faro",
-        zip_code: "3000-300",
+        academyName: "Academia do Sul",
+        academyAddress: "Rua do Sul, 789",
+        academyLocation: "Faro",
+        academyZipCode: "3000-300",
       },
       {
-        name: "Academia do Leste",
-        address: "Rua Leste, 101",
-        location: "Coimbra",
-        zip_code: "4000-400",
+        academyName: "Academia do Leste",
+        academyAddress: "Rua Leste, 101",
+        academyLocation: "Coimbra",
+        academyZipCode: "4000-400",
       },
       {
-        name: "Academia Fitness",
-        address: "Avenida Fitness, 102",
-        location: "Lisboa",
-        zip_code: "5000-500",
+        academyName: "Academia Fitness",
+        academyAddress: "Avenida Fitness, 102",
+        academyLocation: "Lisboa",
+        academyZipCode: "5000-500",
       },
       {
-        name: "Academia Power",
-        address: "Avenida Power, 103",
-        location: "Porto",
-        zip_code: "6000-600",
+        academyName: "Academia Power",
+        academyAddress: "Avenida Power, 103",
+        academyLocation: "Porto",
+        academyZipCode: "6000-600",
       },
       {
-        name: "Academia Elite",
-        address: "Rua Elite, 104",
-        location: "Lisboa",
-        zip_code: "7000-700",
+        academyName: "Academia Elite",
+        academyAddress: "Rua Elite, 104",
+        academyLocation: "Lisboa",
+        academyZipCode: "7000-700",
       },
       {
-        name: "Academia Saúde",
-        address: "Rua da Saúde, 105",
-        location: "Braga",
-        zip_code: "8000-800",
+        academyName: "Academia Saúde",
+        academyAddress: "Rua da Saúde, 105",
+        academyLocation: "Braga",
+        academyZipCode: "8000-800",
       },
       {
-        name: "Academia Performance",
-        address: "Rua Performance, 106",
-        location: "Porto",
-        zip_code: "9000-900",
+        academyName: "Academia Performance",
+        academyAddress: "Rua Performance, 106",
+        academyLocation: "Porto",
+        academyZipCode: "9000-900",
       },
       {
-        name: "Academia Total",
-        address: "Rua Total, 107",
-        location: "Funchal",
-        zip_code: "10000-1000",
+        academyName: "Academia Total",
+        academyAddress: "Rua Total, 107",
+        academyLocation: "Funchal",
+        academyZipCode: "10000-1000",
       },
     ];
 
@@ -72,64 +72,64 @@ async function populateDatabase() {
     // JD - Inserir dados na tabela Coach (10 Coaches)
     const coaches = [
       {
-        name: "Carlos Silva",
-        phone_number: "912345678",
-        sex: "M",
-        birth_date: "1985-05-15",
+        coachName: "Carlos Silva",
+        coachPhoneNumber: "912345678",
+        coachSex: "M",
+        coachBirthDate: "1985-05-15",
       },
       {
-        name: "Ana Martins",
-        phone_number: "923456789",
-        sex: "F",
-        birth_date: "1990-07-20",
+        coachName: "Ana Martins",
+        coachPhoneNumber: "923456789",
+        coachSex: "F",
+        coachBirthDate: "1990-07-20",
       },
       {
-        name: "João Costa",
-        phone_number: "912345679",
-        sex: "M",
-        birth_date: "1982-03-25",
+        coachName: "João Costa",
+        coachPhoneNumber: "912345679",
+        coachSex: "M",
+        coachBirthDate: "1982-03-25",
       },
       {
-        name: "Beatriz Almeida",
-        phone_number: "923456780",
-        sex: "F",
-        birth_date: "1988-11-30",
+        coachName: "Beatriz Almeida",
+        coachPhoneNumber: "923456780",
+        coachSex: "F",
+        coachBirthDate: "1988-11-30",
       },
       {
-        name: "Pedro Sousa",
-        phone_number: "912345680",
-        sex: "M",
-        birth_date: "1991-05-10",
+        coachName: "Pedro Sousa",
+        coachPhoneNumber: "912345680",
+        coachSex: "M",
+        coachBirthDate: "1991-05-10",
       },
       {
-        name: "Laura Ferreira",
-        phone_number: "923456781",
-        sex: "F",
-        birth_date: "1993-02-22",
+        coachName: "Laura Ferreira",
+        coachPhoneNumber: "923456781",
+        coachSex: "F",
+        coachBirthDate: "1993-02-22",
       },
       {
-        name: "Miguel Oliveira",
-        phone_number: "912345681",
-        sex: "M",
-        birth_date: "1992-01-05",
+        coachName: "Miguel Oliveira",
+        coachPhoneNumber: "912345681",
+        coachSex: "M",
+        coachBirthDate: "1992-01-05",
       },
       {
-        name: "Sofia Pereira",
-        phone_number: "923456782",
-        sex: "F",
-        birth_date: "1987-09-15",
+        coachName: "Sofia Pereira",
+        coachPhoneNumber: "923456782",
+        coachSex: "F",
+        coachBirthDate: "1987-09-15",
       },
       {
-        name: "Rui Santos",
-        phone_number: "912345682",
-        sex: "M",
-        birth_date: "1990-12-12",
+        coachName: "Rui Santos",
+        coachPhoneNumber: "912345682",
+        coachSex: "M",
+        coachBirthDate: "1990-12-12",
       },
       {
-        name: "Carolina Rocha",
-        phone_number: "923456783",
-        sex: "F",
-        birth_date: "1989-08-28",
+        coachName: "Carolina Rocha",
+        coachPhoneNumber: "923456783",
+        coachSex: "F",
+        coachBirthDate: "1989-08-28",
       },
     ];
 
@@ -138,11 +138,11 @@ async function populateDatabase() {
 
     // JD - Inserir dados na tabela TrainingType (5 tipos de treino)
     const trainingTypes = [
-      { type: "Cardio" },
-      { type: "Força" },
-      { type: "Flexibilidade" },
-      { type: "Resistência" },
-      { type: "HIIT" },
+      { trainingTypeName: "Cardio", visible: true },
+      { trainingTypeName: "Força", visible: true },
+      { trainingTypeName: "Flexibilidade", visible: true },
+      { trainingTypeName: "Resistência", visible: true },
+      { trainingTypeName: "HIIT", visible: true },
     ];
 
     // Criar tipos de treino no banco
@@ -151,122 +151,122 @@ async function populateDatabase() {
     // JD - Inserir dados na tabela Client (10 Clientes)
     const clients = [
       {
-        name: "João Pereira",
-        phone_number: "931234567",
-        sex: "M",
-        birth_date: "1995-04-01",
-        academy_id: createdAcademies[0].id,
-        coach_id: createdCoaches[0].id,
+        clientName: "João Pereira",
+        clientPhoneNumber: "931234567",
+        clientSex: "M",
+        clientBirthDate: "1995-04-01",
+        academyId: createdAcademies[0].academyId, // usando camelCase para a FK
+        coachId: createdCoaches[0].coachId, // usando camelCase para a FK
       },
       {
-        name: "Maria Costa",
-        phone_number: "937654321",
-        sex: "F",
-        birth_date: "1992-08-10",
-        academy_id: createdAcademies[1].id,
-        coach_id: createdCoaches[1].id,
+        clientName: "Maria Costa",
+        clientPhoneNumber: "937654321",
+        clientSex: "F",
+        clientBirthDate: "1992-08-10",
+        academyId: createdAcademies[1].academyId,
+        coachId: createdCoaches[1].coachId,
       },
       {
-        name: "Carlos Ramos",
-        phone_number: "931234568",
-        sex: "M",
-        birth_date: "1989-06-15",
-        academy_id: createdAcademies[2].id,
-        coach_id: createdCoaches[2].id,
+        clientName: "Carlos Ramos",
+        clientPhoneNumber: "931234568",
+        clientSex: "M",
+        clientBirthDate: "1989-06-15",
+        academyId: createdAcademies[2].academyId,
+        coachId: createdCoaches[2].coachId,
       },
       {
-        name: "Sofia Silva",
-        phone_number: "937654322",
-        sex: "F",
-        birth_date: "1994-03-20",
-        academy_id: createdAcademies[3].id,
-        coach_id: createdCoaches[3].id,
+        clientName: "Sofia Silva",
+        clientPhoneNumber: "937654322",
+        clientSex: "F",
+        clientBirthDate: "1994-03-20",
+        academyId: createdAcademies[3].academyId,
+        coachId: createdCoaches[3].coachId,
       },
       {
-        name: "Luís Oliveira",
-        phone_number: "931234569",
-        sex: "M",
-        birth_date: "1991-05-25",
-        academy_id: createdAcademies[4].id,
-        coach_id: createdCoaches[4].id,
+        clientName: "Luís Oliveira",
+        clientPhoneNumber: "931234569",
+        clientSex: "M",
+        clientBirthDate: "1991-05-25",
+        academyId: createdAcademies[4].academyId,
+        coachId: createdCoaches[4].coachId,
       },
       {
-        name: "Helena Pereira",
-        phone_number: "937654323",
-        sex: "F",
-        birth_date: "1990-07-10",
-        academy_id: createdAcademies[5].id,
-        coach_id: createdCoaches[5].id,
+        clientName: "Helena Pereira",
+        clientPhoneNumber: "937654323",
+        clientSex: "F",
+        clientBirthDate: "1990-07-10",
+        academyId: createdAcademies[5].academyId,
+        coachId: createdCoaches[5].coachId,
       },
       {
-        name: "Bruno Martins",
-        phone_number: "931234570",
-        sex: "M",
-        birth_date: "1988-12-05",
-        academy_id: createdAcademies[6].id,
-        coach_id: createdCoaches[6].id,
+        clientName: "Bruno Martins",
+        clientPhoneNumber: "931234570",
+        clientSex: "M",
+        clientBirthDate: "1988-12-05",
+        academyId: createdAcademies[6].academyId,
+        coachId: createdCoaches[6].coachId,
       },
       {
-        name: "Laura Mendes",
-        phone_number: "937654324",
-        sex: "F",
-        birth_date: "1993-11-18",
-        academy_id: createdAcademies[7].id,
-        coach_id: createdCoaches[7].id,
+        clientName: "Laura Mendes",
+        clientPhoneNumber: "937654324",
+        clientSex: "F",
+        clientBirthDate: "1993-11-18",
+        academyId: createdAcademies[7].academyId,
+        coachId: createdCoaches[7].coachId,
       },
       {
-        name: "Tiago Costa",
-        phone_number: "931234571",
-        sex: "M",
-        birth_date: "1987-01-30",
-        academy_id: createdAcademies[8].id,
-        coach_id: createdCoaches[8].id,
+        clientName: "Tiago Costa",
+        clientPhoneNumber: "931234571",
+        clientSex: "M",
+        clientBirthDate: "1987-01-30",
+        academyId: createdAcademies[8].academyId,
+        coachId: createdCoaches[8].coachId,
       },
       {
-        name: "Raquel Alves",
-        phone_number: "937654325",
-        sex: "F",
-        birth_date: "1992-02-12",
-        academy_id: createdAcademies[9].id,
-        coach_id: createdCoaches[9].id,
+        clientName: "Raquel Alves",
+        clientPhoneNumber: "937654325",
+        clientSex: "F",
+        clientBirthDate: "1992-02-12",
+        academyId: createdAcademies[9].academyId,
+        coachId: createdCoaches[9].coachId,
       },
     ];
 
     // Criar clientes no banco
     const createdClients = await Client.bulkCreate(clients);
 
-
     // JD - Inserir treinos para cada cliente com quantidade aleatória
-for (let i = 0; i < createdClients.length; i++) {
-  // Definir uma quantidade aleatória de treinos entre 5 e 20 por cliente
-  const trainingCount = Math.floor(Math.random() * (20 - 5 + 1)) + 5;
+    for (let i = 0; i < createdClients.length; i++) {
+      // Definir uma quantidade aleatória de treinos entre 5 e 20 por cliente
+      const trainingCount = Math.floor(Math.random() * (20 - 5 + 1)) + 5;
 
-  for (let j = 0; j < trainingCount; j++) {
-    // Gerar uma data aleatória entre dezembro de 2024 e fevereiro de 2025
-    const startDate = new Date(2024, 11, 1); // 1º de dezembro de 2024
-    const endDate = new Date(2025, 1, 28); // 28 de fevereiro de 2025
-    
-    // Calcular a diferença entre as datas em milissegundos
-    const timeDifference = endDate.getTime() - startDate.getTime();
-    
-    // Gerar um valor aleatório dentro desse intervalo
-    const randomTime = Math.floor(Math.random() * timeDifference);
-    
-    // Criar uma nova data aleatória dentro do intervalo
-    const randomDate = new Date(startDate.getTime() + randomTime);
-    
-    await Training.create({
-      date: randomDate, // Data aleatória gerada
-      duration: Math.floor(Math.random() * (120 - 30 + 1)) + 30, // Duração entre 30 e 120 minutos
-      training_type_id: createdTrainingTypes[
-        Math.floor(Math.random() * createdTrainingTypes.length)
-      ].id, // Associa ao tipo de treino
-      client_id: createdClients[i].id, // Associa ao cliente
-      coach_id: createdCoaches[i % createdCoaches.length].id, // Associa ao treinador
-      academy_id: createdAcademies[i % createdAcademies.length].id, // Associa à academia
-    });
-  }
-}
+      for (let j = 0; j < trainingCount; j++) {
+        // Gerar uma data aleatória entre dezembro de 2024 e fevereiro de 2025
+        const startDate = new Date(2024, 11, 1); // 1º de dezembro de 2024
+        const endDate = new Date(2025, 1, 28); // 28 de fevereiro de 2025
+
+        // Calcular a diferença entre as datas em milissegundos
+        const timeDifference = endDate.getTime() - startDate.getTime();
+
+        // Gerar um valor aleatório dentro desse intervalo
+        const randomTime = Math.floor(Math.random() * timeDifference);
+
+        // Criar uma nova data aleatória dentro do intervalo
+        const randomDate = new Date(startDate.getTime() + randomTime);
+
+        await Training.create({
+          trainingDate: randomDate, // Data aleatória gerada
+          trainingDuration: Math.floor(Math.random() * (120 - 30 + 1)) + 30, // Duração entre 30 e 120 minutos
+          trainingTypeId:
+            createdTrainingTypes[
+              Math.floor(Math.random() * createdTrainingTypes.length)
+            ].trainingTypeId, // Associa ao tipo de treino
+          clientId: createdClients[i].clientId, // Associa ao cliente
+          coachId: createdCoaches[i % createdCoaches.length].coachId, // Associa ao treinador
+          academyId: createdAcademies[i % createdAcademies.length].academyId, // Associa à academia
+        });
+      }
+    }
 
     console.log("Banco de dados populado com sucesso!");
   } catch (error) {

@@ -10,9 +10,9 @@ router.get("/", async (req, res) => {
   try {
     const listOfCoaches = await Coach.findAll({
       where: {
-        visible: true,
+        coachVisible: true,
       },
-      atributtes: ["id", "name"],
+      atributtes: ["coachId", "coachName"],
     });
 
     res.status(200).json(listOfCoaches);
