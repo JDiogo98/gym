@@ -29,13 +29,13 @@ export default function AlternativeRegistration() {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="absolute top-4 right-4">
-          Registro Alternativo
+        <Button variant="outline" className="absolute top-4 right-16">
+          Registo Alternativo
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Registro Alternativo de Treino</DialogTitle>
+          <DialogTitle>Registo Alternativo de Treino</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">

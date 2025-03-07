@@ -9,9 +9,9 @@ export default function Footer() {
       <div className="container mx-auto px-4 py-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <h3 className="text-lg font-semibold mb-4">GymPro Management</h3>
+            <h3 className="text-lg font-semibold mb-4">Gym Management</h3>
             <p className="text-sm text-muted-foreground">
-              Soluções inovadoras para gestão de academias e treinos personalizados.
+              Soluções inovadoras para gestão de estúdios e treinos personalizados.
             </p>
           </div>
           <div>
@@ -77,7 +77,7 @@ export default function Footer() {
         </div>
         <div className="mt-4 pt-4 border-t border-muted text-center">
           <p className="text-sm text-muted-foreground">
-            © {currentYear} GymPro Management. Todos os direitos reservados.
+            © {currentYear} Gym Management. Todos os direitos reservados.
           </p>
         </div>
       </div>

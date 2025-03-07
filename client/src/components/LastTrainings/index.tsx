@@ -1,4 +1,5 @@
 "use client";
+
 import { CalendarClockIcon } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "../ui/card";
 import React, { useState, useEffect } from "react";
@@ -38,6 +39,7 @@ export function LastTrainigs({ filters }: LastTrainingsProps) {
                   coachId: filters.coachId || null,
                   trainingTypeId: filters.trainingTypeId || null,
                   academyId: filters.academyId || null,
+                  clientId: filters.clientId || null,
                 }
               : {},
           }),

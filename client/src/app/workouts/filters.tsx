@@ -23,11 +23,12 @@ import api from "../../../lib/api";
 import { toast } from "sonner";
 
 export interface FiltersInterface {
-  startDate: Date | null | undefined;
-  endDate: Date | null | undefined;
-  coachId: number | null;
-  trainingTypeId: number | null;
-  academyId: number | null;
+  startDate?: Date | null | undefined;
+  endDate?: Date | null | undefined;
+  coachId?: number | null;
+  trainingTypeId?: number | null;
+  academyId?: number | null;
+  clientId?: number | null | undefined;
 }
 
 interface FiltersProps {

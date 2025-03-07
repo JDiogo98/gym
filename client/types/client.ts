@@ -1,5 +1,5 @@
 export interface ClientInterface {
-  clientId: number | string;
+  clientId: number | string | undefined;
   clientName: string;
   clientPhoneNumber: string;
   clientSex: string;

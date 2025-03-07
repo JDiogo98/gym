@@ -1,6 +1,6 @@
 "use client";
 
-import React, { use, useEffect, useState } from "react";
+import React, { use, useEffect, useMemo, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,6 +28,7 @@ import {
   ClipboardEditIcon,
   PieChartIcon,
   SaveIcon,
+  UserCircleIcon,
 } from "lucide-react";
 import { DeleteButton } from "@/components/DeleteButton";
 import { useParams } from "next/navigation";
@@ -39,6 +40,8 @@ import UserNotFound from "@/components/UserNotFound";
 import LoadingSpinner from "@/components/Loading";
 import { ClientInterface } from "../../../../types/client";
 import dayjs from "dayjs";
+import { PhoneInput } from "@/components/phone-input";
+import { LastTrainigs } from "@/components/LastTrainings";
 
 const clienteData = {
   id: "1",
@@ -81,7 +84,12 @@ const Title = "Detalhes do Cliente";
 export default function DetalhesCliente() {
   // JD - Obter o id do cliente da URL
 
-  const { clientId } = useParams();
+  const { clientId: rawClientId } = useParams();
+
+  const clientId = useMemo(
+    () => (rawClientId ? Number(rawClientId) : undefined),
+    [rawClientId]
+  );
 
   const [clientData, setClient] = useState<ClientInterface | null>(null);
 
@@ -125,6 +133,8 @@ export default function DetalhesCliente() {
   function handleDelete() {}
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("handleChange", e.target.name, e.target.value);
+
     if (clientData) {
       setClient({ ...clientData, [e.target.name]: e.target.value });
     }
@@ -159,22 +169,27 @@ export default function DetalhesCliente() {
         <LoadingSpinner text="Carregar dados do Utilizador" />
       )}
       {clientData && (
-        <Card className="mb-6 w-full">
+        <Card className="my-6 w-full">
           <CardHeader>
-            <CardTitle>Informações Pessoais</CardTitle>
+            <div className="flex items-center justify-center">
+              <CardTitle className="text-lg sm:text-xl text select-none">
+                Informações Pessoais
+              </CardTitle>
+              <UserCircleIcon className="ml-auto w-5 h-5" />
+            </div>
           </CardHeader>
-
           <CardContent>
             <div className="grid gap-4 w-max">
               <div className="grid grid-cols-1 gap-4">
                 <div>
                   <Label htmlFor="nome">Nome</Label>
                   <Input
-                    id="name"
-                    name="name"
+                    id="clientName"
+                    name="clientName"
                     value={clientData.clientName}
                     onChange={handleChange}
                     disabled={!editMode}
+                    style={{ fontSize: "1rem" }}
                   />
                 </div>
                 <div>
@@ -186,7 +201,10 @@ export default function DetalhesCliente() {
                     }
                     disabled={!editMode}
                   >
-                    <SelectTrigger className="border p-2 rounded-md">
+                    <SelectTrigger
+                      className="border p-2 rounded-md"
+                      style={{ fontSize: "1rem" }}
+                    >
                       <SelectValue placeholder="Selecione o gênero" />
                     </SelectTrigger>
                     <SelectContent>
@@ -198,11 +216,17 @@ export default function DetalhesCliente() {
                 </div>
                 <div>
                   <Label htmlFor="contact">Telemóvel</Label>
-                  <Input
-                    id="clientPhoneNumber"
+                  <PhoneInput
                     name="clientPhoneNumber"
                     value={clientData.clientPhoneNumber}
-                    onChange={handleChange}
+                    onChange={(value) =>
+                      setClient({
+                        ...clientData,
+                        clientPhoneNumber: value,
+                      })
+                    }
+                    placeholder="Número de telemóvel"
+                    defaultCountry="PT"
                     disabled={!editMode}
                   />
                 </div>
@@ -222,27 +246,28 @@ export default function DetalhesCliente() {
                   onChange={handleChange}
                   disabled={!editMode}
                   type="date"
+                  style={{ fontSize: "1rem" }}
                 />
               </div>
-            </div>
-            <div className="mt-4 flex gap-4">
-              {editMode ? (
-                <Button onClick={handleSave}>
-                  <SaveIcon>n</SaveIcon>
-                  Salvar
-                </Button>
-              ) : (
-                <Button onClick={handleEdit}>
-                  <ClipboardEditIcon />
-                  Editar
-                </Button>
-              )}
-              <DeleteButton
-                id={String(clientData.clientId)}
-                name={clientData.clientName}
-                showText={true}
-                handleDelete={() => handleDelete} // Aqui não faz nada porque não é necessário
-              ></DeleteButton>
+              <div className="mt-4 flex justify-between gap-4">
+                {editMode ? (
+                  <Button onClick={handleSave}>
+                    <SaveIcon>n</SaveIcon>
+                    Salvar
+                  </Button>
+                ) : (
+                  <Button onClick={handleEdit}>
+                    <ClipboardEditIcon />
+                    Editar
+                  </Button>
+                )}
+                <DeleteButton
+                  id={String(clientData.clientId)}
+                  name={clientData.clientName}
+                  showText={true}
+                  handleDelete={() => handleDelete}
+                ></DeleteButton>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -285,6 +310,12 @@ export default function DetalhesCliente() {
           </CardContent>
         </Card>
       </div> */}
+      <LastTrainigs
+        filters={{
+          clientId: clientId ? Number(clientId) : undefined,
+          startDate: new Date("1999-01-01"),
+        }}
+      ></LastTrainigs>
     </div>
   );
 }

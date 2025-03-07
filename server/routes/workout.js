@@ -9,11 +9,13 @@ const {
   Academy,
   TrainingType,
   Sequelize,
+  Duration,
 } = require("../models");
 const dayjs = require("dayjs");
 
 router.get("/filteredLastTrainings", async (req, res) => {
-  const { startDate, endDate, coachId, trainingTypeId, academyId } = req.query;
+  const { startDate, endDate, coachId, trainingTypeId, academyId, clientId } =
+    req.query;
 
   try {
     // JD - Se não houver startDate e endDate, definir os valores padrão
@@ -36,6 +38,7 @@ router.get("/filteredLastTrainings", async (req, res) => {
     if (coachId) filters.coachId = coachId;
     if (trainingTypeId) filters.trainingTypeId = trainingTypeId;
     if (academyId) filters.academyId = academyId;
+    if (clientId) filters.clientId = clientId;
 
     const filteredLastTrainings = await Training.findAll({
       include: [
@@ -63,6 +66,12 @@ router.get("/filteredLastTrainings", async (req, res) => {
           attributes: ["trainingTypeName"],
           required: true,
         },
+        {
+          model: Duration,
+          as: "trainingDuration",
+          attributes: ["durationName"],
+          required: true,
+        },
       ],
       where: filters,
       order: [["trainingDate", "DESC"]],
@@ -75,6 +84,7 @@ router.get("/filteredLastTrainings", async (req, res) => {
       trainingCoach: training.coach.coachName,
       trainingAcademy: training.academy.academyName,
       trainingTrainingType: training.trainingType.trainingTypeName,
+      trainingDuration: training.trainingDuration.durationName,
     }));
 
     res.status(200).json(formattedTrainings);

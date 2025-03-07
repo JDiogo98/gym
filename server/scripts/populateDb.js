@@ -1,4 +1,11 @@
-const { Client, Academy, Coach, Training, TrainingType } = require("../models");
+const {
+  Client,
+  Academy,
+  Coach,
+  Training,
+  TrainingType,
+  Duration,
+} = require("../models");
 
 async function populateDatabase() {
   try {
@@ -151,8 +158,8 @@ async function populateDatabase() {
     // JD - Inserir dados na tabela Client (10 Clientes)
     const clients = [
       {
-        clientName: "João Pereira",
-        clientPhoneNumber: "931234567",
+        clientName: "José Diogo",
+        clientPhoneNumber: "+351938096814",
         clientSex: "M",
         clientBirthDate: "1995-04-01",
         academyId: createdAcademies[0].academyId, // usando camelCase para a FK
@@ -160,7 +167,7 @@ async function populateDatabase() {
       },
       {
         clientName: "Maria Costa",
-        clientPhoneNumber: "937654321",
+        clientPhoneNumber: "+351937654321",
         clientSex: "F",
         clientBirthDate: "1992-08-10",
         academyId: createdAcademies[1].academyId,
@@ -168,7 +175,7 @@ async function populateDatabase() {
       },
       {
         clientName: "Carlos Ramos",
-        clientPhoneNumber: "931234568",
+        clientPhoneNumber: "+351931234568",
         clientSex: "M",
         clientBirthDate: "1989-06-15",
         academyId: createdAcademies[2].academyId,
@@ -176,7 +183,7 @@ async function populateDatabase() {
       },
       {
         clientName: "Sofia Silva",
-        clientPhoneNumber: "937654322",
+        clientPhoneNumber: "+351937654322",
         clientSex: "F",
         clientBirthDate: "1994-03-20",
         academyId: createdAcademies[3].academyId,
@@ -184,7 +191,7 @@ async function populateDatabase() {
       },
       {
         clientName: "Luís Oliveira",
-        clientPhoneNumber: "931234569",
+        clientPhoneNumber: "+351931234569",
         clientSex: "M",
         clientBirthDate: "1991-05-25",
         academyId: createdAcademies[4].academyId,
@@ -192,7 +199,7 @@ async function populateDatabase() {
       },
       {
         clientName: "Helena Pereira",
-        clientPhoneNumber: "937654323",
+        clientPhoneNumber: "+351937654323",
         clientSex: "F",
         clientBirthDate: "1990-07-10",
         academyId: createdAcademies[5].academyId,
@@ -200,7 +207,7 @@ async function populateDatabase() {
       },
       {
         clientName: "Bruno Martins",
-        clientPhoneNumber: "931234570",
+        clientPhoneNumber: "+351931234570",
         clientSex: "M",
         clientBirthDate: "1988-12-05",
         academyId: createdAcademies[6].academyId,
@@ -208,7 +215,7 @@ async function populateDatabase() {
       },
       {
         clientName: "Laura Mendes",
-        clientPhoneNumber: "937654324",
+        clientPhoneNumber: "+351937654324",
         clientSex: "F",
         clientBirthDate: "1993-11-18",
         academyId: createdAcademies[7].academyId,
@@ -216,7 +223,7 @@ async function populateDatabase() {
       },
       {
         clientName: "Tiago Costa",
-        clientPhoneNumber: "931234571",
+        clientPhoneNumber: "+351931234571",
         clientSex: "M",
         clientBirthDate: "1987-01-30",
         academyId: createdAcademies[8].academyId,
@@ -224,7 +231,7 @@ async function populateDatabase() {
       },
       {
         clientName: "Raquel Alves",
-        clientPhoneNumber: "937654325",
+        clientPhoneNumber: "+351937654325",
         clientSex: "F",
         clientBirthDate: "1992-02-12",
         academyId: createdAcademies[9].academyId,
@@ -234,6 +241,19 @@ async function populateDatabase() {
 
     // Criar clientes no banco
     const createdClients = await Client.bulkCreate(clients);
+
+    const durations = [
+      { durationName: "15min." },
+      { durationName: "30min." },
+      { durationName: "45min." },
+      { durationName: "60min." },
+      { durationName: "75min." },
+      { durationName: "90min." },
+      { durationName: "105min." },
+      { durationName: "120min." },
+    ];
+
+    const createdDurations = await Duration.bulkCreate(durations);
 
     // JD - Inserir treinos para cada cliente com quantidade aleatória
     for (let i = 0; i < createdClients.length; i++) {
@@ -256,7 +276,10 @@ async function populateDatabase() {
 
         await Training.create({
           trainingDate: randomDate, // Data aleatória gerada
-          trainingDuration: Math.floor(Math.random() * (120 - 30 + 1)) + 30, // Duração entre 30 e 120 minutos
+          trainingDurationId:
+            createdDurations[
+              Math.floor(Math.random() * createdDurations.length)
+            ].durationId, // Associa à duração
           trainingTypeId:
             createdTrainingTypes[
               Math.floor(Math.random() * createdTrainingTypes.length)

@@ -3,12 +3,12 @@
 import * as React from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
+import { PhoneInput } from 'react-international-phone';
+import 'react-international-phone/style.css';
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-
-
 
 type CarouselProps = {
   opts?: any;
@@ -43,7 +43,7 @@ export default function Carousel({
     <div className="relative h-screen">
       <div ref={carouselRef} className="overflow-hidden h-full">
         <div className="flex h-full">
-          {[...Array(5)].map((_, index) => (
+          {[...Array(4)].map((_, index) => (
             <div key={index} className="flex-[0_0_100%]">
               <img
                 src={`../../../CarouselImg/Image-${index + 1}.jpg`}

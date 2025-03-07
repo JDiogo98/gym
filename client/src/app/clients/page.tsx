@@ -49,7 +49,7 @@ export type clientsDataTypes = {
   clientPhoneNumber: string;
   clientSex: "M" | "F" | "Other"; // Valores possíveis para o campo sex
   clientBirthDate: string;
-  clientRegistrationDate: string; // Data de registro
+  clientRegistrationDate: string; // Data de registo
   createdAt: string; // Data de criação
   updatedAt: string; // Data de atualização
   academyId: number; // Id da academia

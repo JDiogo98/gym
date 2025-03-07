@@ -58,7 +58,7 @@ export function DeleteButton({
           </AlertDialogTitle>
           <AlertDialogDescription>
             Esta ação não pode ser desfeita. Isso excluirá permanentemente o
-            registro do cliente {name} e removerá os dados dos servidores.
+            registo do cliente {name} e removerá os dados dos servidores.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

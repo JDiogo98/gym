@@ -8,6 +8,9 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { ModeToggle } from "@/components/modeToggle";
 import Footer from "@/components/footer";
 import { usePathname } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { BookmarkCheckIcon } from "lucide-react";
 
 export default function RootLayout({
   children,
@@ -16,7 +19,7 @@ export default function RootLayout({
 }>) {
   const pathname = usePathname();
   return (
-    <html>
+    <html suppressHydrationWarning>
       <body className="flex flex-col min-h-screen">
         <ThemeProvider
           attribute="class"
@@ -29,10 +32,20 @@ export default function RootLayout({
               {pathname !== "/" && <AppSidebar />}
 
               <div className="flex flex-col flex-1 transition-all duration-300">
-                <div className="relative flex-1 p-4">
+                <div className="relative flex-1">
                   {pathname !== "/" && <SidebarTrigger />}
                   <div className="absolute top-0 right-0 m-4">
                     <ModeToggle />
+                  </div>
+                  <div className="absolute top-0 right-12 m-4">
+                    {pathname !== "/" && (
+                      <Link href="/">
+                        <Button variant="outline">
+                          <BookmarkCheckIcon className="w-6 h-6 mr-2" />
+                          Registar Treino
+                        </Button>
+                      </Link>
+                    )}
                   </div>
 
                   {children}

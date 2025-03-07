@@ -13,11 +13,6 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         field: "training_date",
       },
-      trainingDuration: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        field: "training_duration",
-      },
       trainingNotes: {
         type: DataTypes.STRING,
         field: "training_notes",
@@ -45,6 +40,10 @@ module.exports = (sequelize, DataTypes) => {
     Training.belongsTo(models.TrainingType, {
       foreignKey: "trainingTypeId",
       as: "trainingType",
+    });
+    Training.belongsTo(models.Duration, {
+      foreignKey: "trainingDurationId",
+      as: "trainingDuration",
     });
   };
 
