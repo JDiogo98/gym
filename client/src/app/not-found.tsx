@@ -5,7 +5,7 @@ import type React from "react";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Home, Map } from "lucide-react";
+import { Home } from "lucide-react";
 import Link from "next/link";
 
 export default function NotFound() {

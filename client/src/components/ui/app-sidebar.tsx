@@ -34,7 +34,7 @@ const items = [
   },
   {
     title: "Treinos",
-    url: "/workouts",
+    url: "/trainings",
     icon: BicepsFlexedIcon,
   },
   {

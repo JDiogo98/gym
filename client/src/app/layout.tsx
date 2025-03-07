@@ -30,7 +30,6 @@ export default function RootLayout({
           <SidebarProvider>
             <div className="flex min-h-screen">
               {pathname !== "/" && <AppSidebar />}
-
               <div className="flex flex-col flex-1 transition-all duration-300">
                 <div className="relative flex-1">
                   {pathname !== "/" && <SidebarTrigger />}
@@ -47,10 +46,8 @@ export default function RootLayout({
                       </Link>
                     )}
                   </div>
-
                   {children}
                 </div>
-
                 <Footer />
               </div>
             </div>

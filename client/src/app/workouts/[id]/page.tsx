@@ -24,10 +24,10 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-export default function WorkoutPage({ params }: { params: { id: string } }) {
+export default function TrainingPage({ params }: { params: { id: string } }) {
   const router = useRouter();
   const [date, setDate] = useState<Date>(new Date());
-  const [workout, setWorkout] = useState({
+  const [training, setTraining] = useState({
     client: "Ana Rodrigues",
     trainer: "João Silva",
     type: "Musculação",
@@ -39,37 +39,37 @@ export default function WorkoutPage({ params }: { params: { id: string } }) {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setWorkout((prev) => ({ ...prev, [name]: value }));
+    setTraining((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSelectChange = (name: string, value: string) => {
-    setWorkout((prev) => ({ ...prev, [name]: value }));
+    setTraining((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSave = () => {
-    // Here you would typically save the data to your backend
-    console.log("Savina workout:", { ...workout, date });
-    // After saving, redirect back to the dashboard
+    //TODO AQUI DEVE SER IMPLEMENTADO A LÓGICA DE SALVAR OS DADOS NO BANCO DE DADOS
+
     router.push("/");
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 mt-8">
       <Card>
         <CardHeader>
           <CardTitle>Detalhes do Treino</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="client">Cliente</Label>
-                <Input id="client" value={workout.client} disabled />
+                <Input id="client" value={training.client} disabled />
               </div>
+
               <div className="space-y-2">
                 <Label htmlFor="trainer">Treinador</Label>
                 <Select
-                  value={workout.trainer}
+                  value={training.trainer}
                   onValueChange={(value) =>
                     handleSelectChange("trainer", value)
                   }
@@ -88,7 +88,7 @@ export default function WorkoutPage({ params }: { params: { id: string } }) {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>Data do Treino</Label>
                 <Popover>
@@ -124,17 +124,17 @@ export default function WorkoutPage({ params }: { params: { id: string } }) {
                   id="time"
                   name="time"
                   type="time"
-                  value={workout.time}
+                  value={training.time}
                   onChange={handleInputChange}
                 />
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="type">Tipo de Treino</Label>
                 <Select
-                  value={workout.type}
+                  value={training.type}
                   onValueChange={(value) => handleSelectChange("type", value)}
                 >
                   <SelectTrigger>
@@ -150,7 +150,7 @@ export default function WorkoutPage({ params }: { params: { id: string } }) {
               <div className="space-y-2">
                 <Label htmlFor="location">Localização</Label>
                 <Select
-                  value={workout.location}
+                  value={training.location}
                   onValueChange={(value) =>
                     handleSelectChange("location", value)
                   }
@@ -166,29 +166,6 @@ export default function WorkoutPage({ params }: { params: { id: string } }) {
                     <SelectItem value="Unidade Oeste">Unidade Oeste</SelectItem>
                   </SelectContent>
                 </Select>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="weight">Peso (kg)</Label>
-                <Input
-                  id="weight"
-                  name="weight"
-                  type="number"
-                  value={workout.weight}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="bodyFat">Percentual de Gordura Corporal</Label>
-                <Input
-                  id="bodyFat"
-                  name="bodyFat"
-                  type="number"
-                  value={workout.bodyFat}
-                  onChange={handleInputChange}
-                />
               </div>
             </div>
 

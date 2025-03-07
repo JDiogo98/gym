@@ -10,7 +10,7 @@ import { DataTable } from "./data-table";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import NoResults from "../NoResults";
 import { toast } from "sonner";
-import { FiltersInterface } from "@/app/workouts/filters";
+import { FiltersInterface } from "@/app/trainings/filters";
 
 interface LastTrainingsProps {
   filters: FiltersInterface | undefined;
@@ -29,7 +29,7 @@ export function LastTrainigs({ filters }: LastTrainingsProps) {
     const fetchFilteredData = async () => {
       try {
         const [filteredLastTrainings] = await Promise.all([
-          api.get("/api/workout/filteredLastTrainings", {
+          api.get("/api/training/filteredLastTrainings", {
             params: filters
               ? {
                   startDate:

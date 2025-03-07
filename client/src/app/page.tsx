@@ -10,7 +10,7 @@ import "react-international-phone/style.css";
 import PinAndTrainingValidation from "@/components/RegistationPage/PinAndTrainingValidation";
 import NumberValidation from "@/components/RegistTraining/numberValidation";
 
-export default function WorkoutRegistrationPage() {
+export default function TrainingRegistrationPage() {
   const [showPinValidation, setShowPinValidation] = useState(false);
 
   return (

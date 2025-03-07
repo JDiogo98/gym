@@ -6,8 +6,8 @@ import { LastTrainigs } from "@/components/LastTrainings";
 import api from "../../../lib/api";
 import { toast } from "sonner";
 import { TrainingInterface } from "@/components/LastTrainings/columns";
-import WorkoutCards, { WorkoutCardProps } from "./workoutCards";
-import CoachesTotalTrainings from "@/components/WorkoutsData/CoachesChart";
+import trainingCards, { trainingCardProps } from "./trainingCards";
+import CoachesTotalTrainings from "@/components/trainingsData/CoachesChart";
 
 import {
   Card,

@@ -58,7 +58,7 @@ export const columns: ColumnDef<TrainingInterface>[] = [
       const router = useRouter();
       return (
         <Button
-          onClick={() => router.push(`/workouts/${row.original.trainingId}`)}
+          onClick={() => router.push(`/trainings/${row.original.trainingId}`)}
         >
           <Search />
         </Button>

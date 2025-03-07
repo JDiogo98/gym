@@ -2,18 +2,18 @@ import LoadingSpinner from "@/components/Loading";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import React from "react";
 
-export interface WorkoutCardProps {
+export interface trainingCardProps {
   title: string;
   value: string;
   change: number;
 }
 
-interface WorkoutCardsProps {
-  stats: WorkoutCardProps[] | null;
+interface trainingCardsProps {
+  stats: trainingCardProps[] | null;
   loading: boolean;
 }
 
-const WorkoutCards: React.FC<WorkoutCardsProps> = ({ stats, loading }) => {
+const TrainingCards: React.FC<trainingCardsProps> = ({ stats, loading }) => {
   if (loading) {
     return (
       <>
@@ -38,7 +38,7 @@ const WorkoutCards: React.FC<WorkoutCardsProps> = ({ stats, loading }) => {
             <p className="text-xs text-muted-foreground">
               {stat.change.toString() == "0.00%" ||
               stat.change.toString()[0] == "-"
-                ? `${stat.change }`
+                ? `${stat.change}`
                 : `+${stat.change}`}{" "}
               em relação ao período anterior
             </p>
@@ -48,4 +48,4 @@ const WorkoutCards: React.FC<WorkoutCardsProps> = ({ stats, loading }) => {
     </>
   );
 };
-export default WorkoutCards;
+export default TrainingCards;

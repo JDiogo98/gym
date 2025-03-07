@@ -27,7 +27,6 @@ import {
 } from "@/components/ui/table";
 
 import { DeleteButton } from "@/components/DeleteButton";
-import { EditClient } from "@/components/Sheet/EditClient";
 import Link from "next/link";
 import {
   Pagination,
