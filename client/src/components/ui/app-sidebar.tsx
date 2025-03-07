@@ -13,14 +13,11 @@ import {
 
 import {
   BicepsFlexedIcon,
-  Calendar,
   Home,
-  Inbox,
-  Search,
   Settings,
   UserCheck,
-  UserRound,
   UsersRound,
+  DumbbellIcon,
 } from "lucide-react";
 
 // Items do Menu
@@ -46,6 +43,11 @@ const items = [
     icon: UserCheck,
   },
   {
+    title: "Aulas",
+    url: "/classes",
+    icon: DumbbellIcon,
+  },
+  {
     title: "Definições",
     url: "/",
     icon: Settings,
@@ -58,7 +60,7 @@ export function AppSidebar() {
       <SidebarHeader />
       <SidebarContent>
         <SidebarGroup />
-        <SidebarGroupLabel className="sm:text-base lg:text-l mb-3 ml-4">
+        <SidebarGroupLabel className="text-sm sm:text-base md:text-lg lg:text-xl mb-3 ml-2 sm:ml-4">
           Navegação
         </SidebarGroupLabel>
         <SidebarGroupContent>
@@ -66,9 +68,15 @@ export function AppSidebar() {
             {items.map((item) => (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton asChild>
-                  <a href={item.url}>
-                    <item.icon className="h-6 w-7 ml-4 " />
-                    <p className="sm:text-base mx-3 lg:text-l">{item.title}</p>
+                  <a
+                    href={item.url}
+                    className="flex items-center space-x-3 p-2"
+                    aria-label={item.title} // Melhorando a acessibilidade
+                  >
+                    <item.icon className="h-5 w-5 sm:h-8 sm:w-8 md:h-9 md:w-9 lg:h-12 lg:w-12 ml-2 sm:ml-4" />
+                    <p className="text-sm sm:text-base md:text-lg lg:text-xl">
+                      {item.title}
+                    </p>
                   </a>
                 </SidebarMenuButton>
               </SidebarMenuItem>
