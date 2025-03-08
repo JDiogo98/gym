@@ -5,7 +5,7 @@ import { LastTrainigs } from "@/components/LastTrainings";
 import FiltersComponent, { FiltersInterface } from "./components/filters";
 import TrainingCards from "./components/trainingCards";
 import TopClients from "./components/topClients";
-import CoachesTotalTrainings from "./components/CoachesChart";
+import CoachesTotalTrainings from "./components/coachesChart";
 
 export default function TrainingsPage() {
   const [filters, setFilters] = useState<FiltersInterface>({

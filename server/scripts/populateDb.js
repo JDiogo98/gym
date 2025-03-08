@@ -168,6 +168,7 @@ async function populateDatabase() {
       },
       {
         clientName: "Maria Costa",
+        clientMail: "teste" + Math.random() + "@gmail.com",
         clientPhoneNumber: "+351937654321",
         clientSex: "F",
         clientBirthDate: "1992-08-10",
@@ -176,6 +177,7 @@ async function populateDatabase() {
       },
       {
         clientName: "Carlos Ramos",
+        clientMail: "teste" + Math.random() + "@gmail.com",
         clientPhoneNumber: "+351931234568",
         clientSex: "M",
         clientBirthDate: "1989-06-15",
@@ -184,6 +186,7 @@ async function populateDatabase() {
       },
       {
         clientName: "Sofia Silva",
+        clientMail: "teste" + Math.random() + "@gmail.com",
         clientPhoneNumber: "+351937654322",
         clientSex: "F",
         clientBirthDate: "1994-03-20",
@@ -192,6 +195,7 @@ async function populateDatabase() {
       },
       {
         clientName: "Luís Oliveira",
+        clientMail: "teste" + Math.random() + "@gmail.com",
         clientPhoneNumber: "+351931234569",
         clientSex: "M",
         clientBirthDate: "1991-05-25",
@@ -200,6 +204,7 @@ async function populateDatabase() {
       },
       {
         clientName: "Helena Pereira",
+        clientMail: "teste" + Math.random() + "@gmail.com",
         clientPhoneNumber: "+351937654323",
         clientSex: "F",
         clientBirthDate: "1990-07-10",
@@ -208,6 +213,7 @@ async function populateDatabase() {
       },
       {
         clientName: "Bruno Martins",
+        clientMail: "teste" + Math.random() + "@gmail.com",
         clientPhoneNumber: "+351931234570",
         clientSex: "M",
         clientBirthDate: "1988-12-05",
@@ -216,6 +222,7 @@ async function populateDatabase() {
       },
       {
         clientName: "Laura Mendes",
+        clientMail: "teste" + Math.random() + "@gmail.com",
         clientPhoneNumber: "+351937654324",
         clientSex: "F",
         clientBirthDate: "1993-11-18",
@@ -224,6 +231,7 @@ async function populateDatabase() {
       },
       {
         clientName: "Tiago Costa",
+        clientMail: "teste" + Math.random() + "@gmail.com",
         clientPhoneNumber: "+351931234571",
         clientSex: "M",
         clientBirthDate: "1987-01-30",
@@ -232,6 +240,7 @@ async function populateDatabase() {
       },
       {
         clientName: "Raquel Alves",
+        clientMail: "teste" + Math.random() + "@gmail.com",
         clientPhoneNumber: "+351937654325",
         clientSex: "F",
         clientBirthDate: "1992-02-12",

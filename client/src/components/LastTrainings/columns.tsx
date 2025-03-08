@@ -53,15 +53,17 @@ export const columns: ColumnDef<TrainingInterface>[] = [
   },
   {
     accessorKey: "Detalhes",
-    header: "Detalhes",
+    header: () => <div className="text-right mr-4">Detalhes</div>,
     cell: ({ row }) => {
       const router = useRouter();
       return (
-        <Button
-          onClick={() => router.push(`/trainings/${row.original.trainingId}`)}
-        >
-          <Search />
-        </Button>
+        <div className="text-right mr-4">
+          <Button
+            onClick={() => router.push(`/trainings/${row.original.trainingId}`)}
+          >
+            <Search />
+          </Button>
+        </div>
       );
     },
   },

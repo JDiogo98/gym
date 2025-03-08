@@ -13,15 +13,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import WheightEvolution from "@/components/ClientInformation/wheightEvolution";
-import TrainingEvolution from "@/components/ClientInformation/trainingEvolution";
-import {
-  ActivityIcon,
-  ClipboardEditIcon,
-  PieChartIcon,
-  SaveIcon,
-  UserCircleIcon,
-} from "lucide-react";
+
+import { ClipboardEditIcon, SaveIcon, UserCircleIcon } from "lucide-react";
 import { DeleteButton } from "@/components/DeleteButton";
 import { useParams } from "next/navigation";
 import api from "@/../../client/lib/api";
@@ -35,53 +28,24 @@ import dayjs from "dayjs";
 import { PhoneInput } from "@/components/phone-input";
 import { LastTrainigs } from "@/components/LastTrainings";
 
-const clienteData = {
-  id: "1",
-  name: "João Silva",
-  sex: "Homem",
-  contact: "912345678",
-  dataInscricao: "2023-01-15",
-  ultimosTreinos: [
-    { data: "2024-03-10", tipo: "Musculação", duracao: 60 },
-    { data: "2024-03-08", tipo: "Cardio", duracao: 45 },
-    { data: "2024-03-05", tipo: "Yoga", duracao: 90 },
-    { data: "2024-03-10", tipo: "Musculação", duracao: 60 },
-    { data: "2024-03-08", tipo: "Cardio", duracao: 45 },
-    { data: "2024-03-05", tipo: "Yoga", duracao: 90 },
-    { data: "2024-03-10", tipo: "Musculação", duracao: 60 },
-    { data: "2024-03-08", tipo: "Cardio", duracao: 45 },
-    { data: "2024-03-05", tipo: "Yoga", duracao: 90 },
-    { data: "2024-03-10", tipo: "Musculação", duracao: 60 },
-    { data: "2024-03-08", tipo: "Cardio", duracao: 45 },
-    { data: "2024-03-05", tipo: "Yoga", duracao: 90 },
-  ],
-  progressoFisico: [
-    { mes: "Jan", peso: 80, percentualGordura: 20 },
-    { mes: "Fev", peso: 78, percentualGordura: 19 },
-    { mes: "Mar", peso: 76, percentualGordura: 18 },
-  ],
-  treinosRealizados: [
-    { mes: "Jan", quantidade: 12 },
-    { mes: "Fev", quantidade: 15 },
-    { mes: "Mar", quantidade: 20 },
-    { mes: "Jasn", quantidade: 12 },
-    { mes: "Fev", quantidade: 15 },
-    { mes: "Mar", quantidade: 20 },
-  ],
-};
-
 // Títulos e Labels
 const Title = "Detalhes do Cliente";
 
 export default function DetalhesCliente() {
   // JD - Obter o id do cliente da URL
-
   const { clientId: rawClientId } = useParams();
 
   const clientId = useMemo(
     () => (rawClientId ? Number(rawClientId) : undefined),
     [rawClientId]
   );
+
+  const [avaliableAcademies, setAvaliableAcademies] = useState<
+    { academyId: number; academyName: string }[]
+  >([]);
+  const [avaliableCoaches, setAvaliableCoaches] = useState<
+    { coachId: number; coachName: string }[]
+  >([]);
 
   const [clientData, setClient] = useState<ClientInterface | null>(null);
 
@@ -125,8 +89,6 @@ export default function DetalhesCliente() {
   function handleDelete() {}
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("handleChange", e.target.name, e.target.value);
-
     if (clientData) {
       setClient({ ...clientData, [e.target.name]: e.target.value });
     }
@@ -134,6 +96,7 @@ export default function DetalhesCliente() {
 
   React.useEffect(() => {
     if (!clientId) return;
+
     api
       .get(`api/clients/${clientId}`)
       .then((response) => {
@@ -152,44 +115,124 @@ export default function DetalhesCliente() {
           window.history.back();
         }, 5000);
       });
+  }, []);
+
+  React.useEffect(() => {
+    let isMounted = true;
+
+    async function fetchData() {
+      try {
+        // Fazendo as requisições simultaneamente
+        const [academiesResponse, coachesResponse] = await Promise.all([
+          api.get("/api/academies"),
+          api.get("/api/coaches"),
+        ]);
+
+        if (isMounted) {
+          // Atualiza os dados adicionais (academies, coaches, )
+          setAvaliableAcademies(academiesResponse.data);
+          setAvaliableCoaches(coachesResponse.data);
+        }
+      } catch (error) {
+        toast.error("Erro ao buscar dados.");
+      } finally {
+        setLoadingUserData(false);
+      }
+    }
+
+    fetchData();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const filters = useMemo(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date();
+
+    tomorrow.setDate(today.getDate() + 1);
+    tomorrow.setHours(23, 59, 59, 999);
+
+    return {
+      clientId: clientId ? Number(clientId) : undefined,
+      startDate: new Date("1999-01-01"),
+      endDate: tomorrow,
+    };
   }, [clientId]);
+
+  if (loadingUserData) {
+    return (
+      <Card className="m-4 my-6 w-full">
+        <CardHeader>
+          <div className="flex items-center justify-center">
+            <CardTitle className="text-lg sm:text-xl text select-none">
+              Informações Pessoais
+            </CardTitle>
+            <UserCircleIcon className="ml-auto w-5 h-5" />
+          </div>
+        </CardHeader>
+        <CardContent>
+          <LoadingSpinner text="Carregar dados do Utilizador" />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (userNotFound) {
+    return (
+      <Card className="m-4 my-8 w-full">
+        <CardHeader>
+          <div className="flex items-center justify-center">
+            <CardTitle className="text-lg sm:text-xl text select-none">
+              Informações Pessoais
+            </CardTitle>
+            <UserCircleIcon className="ml-auto w-5 h-5" />
+          </div>
+        </CardHeader>
+        <CardContent>
+          <UserNotFound onRetry={() => refreshPage()} />;
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <div className="p-4 w-full">
-      {userNotFound && <UserNotFound onRetry={() => refreshPage()} />}
-      {loadingUserData && (
-        <LoadingSpinner text="Carregar dados do Utilizador" />
-      )}
-      {clientData && (
-        <Card className="my-6 w-full">
-          <CardHeader>
-            <div className="flex items-center justify-center">
-              <CardTitle className="text-lg sm:text-xl text select-none">
-                Informações Pessoais
-              </CardTitle>
-              <UserCircleIcon className="ml-auto w-5 h-5" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="grid gap-4 w-max">
-              <div className="grid grid-cols-1 gap-4">
-                <div>
-                  <Label htmlFor="nome">Nome</Label>
+      <Card className="my-6 w-full">
+        <CardHeader>
+          <div className="flex items-center justify-center">
+            <CardTitle className="text-lg sm:text-xl text select-none">
+              Informações Pessoais
+            </CardTitle>
+            <UserCircleIcon className="ml-auto w-5 h-5" />
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-4">
+            <div className="grid grid-cols-1 gap-4">
+              <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="w-full">
+                  <Label>Nome</Label>
                   <Input
                     id="clientName"
+                    value={clientData?.clientName}
                     name="clientName"
-                    value={clientData.clientName}
                     onChange={handleChange}
                     disabled={!editMode}
                     style={{ fontSize: "1rem" }}
                   />
                 </div>
-                <div>
-                  <Label htmlFor="sex">Sexo</Label>
+                <div className="w-full">
+                  <Label>Sexo</Label>
                   <Select
-                    value={clientData.clientSex}
+                    value={clientData?.clientSex}
                     onValueChange={(value) =>
-                      setClient({ ...clientData, clientSex: value })
+                      setClient({
+                        ...clientData,
+                        clientSex: value,
+                      } as ClientInterface)
                     }
                     disabled={!editMode}
                   >
@@ -206,108 +249,161 @@ export default function DetalhesCliente() {
                     </SelectContent>
                   </Select>
                 </div>
+              </div>
+
+              <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="contact">Telemóvel</Label>
+                  <Label>Data de Nascimento</Label>
+                  <Input
+                    id="clientBirthDate"
+                    name="clientBirthDate"
+                    value={
+                      clientData?.clientBirthDate
+                        ? dayjs(clientData?.clientBirthDate).format(
+                            "YYYY-MM-DD"
+                          )
+                        : ""
+                    }
+                    onChange={handleChange}
+                    disabled={!editMode}
+                    type="date"
+                    style={{ fontSize: "1rem" }}
+                  />
+                </div>
+                <div>
+                  <Label>Data de Inscrição</Label>
+                  <Input
+                    id="clientRegistrationDate"
+                    name="clientRegistrationDate"
+                    value={
+                      clientData?.clientRegistrationDate
+                        ? dayjs(clientData.clientRegistrationDate).format(
+                            "YYYY-MM-DD"
+                          )
+                        : ""
+                    }
+                    onChange={handleChange}
+                    disabled={!editMode}
+                    type="date"
+                    style={{ fontSize: "1rem" }}
+                  />
+                </div>
+              </div>
+
+              <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label>Telemóvel</Label>
                   <PhoneInput
                     name="clientPhoneNumber"
-                    value={clientData.clientPhoneNumber}
+                    value={clientData?.clientPhoneNumber}
                     onChange={(value) =>
                       setClient({
                         ...clientData,
                         clientPhoneNumber: value,
-                      })
+                        clientId: clientData?.clientId,
+                      } as ClientInterface)
                     }
                     placeholder="Número de telemóvel"
                     defaultCountry="PT"
                     disabled={!editMode}
                   />
                 </div>
+                <div>
+                  <Label>E-mail</Label>
+                  <Input
+                    value={clientData?.clientMail}
+                    id="clientMail"
+                    name="clientMail"
+                    onChange={handleChange}
+                    disabled={!editMode}
+                    style={{ fontSize: "1rem", height: "3rem" }}
+                  />
+                </div>
               </div>
-              <div>
-                <Label htmlFor="dataInscricao">Data de Inscrição</Label>
-                <Input
-                  id="clientRegistrationDate"
-                  name="clientRegistrationDate"
-                  value={
-                    clientData.clientRegistrationDate
-                      ? dayjs(clientData.clientRegistrationDate).format(
-                          "YYYY-MM-DD"
-                        )
-                      : ""
-                  }
-                  onChange={handleChange}
-                  disabled={!editMode}
-                  type="date"
-                  style={{ fontSize: "1rem" }}
-                />
-              </div>
-              <div className="mt-4 flex justify-between gap-4">
-                {editMode ? (
-                  <Button onClick={handleSave}>
-                    <SaveIcon>n</SaveIcon>
-                    Salvar
-                  </Button>
-                ) : (
-                  <Button onClick={handleEdit}>
-                    <ClipboardEditIcon />
-                    Editar
-                  </Button>
-                )}
-                <DeleteButton
-                  id={String(clientData.clientId)}
-                  name={clientData.clientName}
-                  showText={true}
-                  handleDelete={() => handleDelete}
-                ></DeleteButton>
+
+              <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Academia</Label>
+                  <Select
+                    value={clientData?.academyId.toString()}
+                    onValueChange={(value) =>
+                      setClient({
+                        ...clientData,
+                        academyId: Number(value),
+                      } as ClientInterface)
+                    }
+                    disabled={!editMode}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione a academia" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {avaliableAcademies &&
+                        avaliableAcademies.map((academy) => (
+                          <SelectItem
+                            key={academy.academyId}
+                            value={academy.academyId.toString()}
+                          >
+                            {academy.academyName}
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label>Treinador</Label>
+                  <Select
+                    value={clientData?.coachId.toString()}
+                    onValueChange={(value) =>
+                      setClient({
+                        ...clientData,
+                        coachId: Number(value),
+                      } as ClientInterface)
+                    }
+                    disabled={!editMode}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione o treinador" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {avaliableCoaches &&
+                        avaliableCoaches.map((coach) => (
+                          <SelectItem
+                            key={coach.coachId}
+                            value={coach.coachId.toString()}
+                          >
+                            {coach.coachName}
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </div>
-          </CardContent>
-        </Card>
-      )}
-      {/* Progresso Físico */}
-      {/* Training Evolution */}
-      {/* <div className="grid gap-4">
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <WheightEvolution></WheightEvolution>
-          <TrainingEvolution></TrainingEvolution>
-        </section>
-        <Card className="mb-6">
-          <CardHeader>
-            <div className="text-base flex items-center justify-center">
-              <CardTitle className="text-xl select-none">
-                Últimos Treinos
-              </CardTitle>
-              <ActivityIcon className="ml-auto w-5 h-5"></ActivityIcon>
-            </div>{" "}
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Data</TableHead>
-                  <TableHead>Tipo</TableHead>
-                  <TableHead>Duração (min)</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {clienteData.ultimosTreinos.map((treino, index) => (
-                  <TableRow key={index}>
-                    <TableCell>{treino.data}</TableCell>
-                    <TableCell>{treino.tipo}</TableCell>
-                    <TableCell>{treino.duracao}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-      </div> */}
-      <LastTrainigs
-        filters={{
-          clientId: clientId ? Number(clientId) : undefined,
-          startDate: new Date("1999-01-01"),
-        }}
-      ></LastTrainigs>
+            <div className="mt-4 flex justify-between gap-4">
+              {editMode ? (
+                <Button onClick={handleSave}>
+                  <SaveIcon></SaveIcon>
+                  Salvar
+                </Button>
+              ) : (
+                <Button onClick={handleEdit}>
+                  <ClipboardEditIcon />
+                  Editar
+                </Button>
+              )}
+              <DeleteButton
+                id={String(clientData?.clientId)}
+                name={clientData?.clientName || ""}
+                showText={true}
+                handleDelete={() => handleDelete}
+              ></DeleteButton>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <LastTrainigs filters={filters}></LastTrainigs>
     </div>
   );
 }
