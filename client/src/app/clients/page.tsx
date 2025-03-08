@@ -64,7 +64,7 @@ export type clientsDataTypes = {
   }[];
 };
 
-const textClasses = "content-start select-none text-xs sm:text-sm ";
+const textClasses = "p-0 md:p-2 content-start select-none text-xs sm:text-sm ";
 
 export const buttonClasses = "p-1 sm:p-2 md:p-3 lg:p-4";
 
@@ -115,7 +115,7 @@ export default function ClientsTable() {
         </Button>
       ),
       cell: ({ row }) => (
-        <div className={`capitalize hidden lg:flex ml-4 ${textClasses}`}>
+        <div className={`capitalize hidden p-0 lg:flex lg:ml-4 ${textClasses}`}>
           {(row.getValue("coach") as clientsDataTypes["coach"])?.coachName ??
             "Sem treinador"}
         </div>
@@ -198,9 +198,7 @@ export default function ClientsTable() {
           <DeleteButton
             id={row.original.clientId.toString()}
             name={row.original.clientName}
-            handleDelete={() =>
-              handleDeleteClient(row.original.clientId)
-            }
+            handleDelete={() => handleDeleteClient(row.original.clientId)}
           />
         </div>
       ),
@@ -247,8 +245,8 @@ export default function ClientsTable() {
   });
 
   return (
-    <div className="p-4 lg:p-6 min-w-full">
-      <div className="flex items-center py-4">
+    <div className="p-2 lg:p-6 my-4">
+      <div className="items-center py-4">
         <Input
           placeholder="Filtrar Clientes..."
           value={
@@ -257,7 +255,7 @@ export default function ClientsTable() {
           onChange={(event) =>
             table.getColumn("clientName")?.setFilterValue(event.target.value)
           }
-          className="max-w-sm"
+          className="w-fit-content"
         />
       </div>
       <div className="rounded-md border">
@@ -319,7 +317,7 @@ export default function ClientsTable() {
           </TableBody>
         </Table>
       </div>
-      <div className="flex justify-evenly">
+      <div className="grid grid-cols-1 md:flex gap-4">
         <Pagination className="mt-5 flex justify-start">
           <PaginationContent>
             <PaginationItem>
@@ -348,10 +346,9 @@ export default function ClientsTable() {
             </PaginationItem>
           </PaginationContent>
         </Pagination>
-        <Link className="mt-5 flex" href={"/clients/add"}>
-          <Button variant="outline">Adicionar Cliente</Button>
+        <Link className="ml-2 mt-2 md:mt-5 justify-end" href={"/clients/add"}>
+          <Button variant="secondary">Adicionar Cliente</Button>
         </Link>
-        <Toaster />
       </div>
     </div>
   );

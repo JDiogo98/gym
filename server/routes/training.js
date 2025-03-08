@@ -187,6 +187,62 @@ router.get("/filteredLastTrainings", async (req, res) => {
   }
 });
 
+router.get("/filteredTopClients", async (req, res) => {
+  const { startDate, endDate, coachId, trainingTypeId, academyId } = req.query;
+
+  const filters = {};
+
+  if (startDate && endDate) {
+    filters.trainingDate = {
+      [Sequelize.Op.between]: [new Date(startDate), new Date(endDate)],
+    };
+  } else {
+    const today = new Date();
+    filters.trainingDate = {
+      [Sequelize.Op.between]: [
+        new Date(today.setMonth(today.getMonth() - 1)),
+        new Date(),
+      ],
+    };
+  }
+
+  if (coachId) filters.coachId = coachId;
+  if (trainingTypeId) filters.trainingTypeId = trainingTypeId;
+  if (academyId) filters.academyId = academyId;
+
+  try {
+    const topClients = await Training.findAll({
+      attributes: [
+        [Sequelize.fn("COUNT", Sequelize.col("training_id")), "totalTraining"],
+      ],
+      include: [
+        {
+          model: Client,
+          as: "client",
+          attributes: ["clientId", "clientName"],
+          required: true,
+        },
+      ],
+      where: filters,
+      group: ["client.client_id"],
+      order: [
+        [Sequelize.fn("COUNT", Sequelize.col("client.client_id")), "DESC"],
+      ],
+    });
+
+    const formattedTopClients = topClients.map((client) => ({
+      clientName: client.client.clientName,
+      clientTrainings: client.get("totalTraining"),
+      clientId: client.client.clientId,
+    }));
+
+    res.status(200).json(formattedTopClients);
+  } catch (error) {
+    console.error("Erro ao obter os clientes", error);
+    res.status(500).json({ error: "Erro interno ao obter os clientes" });
+  }
+});
+
 router.get("/filteredCardsInfo", async (req, res) => {
   const { startDate, endDate, coachId, trainingTypeId, academyId } = req.query;
 
