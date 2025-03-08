@@ -13,6 +13,97 @@ const {
 } = require("../models");
 const dayjs = require("dayjs");
 
+router.get("/id/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const training = await Training.findByPk(id, {
+      include: [
+        {
+          model: Client,
+          as: "client",
+          attributes: ["clientId", "clientName"],
+        },
+        {
+          model: Coach,
+          as: "coach",
+          attributes: ["coachId", "coachName"],
+        },
+        {
+          model: Academy,
+          as: "academy",
+          attributes: ["academyId", "academyName"],
+        },
+        {
+          model: TrainingType,
+          as: "trainingType",
+          attributes: ["trainingTypeId", "trainingTypeName"],
+        },
+        {
+          model: Duration,
+          as: "trainingDuration",
+          attributes: ["durationId", "durationName"],
+        },
+      ],
+    });
+
+    if (!training) {
+      return res.status(404).json({ error: "Treino não encontrado" });
+    }
+
+    const formattedTraining = {
+      trainingDate: dayjs(training.trainingDate),
+      client: training.client,
+      coach: training.coach,
+      academy: training.academy,
+      trainingType: training.trainingType,
+      trainingDuration: training.trainingDuration,
+    };
+
+    res.status(200).json(formattedTraining);
+  } catch (error) {
+    console.error("Erro ao obter o treino", error);
+    res.status(500).json({ error: "Erro interno ao obter o treino" });
+  }
+});
+
+router.put("/id/:id", async (req, res) => {
+  const { id } = req.params;
+
+  const {
+    trainingDate,
+    clientId,
+    coachId,
+    academyId,
+    trainingTypeId,
+    durationId,
+  } = req.body;
+
+  console.log(req.body);
+
+  try {
+    const training = await Training.findByPk(id);
+
+    if (!training) {
+      return res.status(404).json({ error: "Treino não encontrado" });
+    }
+
+    await training.update({
+      trainingDate,
+      clientId,
+      coachId,
+      academyId,
+      trainingTypeId,
+      trainingDurationId: durationId,
+    });
+
+    res.status(200).json({ message: "Treino atualizado com sucesso" });
+  } catch (error) {
+    console.error("Erro ao atualizar o treino", error);
+    res.status(500).json({ error: "Erro interno ao atualizar o treino" });
+  }
+});
+
 router.get("/filteredLastTrainings", async (req, res) => {
   const { startDate, endDate, coachId, trainingTypeId, academyId, clientId } =
     req.query;

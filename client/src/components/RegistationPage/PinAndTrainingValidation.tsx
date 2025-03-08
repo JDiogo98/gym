@@ -20,7 +20,7 @@ interface TrainingType {
   trainingTypeName: string;
 }
 
-interface TrainingDuration {
+export interface TrainingDuration {
   durationId: number;
   durationName: string;
 }
