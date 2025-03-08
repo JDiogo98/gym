@@ -159,6 +159,7 @@ async function populateDatabase() {
     const clients = [
       {
         clientName: "José Diogo",
+        clientMail: "diogovaz1913@gmail.com",
         clientPhoneNumber: "+351938096814",
         clientSex: "M",
         clientBirthDate: "1995-04-01",

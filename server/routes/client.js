@@ -168,6 +168,7 @@ router.put("/:id", async (req, res) => {
       clientSex,
       academyId,
       coachId,
+      clientMail,
     } = req.body;
 
     // Verificar se o cliente existe
@@ -188,6 +189,7 @@ router.put("/:id", async (req, res) => {
     client.clientSex = clientSex || client.clientSex;
     client.academyId = academyId ? parseInt(academyId) : client.academyId;
     client.coachId = coachId ? parseInt(coachId) : client.coachId;
+    client.clientMail = clientMail || client.clientMail;
 
     // Salvar as alterações no banco de dados
     await client.save();
