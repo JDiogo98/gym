@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/popover";
 import React, { useState } from "react";
 import dayjs from "dayjs";
-import api from "../../../lib/api";
+import api from "../../../../lib/api";
 import { toast } from "sonner";
 
 export interface FiltersInterface {

@@ -8,26 +8,19 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import dayjs from "dayjs";
-import LoadingSpinner from "../Loading";
+import LoadingSpinner from "../../../components/Loading";
 import React, { useState, useEffect } from "react";
-import api from "../../../lib/api";
+import api from "../../../../lib/api";
 import { toast } from "sonner";
-import { FiltersInterface } from "@/app/trainings/filters";
+import { FiltersInterface } from "@/app/trainings/components/filters";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const chartConfig = {
   totalTraining: {
@@ -80,13 +73,21 @@ export default function CoachesTotalTrainings({
     };
   }, [filters]);
 
+  if (loading) {
+    return (
+      <Card className="min-w-[300px] h-full flex items-center justify-center">
+        <LoadingSpinner text="Carregar..." />
+      </Card>
+    );
+  }
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>Total de Treinos</CardTitle>
       </CardHeader>
       <CardContent>
-        {!loading ? (
+        <ScrollArea className="h-[250px]">
           <ChartContainer config={chartConfig}>
             <BarChart
               accessibilityLayer
@@ -110,7 +111,7 @@ export default function CoachesTotalTrainings({
                 tickLine={false}
                 tickMargin={10}
                 axisLine={false}
-                tickFormatter={(value) => value.slice(0, 3)} // Ajusta os nomes no eixo Y
+                tickFormatter={(value) => value.slice(0, 3)} 
                 hide
               />
               <XAxis dataKey="totalTraining" type="number" hide />
@@ -124,8 +125,7 @@ export default function CoachesTotalTrainings({
                 fill="var(--color-totalTraining)"
                 radius={4}
               >
-                {/* Nome do treinador à esquerda */}
-                <LabelList
+«                <LabelList
                   dataKey="coachName"
                   position="insideLeft"
                   offset={10} // Ajusta o espaço à esquerda
@@ -143,9 +143,7 @@ export default function CoachesTotalTrainings({
               </Bar>
             </BarChart>
           </ChartContainer>
-        ) : (
-          <LoadingSpinner />
-        )}
+        </ScrollArea>
       </CardContent>
     </Card>
   );
