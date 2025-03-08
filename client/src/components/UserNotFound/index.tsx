@@ -16,7 +16,7 @@ interface UserNotFoundProps {
 
 export default function UserNotFound({ onRetry }: UserNotFoundProps) {
   return (
-    <div className="w-full mt-7 p-4 max-w-md mx-auto border-none">
+    <div className="w-full  mx-auto border-none">
       <div className="card-header"></div>
       <div className="flex items-center justify-center w-12 h-12 rounded-full bg-red-100 mx-auto mb-4">
         <UserX className="w-6 h-6 text-red-600" />

@@ -81,7 +81,7 @@ export function LastTrainigs({ filters }: LastTrainingsProps) {
         <LoadingSpinner text="Carregando últimos treinos..." />
       ) : lastTrainingsData.length > 0 ? (
         <div className="flex flex-1 m-3">
-          <ScrollArea className="flex-1 max-h-[350px] rounded-md border">
+          <ScrollArea className="flex-1 max-h-[350px]">
             <DataTable columns={columns} data={lastTrainingsData} />
           </ScrollArea>
         </div>
