@@ -76,7 +76,7 @@ async function populateDatabase() {
     // Criar academias no banco
     const createdAcademies = await Academy.bulkCreate(academies);
 
-    // JD - Inserir dados na tabela Coach (10 Coaches)
+    // JD - Inserir dados na tabela Coach (3 Coaches)
     const coaches = [
       {
         coachName: "Carlos Silva",
@@ -95,48 +95,6 @@ async function populateDatabase() {
         coachPhoneNumber: "912345679",
         coachSex: "M",
         coachBirthDate: "1982-03-25",
-      },
-      {
-        coachName: "Beatriz Almeida",
-        coachPhoneNumber: "923456780",
-        coachSex: "F",
-        coachBirthDate: "1988-11-30",
-      },
-      {
-        coachName: "Pedro Sousa",
-        coachPhoneNumber: "912345680",
-        coachSex: "M",
-        coachBirthDate: "1991-05-10",
-      },
-      {
-        coachName: "Laura Ferreira",
-        coachPhoneNumber: "923456781",
-        coachSex: "F",
-        coachBirthDate: "1993-02-22",
-      },
-      {
-        coachName: "Miguel Oliveira",
-        coachPhoneNumber: "912345681",
-        coachSex: "M",
-        coachBirthDate: "1992-01-05",
-      },
-      {
-        coachName: "Sofia Pereira",
-        coachPhoneNumber: "923456782",
-        coachSex: "F",
-        coachBirthDate: "1987-09-15",
-      },
-      {
-        coachName: "Rui Santos",
-        coachPhoneNumber: "912345682",
-        coachSex: "M",
-        coachBirthDate: "1990-12-12",
-      },
-      {
-        coachName: "Carolina Rocha",
-        coachPhoneNumber: "923456783",
-        coachSex: "F",
-        coachBirthDate: "1989-08-28",
       },
     ];
 
@@ -191,7 +149,7 @@ async function populateDatabase() {
         clientSex: "F",
         clientBirthDate: "1994-03-20",
         academyId: createdAcademies[3].academyId,
-        coachId: createdCoaches[3].coachId,
+        coachId: createdCoaches[0].coachId,
       },
       {
         clientName: "Luís Oliveira",
@@ -200,7 +158,7 @@ async function populateDatabase() {
         clientSex: "M",
         clientBirthDate: "1991-05-25",
         academyId: createdAcademies[4].academyId,
-        coachId: createdCoaches[4].coachId,
+        coachId: createdCoaches[1].coachId,
       },
       {
         clientName: "Helena Pereira",
@@ -209,7 +167,7 @@ async function populateDatabase() {
         clientSex: "F",
         clientBirthDate: "1990-07-10",
         academyId: createdAcademies[5].academyId,
-        coachId: createdCoaches[5].coachId,
+        coachId: createdCoaches[2].coachId,
       },
       {
         clientName: "Bruno Martins",
@@ -218,7 +176,7 @@ async function populateDatabase() {
         clientSex: "M",
         clientBirthDate: "1988-12-05",
         academyId: createdAcademies[6].academyId,
-        coachId: createdCoaches[6].coachId,
+        coachId: createdCoaches[0].coachId,
       },
       {
         clientName: "Laura Mendes",
@@ -227,7 +185,7 @@ async function populateDatabase() {
         clientSex: "F",
         clientBirthDate: "1993-11-18",
         academyId: createdAcademies[7].academyId,
-        coachId: createdCoaches[7].coachId,
+        coachId: createdCoaches[1].coachId,
       },
       {
         clientName: "Tiago Costa",
@@ -236,7 +194,7 @@ async function populateDatabase() {
         clientSex: "M",
         clientBirthDate: "1987-01-30",
         academyId: createdAcademies[8].academyId,
-        coachId: createdCoaches[8].coachId,
+        coachId: createdCoaches[2].coachId,
       },
       {
         clientName: "Raquel Alves",
@@ -245,7 +203,7 @@ async function populateDatabase() {
         clientSex: "F",
         clientBirthDate: "1992-02-12",
         academyId: createdAcademies[9].academyId,
-        coachId: createdCoaches[9].coachId,
+        coachId: createdCoaches[0].coachId,
       },
     ];
 
@@ -268,12 +226,12 @@ async function populateDatabase() {
     // JD - Inserir treinos para cada cliente com quantidade aleatória
     for (let i = 0; i < createdClients.length; i++) {
       // Definir uma quantidade aleatória de treinos entre 5 e 20 por cliente
-      const trainingCount = Math.floor(Math.random() * (20 - 5 + 1)) + 5;
+      const trainingCount = Math.floor(Math.random() * (60 - 5 + 1)) + 5;
 
       for (let j = 0; j < trainingCount; j++) {
         // Gerar uma data aleatória entre dezembro de 2024 e fevereiro de 2025
-        const startDate = new Date(2024, 11, 1); // 1º de dezembro de 2024
-        const endDate = new Date(2025, 1, 28); // 28 de fevereiro de 2025
+        const startDate = new Date(2024, 3, 1); // 1º de dezembro de 2024
+        const endDate = new Date(); // 28 de fevereiro de 2025
 
         // Calcular a diferença entre as datas em milissegundos
         const timeDifference = endDate.getTime() - startDate.getTime();

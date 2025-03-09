@@ -164,7 +164,7 @@ export default function DetalhesCliente() {
 
   if (loadingUserData) {
     return (
-      <Card className="m-4 my-6 w-full">
+      <Card className="mx-4 my-6 w-full">
         <CardHeader>
           <div className="flex items-center justify-center">
             <CardTitle className="text-lg sm:text-xl text select-none">

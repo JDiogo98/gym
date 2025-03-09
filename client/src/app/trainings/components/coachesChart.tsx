@@ -21,6 +21,7 @@ import api from "../../../../lib/api";
 import { toast } from "sonner";
 import { FiltersInterface } from "@/app/trainings/components/filters";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import NoResults from "@/components/noResults";
 
 const chartConfig = {
   totalTraining: {
@@ -81,6 +82,22 @@ export default function CoachesTotalTrainings({
     );
   }
 
+  if (!loading && chartData.length === 0) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Total de Treinos</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <NoResults
+            message="Sem reultados"
+            suggestion="Tente ajustar os filtros"
+          />
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -111,7 +128,7 @@ export default function CoachesTotalTrainings({
                 tickLine={false}
                 tickMargin={10}
                 axisLine={false}
-                tickFormatter={(value) => value.slice(0, 3)} 
+                tickFormatter={(value) => value.slice(0, 3)}
                 hide
               />
               <XAxis dataKey="totalTraining" type="number" hide />
@@ -125,7 +142,8 @@ export default function CoachesTotalTrainings({
                 fill="var(--color-totalTraining)"
                 radius={4}
               >
-«                <LabelList
+                «{" "}
+                <LabelList
                   dataKey="coachName"
                   position="insideLeft"
                   offset={10} // Ajusta o espaço à esquerda

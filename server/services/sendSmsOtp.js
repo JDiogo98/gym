@@ -43,7 +43,7 @@ const sendOtpForClassRegistration = async (phoneNumber, otpCode) => {
       {
         destinations: [{ to: phoneNumber }],
         from: "351927946211", // Substitua com o número de envio correto
-        text: `Código OTP para registar a aula é: ${otpCode}`, // Mensagem com o OTP
+        text: `Apresente o seguinte código para registar a aula: ${otpCode}`, // Mensagem com o OTP
       },
     ],
   });

@@ -18,6 +18,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import NoResults from "@/components/noResults";
 
 interface TopClientsProps {
   filters: FiltersInterface | undefined;
@@ -82,6 +83,22 @@ const TopClients: React.FC<TopClientsProps> = ({ filters }) => {
     return (
       <Card className="min-w-[300px] h-full flex items-center justify-center">
         <LoadingSpinner text="Carregar..." />
+      </Card>
+    );
+  }
+
+  if (!loading && (!topClientsData || topClientsData.length === 0)) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Top Clientes por Número de Treinos</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <NoResults
+            message="Sem resultados"
+            suggestion="Tente ajustar os filtros"
+          />
+        </CardContent>
       </Card>
     );
   }

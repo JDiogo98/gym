@@ -4,7 +4,6 @@ import { CartesianGrid, XAxis } from "recharts";
 import { Area, AreaChart } from "recharts";
 
 import {
-  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
@@ -17,58 +16,105 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { PieChartIcon, TrendingUp } from "lucide-react";
+import { PieChartIcon } from "lucide-react";
+import React, { use, useState } from "react";
+import api from "../../../lib/api";
+import LoadingSpinner from "../Loading";
+import { toast } from "sonner";
 
-const chartData = [
-  { month: "Janeiro", treinador1: 35, treinador2: 28, treinador3: 17 },
-  { month: "Fevereiro", treinador1: 24, treinador2: 38, treinador3: 21 },
-  { month: "Março", treinador1: 18, treinador2: 35, treinador3: 25 },
-  { month: "Abril", treinador1: 33, treinador2: 22, treinador3: 16 },
-  { month: "Maio", treinador1: 28, treinador2: 31, treinador3: 19 },
-  { month: "Junho", treinador1: 22, treinador2: 29, treinador3: 13 },
-  { month: "Julho", treinador1: 36, treinador2: 18, treinador3: 20 },
-  { month: "Agosto", treinador1: 25, treinador2: 30, treinador3: 15 },
-  { month: "Setembro", treinador1: 19, treinador2: 22, treinador3: 30 },
-  { month: "Outubro", treinador1: 14, treinador2: 36, treinador3: 11 },
-  { month: "Novembro", treinador1: 31, treinador2: 23, treinador3: 28 },
-  { month: "Dezembro", treinador1: 30, treinador2: 25, treinador3: 35 },
-];
+interface ChartData {
+  month: string;
+  [key: string]: string | number;
+}
 
-const chartConfig = {
-  treinador1: {
-    label: "treinador1",
-    color: "#0a68dc",
-  },
-  treinador2: {
-    label: "treinador2",
-    color: "#528b88",
-  },
-  treinador3: {
-    label: "treinador2",
-    color: "#c7a762",
-  },
-} satisfies ChartConfig;
+type ChartConfig = Record<string, { label: string; color: string }>;
+
+function createChartConfig(data: ChartData[]): ChartConfig {
+  return data
+    .flatMap((entry) => {
+      // Excluir o campo 'month' de cada entrada
+      const { month, ...coaches } = entry;
+
+      return Object.entries(coaches).map(([label, value]) => {
+        return {
+          label,
+          value,
+          color: `#${Math.floor(Math.random() * 16777215).toString(16)}`, // Gerar cor aleatória
+        };
+      });
+    })
+    .reduce((acc: ChartConfig, { label, color }) => {
+      acc[label] = {
+        label,
+        color,
+      };
+      return acc;
+    }, {}) satisfies ChartConfig;
+}
 
 export default function MainChart() {
+  const [chartData, setChartData] = useState<ChartData[]>([]);
+  const [chartConfig, setChartConfig] = useState<ChartConfig>({});
+
+  const [loading, setLoading] = useState(true);
+
   const title = "Desempenho dos/as treinadores/as";
-  const description = "Relatório dos últimos 6 meses";
-  const progress = "Aumento de 5.3% no último mês";
-  const lastSixMonthsRange = "agosto a dezembro de 2024";
+  const description = "Relatório dos últimos 12 meses";
 
+  React.useEffect(() => {
+    let isMounted = true;
+    setLoading(true);
 
+    const fetchFilteredData = async () => {
+      try {
+        setLoading(true);
 
+        const response = await api.get("api/coaches/coachesProgress");
 
+        if (isMounted) {
+          setTimeout(() => {
+            setChartData(response.data);
+            setChartConfig(createChartConfig(response.data));
+            setLoading(false);
+          }, 1000);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        toast.error("Ocorreu um erro ao buscar os dados.");
+      }
+    };
 
+    fetchFilteredData();
 
-  
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  if (loading) {
+    return (
+      <Card className="flex-1">
+        <CardHeader>
+          <div className="text-base flex items-center justify-center">
+            <CardTitle className="text-xl select-none">{title}</CardTitle>
+            <PieChartIcon className="ml-auto w-5 h-5"></PieChartIcon>
+          </div>
+          <CardDescription className="select-none text-base">
+            {description}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <LoadingSpinner></LoadingSpinner>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="flex-1">
       <CardHeader>
         <div className="text-base flex items-center justify-center">
-          <CardTitle className="text-xl  text-gray-800 select-none">
-            {title}
-          </CardTitle>
+          <CardTitle className="text-xl select-none">{title}</CardTitle>
           <PieChartIcon className="ml-auto w-5 h-5"></PieChartIcon>
         </div>
         <CardDescription className="select-none text-base">
@@ -97,46 +143,20 @@ export default function MainChart() {
               cursor={false}
               content={<ChartTooltipContent indicator="dot" />}
             />
-            <Area
-              dataKey="treinador1"
-              type="natural"
-              fill="var(--color-treinador1)"
-              fillOpacity={0.4}
-              stroke="var(--color-treinador1)"
-              stackId="a"
-            />
-            <Area
-              dataKey="treinador2"
-              type="natural"
-              fill="var(--color-treinador2)"
-              fillOpacity={0.4}
-              stroke="var(--color-treinador2)"
-              stackId="a"
-            />
-            <Area
-              dataKey="treinador3"
-              type="natural"
-              fill="var(--color-treinador3)"
-              fillOpacity={0.4}
-              stroke="var(--color-treinador3)"
-              stackId="a"
-            />
+            {Object.keys(chartConfig).map((key) => (
+              <Area
+                key={key}
+                dataKey={key}
+                type="natural"
+                fill={chartConfig[key].color}
+                fillOpacity={0.4}
+                stroke={chartConfig[key].color}
+                stackId="a"
+              />
+            ))}
           </AreaChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter>
-        <div className="flex w-full items-start gap-2 text-sm">
-          <div className="grid gap-2">
-            <div className="flex items-center gap-2 font-medium leading-none">
-              {progress}
-              <TrendingUp className="h-4 w-4" />
-            </div>
-            <div className="flex items-center gap-2 leading-none text-muted-foreground">
-              {lastSixMonthsRange}
-            </div>
-          </div>
-        </div>
-      </CardFooter>
     </Card>
   );
 }

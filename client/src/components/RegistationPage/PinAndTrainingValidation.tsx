@@ -14,6 +14,7 @@ import {
 import api from "../../../lib/api";
 import { toast } from "sonner";
 import NumbersInput from "../RegistTraining/numbersInput";
+import SuccessCard from "@/app/trainings/components/successCard";
 
 interface TrainingType {
   trainingTypeId: number;
@@ -104,7 +105,6 @@ const TypeAndDurationInput: React.FC<TypeAndDurationInputProps> = ({
     };
   }, []);
 
-  console.log("Available durations:", trainingDuration);
   return (
     <div className="grid grid-cols-2 gap-4 mt-12">
       <div>
@@ -173,6 +173,8 @@ export default function PinAndTrainingValidation({
     durationName: "",
   });
 
+  const [success, setSuccess] = useState(false);
+
   const handlePinChange = (index: number, value: string) => {
     if (value.length <= 1 && !isNaN(Number(value))) {
       const newPin = [...pin];
@@ -215,16 +217,27 @@ export default function PinAndTrainingValidation({
         trainingTypeId: parseInt(trainingType.typeId),
         trainingDurationId: parseInt(trainingDuration.durationId),
       });
-      setShowPinValidation(false);
+      setSuccess(true);
       toast.success("Treino registado com sucesso!", {
         description: "O treino foi registado na base de dados.",
       });
+      setTimeout(() => {
+        setShowPinValidation(false);
+      }, 5000);
     } catch (error) {
       toast.error("Código inválido", {
         description: "Por favor, insira um código válido ou tente novamente.",
       });
     }
   };
+
+  if (success) {
+    return (
+      <div className="flex flex-col items-center justify-center space-y-4">
+        <SuccessCard className="p-8"></SuccessCard>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4">

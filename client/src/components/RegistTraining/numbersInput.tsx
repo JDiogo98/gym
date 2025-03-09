@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "../ui/button";
-import { DeleteIcon } from "lucide-react";
+import { DeleteIcon, Undo2Icon } from "lucide-react";
 
 interface NumbersInputProps {
   handleNumberClick: (value: string) => void;
@@ -33,7 +33,13 @@ const NumbersInput: React.FC<NumbersInputProps> = ({
             +
           </Button>
         ) : (
-          <div></div>
+          <Button
+            onClick={() => (window.location.href = "/")}
+            variant={"ghost"}
+            className="h-16 flex items-center justify-center text-3xl font-bold cursor-pointer border"
+          >
+            <Undo2Icon style={{ width: "24px", height: "60px" }} />
+          </Button>
         )}
         <Button
           onClick={() => handleNumberClick("0")}

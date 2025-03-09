@@ -8,7 +8,7 @@ import { columns, TrainingInterface } from "./columns";
 import LoadingSpinner from "../Loading";
 import { DataTable } from "./data-table";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import NoResults from "../NoResults";
+import NoResults from "../noResults";
 import { toast } from "sonner";
 import { FiltersInterface } from "@/app/trainings/components/filters";
 
@@ -22,6 +22,8 @@ export function LastTrainigs({ filters }: LastTrainingsProps) {
   >([]);
 
   const [loadingState, setLoadingState] = useState(true);
+
+  
   React.useEffect(() => {
     let isMounted = true;
     setLoadingState(true);

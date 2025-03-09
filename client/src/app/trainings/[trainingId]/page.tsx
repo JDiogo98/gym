@@ -13,8 +13,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { CalendarIcon, Loader } from "lucide-react";
-import { cn } from "@/lib/utils";
+import {
+  ClipboardEditIcon,
+  SaveIcon,
+} from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
@@ -26,6 +28,7 @@ import { toast } from "sonner";
 import api from "../../../../lib/api";
 import LoadingSpinner from "@/components/Loading";
 import { TrainingDuration } from "@/components/RegistationPage/PinAndTrainingValidation";
+import { set } from "date-fns";
 
 interface Training {
   trainingDate: string;
@@ -71,7 +74,15 @@ export default function TrainingPage() {
     TrainingDuration[]
   >([]);
 
+  const [editMode, setEditMode] = useState(false);
+
+  const handleEdit = () => {
+    setEditMode(true);
+  };
+
   const handleSave = () => {
+    setEditMode(false);
+
     if (trainingId) {
       api
         .put(`api/training/id/${trainingId}`, {
@@ -154,212 +165,226 @@ export default function TrainingPage() {
 
   if (loading) {
     return (
-      <Card className="h-max flex justify-center items-center m-8">
+      <Card className="h-5/6 flex justify-center items-center m-8 mb-16">
         <LoadingSpinner />
       </Card>
     );
   }
 
-  console.log("training", training);
-
   return (
     <div className="container mx-auto p-4 mt-8">
-      <Card>
-        <CardHeader>
-          <CardTitle>Detalhes do Treino</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
-            <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="client">Cliente</Label>
-                <Input
-                  id="client"
-                  value={training?.client.clientName}
-                  disabled
-                />
+      {training && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Detalhes do Treino</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
+              <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="client">Cliente</Label>
+                  <Input
+                    id="client"
+                    value={training?.client.clientName}
+                    disabled
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="trainer">Treinador</Label>
+                  <Select
+                    value={training?.coach.coachId.toString()}
+                    onValueChange={(value) => {
+                      const selectedCoach = avaliableCoaches.find(
+                        (coach) => coach.coachId.toString() === value
+                      );
+                      handleSelectChange("coach", selectedCoach!);
+                    }}
+                    disabled={!editMode}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione o treinador" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {avaliableCoaches &&
+                        avaliableCoaches.map((coach) => (
+                          <SelectItem
+                            key={coach.coachId}
+                            value={coach.coachId.toString()}
+                          >
+                            {coach.coachName}
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="trainer">Treinador</Label>
-                <Select
-                  value={training?.coach.coachId.toString()}
-                  onValueChange={(value) => {
-                    const selectedCoach = avaliableCoaches.find(
-                      (coach) => coach.coachId.toString() === value
-                    );
-                    handleSelectChange("coach", selectedCoach!);
-                  }}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecione o treinador" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {avaliableCoaches &&
-                      avaliableCoaches.map((coach) => (
-                        <SelectItem
-                          key={coach.coachId}
-                          value={coach.coachId.toString()}
-                        >
-                          {coach.coachName}
-                        </SelectItem>
-                      ))}
-                  </SelectContent>
-                </Select>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Data do Treino</Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className="w-full justify-start text-left font-normal"
+                        disabled={!editMode}
+                      >
+                        {training?.trainingDate ? (
+                          <span>
+                            {new Date(
+                              training?.trainingDate
+                            ).toLocaleDateString()}
+                          </span>
+                        ) : (
+                          <span>Selecione uma data</span>
+                        )}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={
+                          training?.trainingDate
+                            ? new Date(training.trainingDate)
+                            : undefined
+                        }
+                        onSelect={(date) => {
+                          handleSelectChange(
+                            "trainingDate",
+                            dayjs(date).toISOString()
+                          );
+                        }}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="time">Hora do Treino</Label>
+                  <Input
+                    className="text-sm"
+                    id="time"
+                    name="time"
+                    type="time"
+                    value={training?.trainingDate.split("T")[1].split(".")[0]}
+                    onChange={(e) =>
+                      handleSelectChange(
+                        "trainingDate",
+                        `${training?.trainingDate.split("T")[0]}T${
+                          e.target.value
+                        }:00`
+                      )
+                    }
+                    disabled={!editMode}
+                  />
+                </div>
               </div>
-            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Data do Treino</Label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant={"outline"}
-                      className="w-full justify-start text-left font-normal"
-                    >
-                      {training?.trainingDate ? (
-                        <span>
-                          {new Date(
-                            training?.trainingDate
-                          ).toLocaleDateString()}
-                        </span>
-                      ) : (
-                        <span>Selecione uma data</span>
-                      )}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={
-                        training?.trainingDate
-                          ? new Date(training.trainingDate)
-                          : undefined
-                      }
-                      onSelect={(date) => {
-                        handleSelectChange(
-                          "trainingDate",
-                          dayjs(date).toISOString()
-                        );
-                      }}
-                    />
-                  </PopoverContent>
-                </Popover>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="type">Tipo de Treino</Label>
+                  <Select
+                    value={training?.trainingType.trainingTypeId.toString()}
+                    onValueChange={(value) => {
+                      const selectedTrainingType = avaliableTrainingTypes.find(
+                        (trainingType) =>
+                          trainingType.trainingTypeId.toString() === value
+                      );
+                      handleSelectChange("trainingType", selectedTrainingType!);
+                    }}
+                    disabled={!editMode}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione o tipo de treino" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {avaliableTrainingTypes &&
+                        avaliableTrainingTypes.map((trainingType) => (
+                          <SelectItem
+                            key={trainingType.trainingTypeId}
+                            value={trainingType.trainingTypeId.toString()}
+                          >
+                            {trainingType.trainingTypeName}
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="location">Localização</Label>
+                  <Select
+                    value={training?.academy.academyId.toString()}
+                    onValueChange={(value) => {
+                      const selectedAcademy = avaliableAcademies.find(
+                        (academy) => academy.academyId.toString() === value
+                      );
+                      handleSelectChange("academy", selectedAcademy!);
+                    }}
+                    disabled={!editMode}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione a localização" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {avaliableAcademies &&
+                        avaliableAcademies.map((academy) => (
+                          <SelectItem
+                            key={academy.academyId}
+                            value={academy.academyId.toString()}
+                          >
+                            {academy.academyName}
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="location">Duração</Label>
+                  <Select
+                    value={training?.trainingDuration.durationId.toString()}
+                    onValueChange={(value) => {
+                      const selectedDuration = availableTrainingDuration.find(
+                        (duration) => duration.durationId.toString() === value
+                      );
+                      handleSelectChange("trainingDuration", selectedDuration!);
+                    }}
+                    disabled={!editMode}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione a localização" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {availableTrainingDuration &&
+                        availableTrainingDuration.map((duration) => (
+                          <SelectItem
+                            key={duration.durationId}
+                            value={duration.durationId.toString()}
+                          >
+                            {duration.durationName}
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="time">Hora do Treino</Label>
-                <Input
-                  id="time"
-                  name="time"
-                  type="time"
-                  value={training?.trainingDate.split("T")[1].split(".")[0]}
-                  onChange={(e) =>
-                    handleSelectChange(
-                      "trainingDate",
-                      `${training?.trainingDate.split("T")[0]}T${
-                        e.target.value
-                      }:00`
-                    )
-                  }
-                />
-              </div>
-            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="type">Tipo de Treino</Label>
-                <Select
-                  value={training?.trainingType.trainingTypeId.toString()}
-                  onValueChange={(value) => {
-                    const selectedTrainingType = avaliableTrainingTypes.find(
-                      (trainingType) =>
-                        trainingType.trainingTypeId.toString() === value
-                    );
-                    handleSelectChange("trainingType", selectedTrainingType!);
-                  }}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecione o tipo de treino" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {avaliableTrainingTypes &&
-                      avaliableTrainingTypes.map((trainingType) => (
-                        <SelectItem
-                          key={trainingType.trainingTypeId}
-                          value={trainingType.trainingTypeId.toString()}
-                        >
-                          {trainingType.trainingTypeName}
-                        </SelectItem>
-                      ))}
-                  </SelectContent>
-                </Select>
+              <div className="flex justify-between">
+                {editMode ? (
+                  <Button onClick={handleSave}>
+                    <SaveIcon></SaveIcon>
+                    Salvar
+                  </Button>
+                ) : (
+                  <Button onClick={handleEdit}>
+                    <ClipboardEditIcon />
+                    Editar
+                  </Button>
+                )}
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="location">Localização</Label>
-                <Select
-                  value={training?.academy.academyId.toString()}
-                  onValueChange={(value) => {
-                    const selectedAcademy = avaliableAcademies.find(
-                      (academy) => academy.academyId.toString() === value
-                    );
-                    handleSelectChange("academy", selectedAcademy!);
-                  }}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecione a localização" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {avaliableAcademies &&
-                      avaliableAcademies.map((academy) => (
-                        <SelectItem
-                          key={academy.academyId}
-                          value={academy.academyId.toString()}
-                        >
-                          {academy.academyName}
-                        </SelectItem>
-                      ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="location">Duração</Label>
-                <Select
-                  value={training?.trainingDuration.durationId.toString()}
-                  onValueChange={(value) => {
-                    const selectedDuration = availableTrainingDuration.find(
-                      (duration) => duration.durationId.toString() === value
-                    );
-                    handleSelectChange("trainingDuration", selectedDuration!);
-                  }}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecione a localização" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {availableTrainingDuration &&
-                      availableTrainingDuration.map((duration) => (
-                        <SelectItem
-                          key={duration.durationId}
-                          value={duration.durationId.toString()}
-                        >
-                          {duration.durationName}
-                        </SelectItem>
-                      ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
-            <div className="flex justify-between">
-              <Button variant="outline" onClick={() => router.push("/")}>
-                Voltar
-              </Button>
-              <Button onClick={handleSave}>Salvar Alterações</Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+            </form>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

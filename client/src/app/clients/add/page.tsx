@@ -40,10 +40,10 @@ import api from "../../../../lib/api";
 import { Toaster, toast } from "sonner";
 
 const formSchema = z.object({
-  name: z.string().min(2, {
+  clientName: z.string().min(2, {
     message: "O nome deve ter pelo menos 2 caracteres.",
   }),
-  phone_number: z
+  clientPhoneNumber: z
     .string()
     .trim()
     .min(9, {
@@ -52,17 +52,17 @@ const formSchema = z.object({
     .max(9, {
       message: "O número de telefone deve ter 9 dígitos.",
     }),
-  birth_date: z.date({
+  clientBirthDate: z.date({
     required_error: "A data de nascimento é obrigatória.",
   }),
-  registration_date: z.date({
+  clientRegistrationDate: z.date({
     required_error: "A data de inscrição é obrigatória.",
   }),
-  sex: z.enum(["M", "F", "O"], {
+  clientSex: z.enum(["M", "F", "O"], {
     required_error: "Por favor, selecione um gênero.",
   }),
-  academy_id: z.string().nullable().optional(),
-  coach_id: z.string().nullable().optional(),
+  academyId: z.string().nullable().optional(),
+  coachId: z.string().nullable().optional(),
 });
 
 export default function AddClientPage() {
@@ -77,13 +77,13 @@ export default function AddClientPage() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      phone_number: "",
-      birth_date: undefined,
-      registration_date: undefined,
-      sex: undefined,
-      academy_id: null,
-      coach_id: null,
+      clientName: "",
+      clientPhoneNumber: "",
+      clientBirthDate: undefined,
+      clientRegistrationDate: undefined,
+      clientSex: undefined,
+      academyId: null,
+      coachId: null,
     },
   });
 
@@ -91,8 +91,8 @@ export default function AddClientPage() {
     // JD - Garantir que os valores de academia e treinador são números inteiros
     const formattedValues = {
       ...values,
-      academy_id: values.academy_id ? parseInt(values.academy_id) : null,
-      coach_id: values.coach_id ? parseInt(values.coach_id) : null,
+      academyId: values.academyId ? parseInt(values.academyId) : null,
+      coachId: values.coachId ? parseInt(values.coachId) : null,
     };
 
     console.log("aqui os valores", formattedValues);
@@ -101,7 +101,7 @@ export default function AddClientPage() {
       .post("api/clients", formattedValues)
       .then((response) => {
         toast.success(
-          `O/a ${formattedValues.name} foi adicionado/a com sucesso!`
+          `O/a ${formattedValues.clientName} foi adicionado/a com sucesso!`
         );
 
         setTimeout(() => {
@@ -150,7 +150,7 @@ export default function AddClientPage() {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField
               control={form.control}
-              name="name"
+              name="clientName"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Nome</FormLabel>
@@ -163,7 +163,7 @@ export default function AddClientPage() {
             />
             <FormField
               control={form.control}
-              name="phone_number"
+              name="clientPhoneNumber"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>N.º Telemóvel</FormLabel>
@@ -176,7 +176,7 @@ export default function AddClientPage() {
             />
             <FormField
               control={form.control}
-              name="birth_date"
+              name="clientBirthDate"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>Data de Nascimento</FormLabel>
@@ -218,7 +218,7 @@ export default function AddClientPage() {
 
             <FormField
               control={form.control}
-              name="registration_date"
+              name="clientRegistrationDate"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>Data de Inscrição</FormLabel>
@@ -258,7 +258,7 @@ export default function AddClientPage() {
 
             <FormField
               control={form.control}
-              name="sex"
+              name="clientSex"
               render={({ field }) => (
                 <FormItem className="space-y-3">
                   <FormLabel>Gênero</FormLabel>
@@ -294,7 +294,7 @@ export default function AddClientPage() {
             />
             <FormField
               control={form.control}
-              name="academy_id"
+              name="academyId"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Academia (opcional)</FormLabel>
@@ -305,16 +305,17 @@ export default function AddClientPage() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value={null}>Nenhuma academia</SelectItem>
                       {avaliableAcademies &&
-                        avaliableAcademies.map((academy_id) => (
-                          <SelectItem
-                            key={academy_id.id}
-                            value={academy_id.id.toString()}
-                          >
-                            {academy_id.name}
-                          </SelectItem>
-                        ))}
+                        avaliableAcademies.map((academy) =>
+                          academy.id ? (
+                            <SelectItem
+                              key={academy.id.toString()}
+                              value={academy.id.toString()}
+                            >
+                              {academy.name}
+                            </SelectItem>
+                          ) : null
+                        )}
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -323,7 +324,7 @@ export default function AddClientPage() {
             />
             <FormField
               control={form.control}
-              name="coach_id"
+              name="coachId"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Treinador (opcional)</FormLabel>
@@ -339,14 +340,16 @@ export default function AddClientPage() {
                     <SelectContent>
                       <SelectItem value={null}>Nenhum treinador</SelectItem>
                       {avaliableCoaches &&
-                        avaliableCoaches.map((coach_id) => (
-                          <SelectItem
-                            key={coach_id.id}
-                            value={coach_id.id.toString()}
-                          >
-                            {coach_id.name}
-                          </SelectItem>
-                        ))}
+                        avaliableCoaches.map((coach) =>
+                          coach.id ? (
+                            <SelectItem
+                              key={coach.id.toString()}
+                              value={coach.id.toString()}
+                            >
+                              {coach.name}
+                            </SelectItem>
+                          ) : null
+                        )}
                     </SelectContent>
                   </Select>
                   <FormMessage />
