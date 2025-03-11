@@ -28,8 +28,6 @@ import dayjs from "dayjs";
 import { PhoneInput } from "@/components/phone-input";
 import { LastTrainigs } from "@/components/LastTrainings";
 
-// Títulos e Labels
-const Title = "Detalhes do Cliente";
 
 export default function DetalhesCliente() {
   // JD - Obter o id do cliente da URL
@@ -95,7 +93,12 @@ export default function DetalhesCliente() {
   };
 
   React.useEffect(() => {
-    if (!clientId) return;
+    if (!clientId || isNaN(clientId)) {
+      setUserNotFound(true);
+      setLoadingUserData(false);
+      toast.error("O ID do cliente não é válido.");
+      return;
+    }
 
     api
       .get(`api/clients/${clientId}`)
@@ -162,6 +165,8 @@ export default function DetalhesCliente() {
     };
   }, [clientId]);
 
+  console.log(userNotFound, "aqui userNotFound");
+
   if (loadingUserData) {
     return (
       <Card className="mx-4 my-6 w-full">
@@ -182,7 +187,7 @@ export default function DetalhesCliente() {
 
   if (userNotFound) {
     return (
-      <Card className="m-4 my-8 w-full">
+      <Card className="m-4 my-8">
         <CardHeader>
           <div className="flex items-center justify-center">
             <CardTitle className="text-lg sm:text-xl text select-none">
@@ -192,7 +197,7 @@ export default function DetalhesCliente() {
           </div>
         </CardHeader>
         <CardContent>
-          <UserNotFound onRetry={() => refreshPage()} />;
+          <UserNotFound onRetry={() => refreshPage()} />
         </CardContent>
       </Card>
     );

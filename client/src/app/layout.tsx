@@ -28,7 +28,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <SidebarProvider>
-            <div className="flex min-h-screen">
+            <div className="flex flex-1">
               {pathname !== "/" && <AppSidebar />}
               <div className="flex flex-col flex-1 transition-all duration-300">
                 <div className="relative flex-1">

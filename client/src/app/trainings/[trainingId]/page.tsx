@@ -28,7 +28,6 @@ import { toast } from "sonner";
 import api from "../../../../lib/api";
 import LoadingSpinner from "@/components/Loading";
 import { TrainingDuration } from "@/components/RegistationPage/PinAndTrainingValidation";
-import { set } from "date-fns";
 
 interface Training {
   trainingDate: string;

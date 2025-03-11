@@ -34,7 +34,6 @@ import {
 } from "@/components/ui/form";
 import { Card } from "@/components/ui/card";
 
-import { pt } from "date-fns/locale";
 import api from "../../../../lib/api";
 
 import { Toaster, toast } from "sonner";
@@ -143,7 +142,7 @@ export default function AddClientPage() {
   }, []);
 
   return (
-    <div className="container mx-auto py-6 p-4">
+    <div className="mx-auto py-6 p-4 mt-4">
       <Card className="p-4">
         <h1 className="text-2xl font-bold mb-6">Adicionar Novo Cliente</h1>
         <Form {...form}>
