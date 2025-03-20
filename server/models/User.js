@@ -8,45 +8,50 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         field: "user_id",
       },
-      email: {
+      userEmail: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
         validate: {
           isEmail: true,
         },
-        field: "email",
+        field: "user_email",
       },
-      passwordHash: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        field: "password_hash",
-      },
-      refreshToken: {
+      userName: {
         type: DataTypes.STRING,
         allowNull: true,
-        field: "refresh_token",
+        field: "user_name",
       },
-      lastLogin: {
+      userPasswordHash: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        field: "user_password_hash",
+      },
+      userRefreshToken: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        field: "user_refresh_token",
+      },
+      userLastLogin: {
         type: DataTypes.DATE,
-        field: "last_login",
+        field: "user_last_login",
       },
-      lastIp: {
+      userLastIp: {
         type: DataTypes.STRING,
         validate: {
           isIP: true,
         },
-        field: "last_ip",
+        field: "user_last_ip",
       },
-      role: {
+      userRole: {
         type: DataTypes.ENUM("admin", "user", "coach"),
         defaultValue: "user",
-        field: "role",
+        field: "user_role",
       },
-      isActive: {
+      userIsActive: {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
-        field: "is_active",
+        field: "user_is_active",
       },
     },
     {

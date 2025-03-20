@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button } from "../ui/button";
 import { DeleteIcon, Undo2Icon } from "lucide-react";
 
@@ -13,6 +13,26 @@ const NumbersInput: React.FC<NumbersInputProps> = ({
   handleDelete,
   onPinValidation,
 }) => {
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      const { key } = event;
+      if (key >= "0" && key <= "9") {
+        handleNumberClick(key);
+      } else if (key === "Backspace") {
+        handleDelete();
+      } else if (key === "+" && !onPinValidation) {
+        handleNumberClick("+");
+      } else if (key === "Enter" && onPinValidation) {
+        window.location.href = "/";
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyPress);93
+    return () => {
+      window.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [handleNumberClick, handleDelete, onPinValidation]);
+
   return (
     <div className="space-y-2 gap-4 ">
       <div className="grid grid-cols-3 gap-4">

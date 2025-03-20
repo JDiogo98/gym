@@ -1,36 +1,38 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
+import { ClipboardIcon } from "lucide-react";
 
 export default function AlternativeRegistration() {
-  const [isOpen, setIsOpen] = useState(false)
-  const [trainerCode, setTrainerCode] = useState('')
-  const [clientName, setClientName] = useState('')
+  const [isOpen, setIsOpen] = useState(false);
+  const [trainerCode, setTrainerCode] = useState("");
+  const [clientName, setClientName] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     // Aqui você normalmente validaria o código do treinador e registraria o treino
-    console.log('Registrando treino para:', clientName)
-    setIsOpen(false)
-    setTrainerCode('')
-    setClientName('')
-  }
+    console.log("Registrando treino para:", clientName);
+    setIsOpen(false);
+    setTrainerCode("");
+    setClientName("");
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="absolute top-4 right-16">
-          Registo Alternativo
+        <Button variant="outline" className="">
+          <ClipboardIcon className="w-4 h-4" />
+          <span className="hidden md:flex">Registo Alternativo</span>
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -58,10 +60,11 @@ export default function AlternativeRegistration() {
               required
             />
           </div>
-          <Button type="submit" className="w-full">Registrar Treino</Button>
+          <Button type="submit" className="w-full">
+            Registrar Treino
+          </Button>
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
-

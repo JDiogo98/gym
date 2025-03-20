@@ -23,7 +23,6 @@ export function LastTrainigs({ filters }: LastTrainingsProps) {
 
   const [loadingState, setLoadingState] = useState(true);
 
-  
   React.useEffect(() => {
     let isMounted = true;
     setLoadingState(true);
@@ -66,6 +65,7 @@ export function LastTrainigs({ filters }: LastTrainingsProps) {
     };
   }, [filters]);
 
+  console.log("lastTrainingsData", lastTrainingsData);
   const title = "Últimos Treinos";
 
   return (
