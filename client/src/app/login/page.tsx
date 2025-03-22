@@ -6,7 +6,7 @@ import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -26,22 +26,23 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useToast } from "@/hooks/use-toast";
 import api from "../../../lib/api";
 import Carousel from "@/components/RegistationPage/Carousel";
+import { toast } from "sonner";
+import { LOGIN } from "@/locales/strings";
+import { set } from "date-fns";
 
 const formSchema = z.object({
   email: z.string().email({
-    message: "Por favor, insira um e-mail válido.",
+    message: LOGIN.VALIDATION.EMAIL_INVALID,
   }),
   password: z.string().min(6, {
-    message: "A senha deve ter pelo menos 6 caracteres.",
+    message: LOGIN.VALIDATION.PASSWORD_MIN,
   }),
 });
 
 export default function LoginPage() {
   const router = useRouter();
-  const { toast } = useToast();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -55,24 +56,22 @@ export default function LoginPage() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
     try {
       await api
         .post("api/auth/login", values, {
           withCredentials: true,
         })
         .then(() => {
-          toast({
-            title: "Login realizado com sucesso!",
-            description: "Você está logado.",
-          });
-          window.location.href = "/";
+          toast.success(LOGIN.VALIDATION.LOGIN_SUCCESS);
+          setTimeout(() => {
+            window.location.href = "/";
+          }, 1000);
         });
     } catch (error) {
-      toast({
-        title: "Erro ao logar",
-        description: "Ocorreu um erro ao tentar fazer login. Tente novamente.",
-        variant: "destructive",
-      });
+      toast.error(LOGIN.VALIDATION.LOGIN_ERROR);
     } finally {
       setIsLoading(false);
     }
@@ -88,7 +87,7 @@ export default function LoginPage() {
           router.push("/");
         }
       } catch (error) {
-        console.error("Erro ao verificar JWT", error);
+        return;
       }
     };
     verifyJWT();
@@ -103,10 +102,10 @@ export default function LoginPage() {
         <Card className="w-full max-w-md">
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl font-bold text-center">
-              Login
+              {LOGIN.TITLE}
             </CardTitle>
             <CardDescription className="text-center">
-              Entre com seu e-mail e senha para acessar sua conta
+              {LOGIN.DESCRIPTION}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -120,9 +119,12 @@ export default function LoginPage() {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>E-mail</FormLabel>
+                      <FormLabel>{LOGIN.EMAIL.LABEL}</FormLabel>
                       <FormControl>
-                        <Input placeholder="seu@email.com" {...field} />
+                        <Input
+                          placeholder={LOGIN.EMAIL.PLACEHOLDER}
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -133,12 +135,12 @@ export default function LoginPage() {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Senha</FormLabel>
+                      <FormLabel>{LOGIN.PASSWORD.LABEL}</FormLabel>
                       <FormControl>
                         <div className="relative">
                           <Input
                             type={showPassword ? "text" : "password"}
-                            placeholder="******"
+                            placeholder={LOGIN.PASSWORD.PLACEHOLDER}
                             {...field}
                           />
                           <Button
@@ -153,11 +155,6 @@ export default function LoginPage() {
                             ) : (
                               <Eye className="h-4 w-4" />
                             )}
-                            <span className="sr-only">
-                              {showPassword
-                                ? "Esconder senha"
-                                : "Mostrar senha"}
-                            </span>
                           </Button>
                         </div>
                       </FormControl>
@@ -166,7 +163,11 @@ export default function LoginPage() {
                   )}
                 />
                 <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? "Entrando..." : "Entrar"}
+                  {isLoading ? (
+                    <Loader2 className="h-6 w-6 animate-spin" />
+                  ) : (
+                    LOGIN.BUTTONS.LOGIN
+                  )}
                 </Button>
               </form>
             </Form>
@@ -177,16 +178,16 @@ export default function LoginPage() {
                 href="/forgot-password"
                 className="hover:text-primary underline underline-offset-4"
               >
-                Esqueceu sua senha?
+                {LOGIN.LINKS.FORGOT_PASSWORD}
               </Link>
             </div>
             <div className="text-sm text-center text-muted-foreground">
-              Não tem uma conta?{" "}
+              {LOGIN.LINKS.DONT_HAVE_ACCOUNT}{" "}
               <Link
                 href="/register"
                 className="hover:text-primary underline underline-offset-4"
               >
-                Registre-se
+                {LOGIN.LINKS.REGISTER}
               </Link>
             </div>
           </CardFooter>
@@ -195,3 +196,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
+//TODO FAZER O FORGOT PASSWORD
