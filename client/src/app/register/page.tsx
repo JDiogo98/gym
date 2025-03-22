@@ -6,7 +6,7 @@ import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -26,33 +26,49 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useToast } from "@/hooks/use-toast";
 import api from "../../../lib/api";
+import { REGISTER } from "@/locales/strings";
+import { toast } from "sonner";
+import { PhoneInput } from "@/components/phone-input";
+
+//TODO- A MESMA VALIDAÇÃO DE PASSWORD NO SERVIDOR
+//TODO- Colocar input do telemóve e respetiva validação no formSchema aqui e em todos os locais que o input phone é utilizado
+// TODO - Tratamento de erros do backend
 
 const formSchema = z
   .object({
     name: z.string().min(2, {
-      message: "O nome deve ter pelo menos 2 caracteres.",
+      message: REGISTER.VALIDATION.NAME_MIN,
     }),
     email: z.string().email({
-      message: "Por favor, insira um e-mail válido.",
+      message: REGISTER.VALIDATION.EMAIL_INVALID,
     }),
-    password: z.string().min(6, {
-      message: "A senha deve ter pelo menos 6 caracteres.",
-    }),
+    password: z
+      .string()
+      .min(6, {
+        message: REGISTER.VALIDATION.PASSWORD_MIN,
+      })
+      .regex(/[A-Z]/, {
+        message: REGISTER.VALIDATION.PASSWORD_UPPERCASE,
+      })
+      .regex(/[a-z]/, {
+        message: REGISTER.VALIDATION.PASSWORD_LOWERCASE,
+      })
+      .regex(/[^a-zA-Z0-9]/, {
+        message: REGISTER.VALIDATION.PASSWORD_SYMBOL,
+      }),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "As senhas não coincidem",
+    message: REGISTER.VALIDATION.PASSWORD_MISMATCH,
     path: ["confirmPassword"],
   });
 
 export default function RegisterPage() {
-  const router = useRouter();
-  const { toast } = useToast();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [phone, setPhone] = useState("");
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -68,16 +84,16 @@ export default function RegisterPage() {
     setIsLoading(true);
     try {
       await api.post("api/auth/register", values).then(() => {
-        toast({
-          title: "Registro realizado com sucesso!",
-          description: "Sua conta foi criada. Você pode fazer login agora.",
+        toast.success(REGISTER.VALIDATION.REGISTER_SUCCESS, {
+          description: REGISTER.VALIDATION.REGISTER_SUCCESS_DESCRIPTION,
         });
+        setTimeout(() => {
+          window.location.href = "/login";
+        }, 1000);
       });
     } catch (error) {
-      toast({
-        title: "Erro ao registrar",
-        description: "Ocorreu um erro ao criar sua conta. Tente novamente.",
-        variant: "destructive",
+      toast.error(REGISTER.VALIDATION.REGISTER_ERROR, {
+        description: REGISTER.VALIDATION.REGISTER_ERROR_DESCRIPTION,
       });
     } finally {
       setIsLoading(false);
@@ -89,10 +105,10 @@ export default function RegisterPage() {
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">
-            Criar Conta
+            {REGISTER.TITLE}
           </CardTitle>
           <CardDescription className="text-center">
-            Preencha os campos abaixo para criar sua conta
+            {REGISTER.DESCRIPTION}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -103,9 +119,12 @@ export default function RegisterPage() {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Nome</FormLabel>
+                    <FormLabel>{REGISTER.NAME.LABEL}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Seu nome completo" {...field} />
+                      <Input
+                        placeholder={REGISTER.NAME.PLACEHOLDER}
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -116,20 +135,36 @@ export default function RegisterPage() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>E-mail</FormLabel>
+                    <FormLabel>{REGISTER.EMAIL.LABEL}</FormLabel>
                     <FormControl>
-                      <Input placeholder="seu@email.com" {...field} />
+                      <Input
+                        placeholder={REGISTER.EMAIL.PLACEHOLDER}
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
+              />
+              <div>
+                <FormLabel>{REGISTER.PHONE_NUMBER.LABEL}</FormLabel>
+              </div>
+              <PhoneInput
+                name="clientPhoneNumber"
+                value={phone}
+                onChange={(value) => {
+                  setPhone(value);
+                }
+              }
+                placeholder={REGISTER.PHONE_NUMBER.PLACEHOLDER}
+                defaultCountry="PT"
               />
               <FormField
                 control={form.control}
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Senha</FormLabel>
+                    <FormLabel>{REGISTER.PASSWORD.LABEL}</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <Input
@@ -149,9 +184,6 @@ export default function RegisterPage() {
                           ) : (
                             <Eye className="h-4 w-4" />
                           )}
-                          <span className="sr-only">
-                            {showPassword ? "Esconder senha" : "Mostrar senha"}
-                          </span>
                         </Button>
                       </div>
                     </FormControl>
@@ -164,7 +196,7 @@ export default function RegisterPage() {
                 name="confirmPassword"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Confirmar Senha</FormLabel>
+                    <FormLabel>{REGISTER.CONFIRM_PASSWORD.LABEL}</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <Input
@@ -186,11 +218,6 @@ export default function RegisterPage() {
                           ) : (
                             <Eye className="h-4 w-4" />
                           )}
-                          <span className="sr-only">
-                            {showConfirmPassword
-                              ? "Esconder senha"
-                              : "Mostrar senha"}
-                          </span>
                         </Button>
                       </div>
                     </FormControl>
@@ -199,19 +226,23 @@ export default function RegisterPage() {
                 )}
               />
               <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Registrando..." : "Registrar"}
+                {isLoading ? (
+                  <Loader2 className="h-6 w-6 animate-spin" />
+                ) : (
+                  REGISTER.BUTTONS.REGISTER
+                )}
               </Button>
             </form>
           </Form>
         </CardContent>
         <CardFooter>
           <div className="text-sm text-center w-full text-muted-foreground">
-            Já tem uma conta?{" "}
+            {REGISTER.LINKS.ALREADY_HAVE_ACCOUNT}{" "}
             <Link
               href="/login"
               className="hover:text-primary underline underline-offset-4"
             >
-              Faça login
+              {REGISTER.LINKS.LOGIN}
             </Link>
           </div>
         </CardFooter>
