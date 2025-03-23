@@ -19,6 +19,7 @@ import {
   UsersRound,
   DumbbellIcon,
 } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 // Items do Menu
 const items = [
@@ -49,12 +50,14 @@ const items = [
   },
   {
     title: "Definições",
-    url: "/",
+    url: "/settings",
     icon: Settings,
   },
 ];
 
 export function AppSidebar() {
+  const pathname = usePathname();
+
   return (
     <Sidebar>
       <SidebarHeader />
@@ -67,10 +70,7 @@ export function AppSidebar() {
           <SidebarMenu>
             {items.map((item) => (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton
-                  asChild
-                  isActive={window.location.pathname === item.url}
-                >
+                <SidebarMenuButton asChild isActive={pathname === item.url}>
                   <a
                     href={item.url}
                     className="flex items-center space-x-3 p-2"

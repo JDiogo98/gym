@@ -8,7 +8,7 @@ const { Duration } = require("../models");
 router.get("/", async (req, res) => {
   try {
     const listOfDurations = await Duration.findAll({
-      atributtes: ["duration_id", "duration_name"],
+      order: [["duration_number", "ASC"]],
     });
 
     res.status(200).json(listOfDurations);
@@ -16,6 +16,55 @@ router.get("/", async (req, res) => {
     console.error("Erro ao obter as durações dos treinos.", error);
     res.status(500).json({
       error: "Erro interno ao obter as durações dos treinos",
+    });
+  }
+});
+
+router.put("/visible/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const duration = await Duration.findByPk(id);
+
+    if (!duration) {
+      res.status(404).json({
+        error: "Duração não encontrada",
+      });
+    }
+
+    duration.durationVisible = !duration.durationVisible;
+
+    await duration.save();
+
+    res.status(200).json(duration);
+  } catch (error) {
+    console.error(
+      "Erro ao alterar a visibilidade da duração do treino.",
+      error
+    );
+    res.status(500).json({
+      error: "Erro interno ao alterar a visibilidade da duração do treino",
+    });
+  }
+});
+
+router.post("/", async (req, res) => {
+  const { durationNumber, durationName, durationVisible } = req.body;
+
+  const roundedDurationNumber = parseFloat(durationNumber.toFixed(2));
+
+  try {
+    const newDuration = await Duration.create({
+      durationNumber: roundedDurationNumber,
+      durationName,
+      durationVisible,
+    });
+
+    res.status(201).json(newDuration);
+  } catch (error) {
+    console.error("Erro ao criar uma nova duração de treino.", error);
+    res.status(500).json({
+      error: "Erro interno ao criar uma nova duração de treino",
     });
   }
 });

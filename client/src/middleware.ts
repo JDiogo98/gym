@@ -21,5 +21,6 @@ export const config = {
     "/settings",
     "/clients",
     "/classes",
+    "/settings",
   ],
 };

@@ -211,15 +211,16 @@ async function populateDatabase() {
     const createdClients = await Client.bulkCreate(clients);
 
     const durations = [
-      { durationName: "15min." },
-      { durationName: "30min." },
-      { durationName: "45min." },
-      { durationName: "60min." },
-      { durationName: "75min." },
-      { durationName: "90min." },
-      { durationName: "105min." },
-      { durationName: "120min." },
+      { durationNumber: 0.25, durationName: "15min." },
+      { durationNumber: 0.50, durationName: "30min." },
+      { durationNumber: 0.75, durationName: "45min." },
+      { durationNumber: 1.00, durationName: "60min." },
+      { durationNumber: 1.25, durationName: "75min." },
+      { durationNumber: 1.50, durationName: "90min." },
+      { durationNumber: 1.75, durationName: "105min." },
+      { durationNumber: 2.00, durationName: "120min." },
     ];
+    
 
     const createdDurations = await Duration.bulkCreate(durations);
 

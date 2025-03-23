@@ -265,6 +265,9 @@ export default function AcademiesSettings() {
       </Card>
     );
   }
+
+
+  
   return (
     <Card>
       <CardHeader>

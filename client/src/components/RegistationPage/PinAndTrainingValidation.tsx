@@ -287,3 +287,6 @@ export default function PinAndTrainingValidation({
     </div>
   );
 }
+
+
+//TODO STRING DE ERRO AO BUSCAR DADOS

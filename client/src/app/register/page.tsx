@@ -80,7 +80,7 @@ export default function RegisterPage() {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {    
     setIsLoading(true);
     try {
       await api.post("api/auth/register", values).then(() => {
@@ -210,7 +210,7 @@ export default function RegisterPage() {
                           size="icon"
                           className="absolute right-0 top-0 h-full px-3"
                           onClick={() =>
-                            setShowConfirmPassword(!showConfirmPassword)
+                          setShowConfirmPassword(!showConfirmPassword)
                           }
                         >
                           {showConfirmPassword ? (

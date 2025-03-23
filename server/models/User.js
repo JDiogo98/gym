@@ -63,3 +63,6 @@ module.exports = (sequelize, DataTypes) => {
 
   return User;
 };
+
+// todo criar o phone input
+// todo regitar os metadados do user
