@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/popover";
 import React, { useState } from "react";
 import dayjs from "dayjs";
-import api from "../../../../lib/api";
+import  { apiPrivate } from "../../../../lib/api";
 import { toast } from "sonner";
 
 export interface FiltersInterface {
@@ -63,9 +63,9 @@ export default function Filters({ setFilters }: FiltersProps) {
       try {
         const [academiesResponse, coachesResponse, trainingTypesResponse] =
           await Promise.all([
-            api.get("/api/academies"),
-            api.get("/api/coaches"),
-            api.get("/api/trainingTypes"),
+            apiPrivate.get("/api/academies"),
+            apiPrivate.get("/api/coaches"),
+            apiPrivate.get("/api/trainingTypes"),
           ]);
 
         if (isMounted) {

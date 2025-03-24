@@ -66,3 +66,16 @@ module.exports = (sequelize, DataTypes) => {
 
 // todo criar o phone input
 // todo regitar os metadados do user
+
+
+// todo fazer forget_password e reset_password
+
+// roles: admin, user
+
+
+
+
+// o admin tem as definições de academias, treinos durações, 
+
+// admin pode suspender, ativar e eliminar utilizadores
+// só o admin pode verificar contas de users

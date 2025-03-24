@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/card";
 import { TrophyIcon } from "lucide-react";
 import React, { useState } from "react";
-import api from "../../../../lib/api";
+import { apiPrivate } from "../../../../lib/api";
 
 interface InformationCardProps {
   content?: string;
@@ -26,7 +26,7 @@ export function AverageTrainings() {
   const [response, setResponse] = useState<InformationCardProps | null>(null);
 
   React.useEffect(() => {
-    api
+    apiPrivate
       .get("/api/dashboard/averageTrainings")
       .then((response) => {
         console.log(response.data);

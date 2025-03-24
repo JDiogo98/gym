@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/chart";
 import LoadingSpinner from "../../../components/Loading";
 import React, { useState, useEffect } from "react";
-import api from "../../../../lib/api";
+import { apiPrivate } from "../../../../lib/api";
 import { toast } from "sonner";
 import { FiltersInterface } from "@/app/trainings/components/filters";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -50,7 +50,7 @@ export default function CoachesTotalTrainings({
     const fetchFilteredData = async () => {
       try {
         const [coachesTotalTrainingsData] = await Promise.all([
-          api.get("/api/training/coachesChart", {
+          apiPrivate.get("/api/training/coachesChart", {
             params: filters,
           }),
         ]);

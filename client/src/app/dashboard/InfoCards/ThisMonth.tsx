@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/card";
 import { DumbbellIcon } from "lucide-react";
 import React, { useState } from "react";
-import api from "../../../../lib/api";
+import { apiPrivate } from "../../../../lib/api";
 
 interface InformationCardProps {
   content?: string;
@@ -26,7 +26,7 @@ export function ThisMonthCard() {
   const [response, setResponse] = useState<InformationCardProps | null>(null);
 
   React.useEffect(() => {
-    api
+    apiPrivate
       .get("/api/dashboard/thisMonth")
       .then((response) => {
         console.log(response.data);

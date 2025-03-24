@@ -31,7 +31,7 @@ import {
 } from "@/components/ui/table";
 import { Plus } from "lucide-react";
 import LoadingSpinner from "../Loading";
-import api from "../../../lib/api";
+import { apiPrivate } from "../../../lib/api";
 import { toast } from "sonner";
 
 //todo colocar o type no arquivo próprio
@@ -76,7 +76,7 @@ export default function DurationsSettings() {
     };
 
     try {
-      const response = await api.post("api/durations/", newDuration);
+      const response = await apiPrivate.post("api/durations/", newDuration);
       toast.success("Duração adicionada com sucesso.");
       setAvailableTrainingDuration(
         [...(availableTrainingDuration || []), response.data].sort(
@@ -93,7 +93,7 @@ export default function DurationsSettings() {
 
   const handleToggleActive = async (id: number) => {
     try {
-      await api.put(`api/durations/visible/${id}`);
+      await apiPrivate.put(`api/durations/visible/${id}`);
       setAvailableTrainingDuration(
         availableTrainingDuration?.map((duration) =>
           duration.durationId === id
@@ -113,7 +113,7 @@ export default function DurationsSettings() {
     async function fetchData() {
       try {
         const [trainingDurations] = await Promise.all([
-          api.get("/api/durations/"),
+          apiPrivate.get("/api/durations/"),
         ]);
         if (isMounted) {
           setAvailableTrainingDuration(trainingDurations.data);

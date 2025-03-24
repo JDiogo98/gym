@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { toast } from "sonner";
-import api from "../../../lib/api";
+import { apiPublic } from "../../../lib/api";
 import NumbersInput from "./numbersInput";
 import { Button } from "../ui/button";
 import { Loader2 } from "lucide-react";
@@ -49,7 +49,7 @@ const NumberValidation: React.FC<NumbersValidationProps> = ({
 
     try {
       if (phoneNumber.length === 13) {
-        await api.post("/api/sms/sendTrainingOtp", {
+        await apiPublic.post("/api/sms/sendTrainingOtp", {
           phoneNumber: phoneNumber,
         });
         setShowPinValidation(true);

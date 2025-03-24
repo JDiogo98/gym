@@ -34,7 +34,7 @@ import {
 } from "@/components/ui/form";
 import { Card } from "@/components/ui/card";
 
-import api from "../../../../lib/api";
+import { apiPrivate } from "../../../../lib/api";
 
 import { Toaster, toast } from "sonner";
 
@@ -121,8 +121,8 @@ export default function AddClientPage() {
     const fetchData = async () => {
       try {
         const [academiesResponse, coachesResponse] = await Promise.all([
-          api.get("/api/academies"),
-          api.get("/api/coaches"),
+          apiPrivate.get("/api/academies"),
+          apiPrivate.get("/api/coaches"),
         ]);
 
         if (isMounted) {

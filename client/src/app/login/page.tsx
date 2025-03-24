@@ -26,7 +26,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import api from "../../../lib/api";
+import { apiPrivate, apiPublic } from "../../../lib/api";
 import Carousel from "@/components/RegistationPage/Carousel";
 import { toast } from "sonner";
 import { LOGIN } from "@/locales/strings";
@@ -60,7 +60,7 @@ export default function LoginPage() {
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     try {
-      await api
+      await apiPublic
         .post("api/auth/login", values, {
           withCredentials: true,
         })
@@ -80,7 +80,7 @@ export default function LoginPage() {
   useEffect(() => {
     const verifyJWT = async () => {
       try {
-        const response = await api.get("/", {
+        const response = await apiPublic.get("/", {
           withCredentials: true,
         });
         if (response.data.auth) {

@@ -30,10 +30,7 @@ export default function AlternativeRegistration() {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="">
-          <ClipboardIcon className="w-4 h-4" />
-          <span className="hidden md:flex">Registo Alternativo</span>
-        </Button>
+       
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

@@ -31,7 +31,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Plus, Pencil } from "lucide-react";
-import api from "../../../lib/api";
+import { apiPrivate } from "../../../lib/api";
 import { toast } from "sonner";
 import { TRAINING_TYPES_SETTINGS } from "@/locales/strings";
 import LoadingSpinner from "../Loading";
@@ -66,7 +66,7 @@ export default function TrainingTypesSettings() {
     if (newType.trainingTypeName.length < 2) return;
 
     try {
-      const response = await api.post("api/trainingTypes/", {
+      const response = await apiPrivate.post("api/trainingTypes/", {
         trainingTypeName: newType.trainingTypeName.trim(),
         trainingTypeVisible: true,
       });
@@ -100,7 +100,7 @@ export default function TrainingTypesSettings() {
     if (!currentType) return;
 
     try {
-      const response = await api.put(`api/trainingTypes/${id}`, {
+      const response = await apiPrivate.put(`api/trainingTypes/${id}`, {
         trainingTypeName: currentType?.trainingTypeName.trim(),
         trainingTypeVisible: currentType?.trainingTypeVisible,
       });
@@ -137,7 +137,7 @@ export default function TrainingTypesSettings() {
 
   const handleToggleActive = async (trainingTypeId: number) => {
     try {
-      await api.put(`api/trainingTypes/visible/${trainingTypeId}`, {
+      await apiPrivate.put(`api/trainingTypes/visible/${trainingTypeId}`, {
         trainingTypeVisible: !availableTrainingTypes?.find(
           (type) => type.trainingTypeId === trainingTypeId
         )?.trainingTypeVisible,
@@ -171,7 +171,7 @@ export default function TrainingTypesSettings() {
 
   const setDeleteType = async (trainingTypeId: number) => {
     try {
-      await api.delete(`api/trainingTypes/${trainingTypeId}`);
+      await apiPrivate.delete(`api/trainingTypes/${trainingTypeId}`);
       setAvailableTrainingTypes(
         availableTrainingTypes?.filter(
           (type) => type.trainingTypeId !== trainingTypeId
@@ -199,7 +199,7 @@ export default function TrainingTypesSettings() {
     async function fetchData() {
       try {
         const [trainingTypesResponse] = await Promise.all([
-          api.get("/api/trainingTypes/all"),
+          apiPrivate.get("/api/trainingTypes/all"),
         ]);
         if (isMounted) {
           setAvailableTrainingTypes(trainingTypesResponse.data);

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ModeToggle } from "./modeToggle";
-import { BookmarkCheckIcon, HouseIcon } from "lucide-react";
+import { BookmarkCheckIcon, ClipboardIcon, HouseIcon } from "lucide-react";
 import { Button } from "./ui/button";
 import AlternativeRegistration from "./RegistationPage/AlternativeRegistation";
 import AuthButton from "./authButton";
@@ -22,7 +22,11 @@ export const TopButtons = ({ pathname }: { pathname: string }) => {
       ) : (
         <div className="flex gap-2">
           <div>
-            <AlternativeRegistration />
+            {/* <AlternativeRegistration /> */}
+            <Button variant="outline" className="">
+              <ClipboardIcon className="w-4 h-4" />
+              <span className="hidden md:flex">Registo Alternativo</span>
+            </Button>
           </div>
           {isAuth && (
             <div>

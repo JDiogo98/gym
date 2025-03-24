@@ -62,3 +62,6 @@ module.exports = (sequelize, DataTypes) => {
 
   return Coach;
 };
+
+
+// todo coloca os coaches nas definições

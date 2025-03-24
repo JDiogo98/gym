@@ -12,7 +12,7 @@ import {
 import { FiltersInterface } from "./filters";
 import React, { useState } from "react";
 import LoadingSpinner from "@/components/Loading";
-import api from "../../../../lib/api";
+import  { apiPrivate } from "../../../../lib/api";
 import { toast } from "sonner";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -45,7 +45,7 @@ const TopClients: React.FC<TopClientsProps> = ({ filters }) => {
       try {
         setLoadingState(true);
 
-        const response = await api.get("/api/training/filteredTopClients", {
+        const response = await apiPrivate.get("/api/training/filteredTopClients", {
           params: filters
             ? {
                 startDate:

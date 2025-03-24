@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import api from "../../../lib/api";
+import { apiPublic } from "../../../lib/api";
 import { toast } from "sonner";
 import NumbersInput from "../RegistTraining/numbersInput";
 import SuccessCard from "@/app/trainings/components/successCard";
@@ -85,8 +85,8 @@ const TypeAndDurationInput: React.FC<TypeAndDurationInputProps> = ({
     const fetchData = async () => {
       try {
         const [trainingTypesResponse, trainingDurations] = await Promise.all([
-          api.get("/api/trainingTypes"),
-          api.get("/api/durations"),
+          apiPublic.get("/api/trainingTypes"),
+          apiPublic.get("/api/durations"),
         ]);
 
         if (isMounted) {
@@ -212,7 +212,7 @@ export default function PinAndTrainingValidation({
 
   const handlePinValidated = async (pin: string) => {
     try {
-      await api.post("/api/sms/verifyOtp", {
+      await apiPublic.post("/api/sms/verifyOtp", {
         otpCode: parseInt(pin, 10),
         trainingTypeId: parseInt(trainingType.typeId),
         trainingDurationId: parseInt(trainingDuration.durationId),
@@ -287,6 +287,5 @@ export default function PinAndTrainingValidation({
     </div>
   );
 }
-
 
 //TODO STRING DE ERRO AO BUSCAR DADOS

@@ -2,7 +2,7 @@ import LoadingSpinner from "@/components/Loading";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import React, { useState } from "react";
 import { FiltersInterface } from "./filters";
-import api from "../../../../lib/api";
+import { apiPrivate } from "../../../../lib/api";
 import { toast } from "sonner";
 
 export interface trainingCardProps {
@@ -28,7 +28,7 @@ const TrainingCards: React.FC<TrainingCardsProps> = ({ filters }) => {
       try {
         setLoadingState(true);
 
-        const response = await api.get("/api/training/filteredCardsInfo", {
+        const response = await apiPrivate.get("/api/training/filteredCardsInfo", {
           params: filters
             ? {
                 startDate:

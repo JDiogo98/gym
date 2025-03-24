@@ -10,6 +10,15 @@ import { usePathname } from "next/navigation";
 import { AuthProvider } from "../Auth";
 import { TopButtons } from "@/components/topButtons";
 
+const pagesWithoutSidebar = [
+  "/",
+  "/login",
+  "/register",
+  "/forgot-password",
+  "/reset-password",
+  "/alternativeRegistration",
+];
+
 export default function RootLayout({
   children,
 }: {
@@ -29,15 +38,13 @@ export default function RootLayout({
           >
             <SidebarProvider>
               <div className="flex flex-1">
-                {pathname !== "/" &&
-                  pathname !== "/login" &&
-                  pathname !== "/register" && <AppSidebar />}
+                {!pagesWithoutSidebar.includes(pathname) && <AppSidebar />}
                 <TopButtons pathname={pathname} />
                 <div className="flex flex-col flex-1 transition-all duration-600">
                   <div className="relative flex-1">
-                    {pathname !== "/" &&
-                      pathname !== "/login" &&
-                      pathname !== "/register" && <SidebarTrigger />}
+                    {!pagesWithoutSidebar.includes(pathname) && (
+                      <SidebarTrigger />
+                    )}
                     {children}
                   </div>
                   <Footer />

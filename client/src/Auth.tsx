@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import api from "../lib/api";
+import { apiPrivate } from "../lib/api";
 import { toast } from "sonner";
 
 // Interface para o contexto
@@ -33,7 +33,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     const verifyJWT = async () => {
       try {
-        const response = await api.get("/", { withCredentials: true });
+        const response = await apiPrivate.get("/", { withCredentials: true });
 
         if (response.data.auth) {
           setIsAuth(true);

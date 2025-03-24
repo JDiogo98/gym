@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,7 +26,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import api from "../../../lib/api";
+import { apiPublic } from "../../../lib/api";
 import { REGISTER } from "@/locales/strings";
 import { toast } from "sonner";
 import { PhoneInput } from "@/components/phone-input";
@@ -70,6 +70,8 @@ export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [phone, setPhone] = useState("");
 
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -80,10 +82,10 @@ export default function RegisterPage() {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {    
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
-      await api.post("api/auth/register", values).then(() => {
+      await apiPublic.post("api/auth/register", values).then(() => {
         toast.success(REGISTER.VALIDATION.REGISTER_SUCCESS, {
           description: REGISTER.VALIDATION.REGISTER_SUCCESS_DESCRIPTION,
         });
@@ -99,6 +101,22 @@ export default function RegisterPage() {
       setIsLoading(false);
     }
   }
+
+  useEffect(() => {
+    const verifyJWT = async () => {
+      try {
+        const response = await apiPublic.get("/", {
+          withCredentials: true,
+        });
+        if (response.data.auth) {
+          router.push("/");
+        }
+      } catch (error) {
+        return;
+      }
+    };
+    verifyJWT();
+  }, []);
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-background p-4">
@@ -154,8 +172,7 @@ export default function RegisterPage() {
                 value={phone}
                 onChange={(value) => {
                   setPhone(value);
-                }
-              }
+                }}
                 placeholder={REGISTER.PHONE_NUMBER.PLACEHOLDER}
                 defaultCountry="PT"
               />
@@ -210,7 +227,7 @@ export default function RegisterPage() {
                           size="icon"
                           className="absolute right-0 top-0 h-full px-3"
                           onClick={() =>
-                          setShowConfirmPassword(!showConfirmPassword)
+                            setShowConfirmPassword(!showConfirmPassword)
                           }
                         >
                           {showConfirmPassword ? (

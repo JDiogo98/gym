@@ -17,7 +17,7 @@ import {
 import { ClipboardEditIcon, SaveIcon, UserCircleIcon } from "lucide-react";
 import { DeleteButton } from "@/components/DeleteButton";
 import { useParams } from "next/navigation";
-import api from "@/../../client/lib/api";
+import { apiPrivate } from "@/../../client/lib/api";
 
 import { toast } from "sonner";
 
@@ -65,7 +65,7 @@ export default function DetalhesCliente() {
     setEditMode(false);
 
     if (clientData) {
-      api
+      apiPrivate
         .put(`api/clients/${clientData.clientId}`, clientData)
         .then((response) => {
           setClient(response.data);
@@ -100,7 +100,7 @@ export default function DetalhesCliente() {
       return;
     }
 
-    api
+    apiPrivate
       .get(`api/clients/${clientId}`)
       .then((response) => {
         setClient(response.data);
@@ -127,8 +127,8 @@ export default function DetalhesCliente() {
       try {
         // Fazendo as requisições simultaneamente
         const [academiesResponse, coachesResponse] = await Promise.all([
-          api.get("/api/academies"),
-          api.get("/api/coaches"),
+          apiPrivate.get("/api/academies"),
+          apiPrivate.get("/api/coaches"),
         ]);
 
         if (isMounted) {

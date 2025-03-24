@@ -13,7 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Trash2Icon } from "lucide-react";
 import { toast } from "sonner";
-import api from "../../../lib/api";
+import { apiPrivate } from "../../../lib/api";
 
 interface DeleteButtonProps {
   id: string;
@@ -30,7 +30,7 @@ export function DeleteButton({
 }: DeleteButtonProps) {
   async function deleteClient(id: string, name: string) {
     try {
-      const response = await api.delete(`api/clients/${id}`);
+      const response = await apiPrivate.delete(`api/clients/${id}`);
       if (response.status === 200) {
         toast.info(`O/a ${name} foi removido/a com sucesso!`);
         handleDelete(id);

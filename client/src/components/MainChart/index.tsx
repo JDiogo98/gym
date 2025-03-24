@@ -18,7 +18,7 @@ import {
 } from "../ui/card";
 import { PieChartIcon } from "lucide-react";
 import React, { use, useState } from "react";
-import api from "../../../lib/api";
+import { apiPrivate } from "../../../lib/api";
 import LoadingSpinner from "../Loading";
 import { toast } from "sonner";
 
@@ -69,7 +69,7 @@ export default function MainChart() {
       try {
         setLoading(true);
 
-        const response = await api.get("api/coaches/coachesProgress");
+        const response = await apiPrivate.get("api/coaches/coachesProgress");
 
         if (isMounted) {
           setTimeout(() => {

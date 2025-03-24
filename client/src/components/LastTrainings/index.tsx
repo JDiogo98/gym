@@ -3,7 +3,7 @@
 import { CalendarClockIcon } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "../ui/card";
 import React, { useState, useEffect } from "react";
-import api from "../../../lib/api";
+import  { apiPrivate } from "../../../lib/api";
 import { columns, TrainingInterface } from "./columns";
 import LoadingSpinner from "../Loading";
 import { DataTable } from "./data-table";
@@ -30,7 +30,7 @@ export function LastTrainigs({ filters }: LastTrainingsProps) {
     const fetchFilteredData = async () => {
       try {
         const [filteredLastTrainings] = await Promise.all([
-          api.get("/api/training/filteredLastTrainings", {
+          apiPrivate.get("/api/training/filteredLastTrainings", {
             params: filters
               ? {
                   startDate:

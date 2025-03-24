@@ -3,6 +3,7 @@ const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const cookieParser = require("cookie-parser");
+const verifyJWT = require("./middleware/authMiddleware");
 
 require("dotenv").config();
 
@@ -20,28 +21,7 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-const verifyJWT = (req, res, next) => {
-  const token = req.cookies.token;
-
-  console.log(token);
-  if (!token) {
-    return res
-      .status(403)
-      .json({ auth: false, message: "Token não informado." });
-  } else {
-    jwt.verify(token, "process.env.JWT_SECRET_KEY", (err, decoded) => {
-      if (err) {
-        return res
-          .status(401)
-          .json({ auth: false, message: "Token inválido." });
-      } else {
-        req.userId = decoded.userId; // Defina o ID do usuário ou outros dados no req
-        req.userName = decoded.userName; // Caso você tenha o nome no JWT, adicione ele também
-        next();
-      }
-    });
-  }
-};
+// todo colocar o segredo no env
 
 app.get("/", verifyJWT, (req, res) => {
   return res.json({ auth: true, name: req.userName, id: req.userId });
@@ -69,4 +49,5 @@ app.use("/api/training", trainingRouter);
 app.use("/api/sms", smsRouter);
 app.use("/api/auth", authRouter);
 
-module.exports = app; // Exporta o app para ser usado em outros arquivos
+module.exports = app;
+module.exports.verifyJWT = verifyJWT; // Exporta o app para ser usado em outros arquivos

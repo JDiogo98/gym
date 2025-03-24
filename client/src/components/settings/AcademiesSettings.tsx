@@ -24,7 +24,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Plus, Pencil } from "lucide-react";
-import api from "../../../lib/api";
+import  { apiPrivate } from "../../../lib/api";
 import { toast } from "sonner";
 import LoadingSpinner from "../Loading";
 import { AxiosError } from "axios";
@@ -126,7 +126,7 @@ export default function AcademiesSettings() {
     if (!validateAcademy(newAcademy)) return;
 
     try {
-      const response = await api.post("api/academies/", {
+      const response = await apiPrivate.post("api/academies/", {
         academyName: newAcademy.academyName.trim(),
         academyAddress: newAcademy.academyAddress.trim(),
         academyLocation: newAcademy.academyLocation.trim(),
@@ -165,7 +165,7 @@ export default function AcademiesSettings() {
     if (!validateAcademy(currentAcademy)) return;
 
     try {
-      await api.put(`api/academies/${currentAcademy.academyId}`, {
+      await apiPrivate.put(`api/academies/${currentAcademy.academyId}`, {
         academyName: currentAcademy.academyName.trim(),
         academyAddress: currentAcademy.academyAddress.trim(),
         academyLocation: currentAcademy.academyLocation.trim(),
@@ -205,7 +205,7 @@ export default function AcademiesSettings() {
 
   const handleToggleActive = async (id: number) => {
     try {
-      await api.put(`api/academies/visible/${id}`);
+      await apiPrivate.put(`api/academies/visible/${id}`);
       setAvaliableAcademies(
         avaliableAcademies?.map((academy) =>
           academy.academyId === id
@@ -235,7 +235,7 @@ export default function AcademiesSettings() {
     async function fetchData() {
       try {
         const [academiesResponse] = await Promise.all([
-          api.get("/api/academies/all"),
+          apiPrivate.get("/api/academies/all"),
         ]);
         if (isMounted) {
           setAvaliableAcademies(academiesResponse.data);

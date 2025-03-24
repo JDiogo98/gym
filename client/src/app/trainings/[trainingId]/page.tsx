@@ -13,10 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  ClipboardEditIcon,
-  SaveIcon,
-} from "lucide-react";
+import { ClipboardEditIcon, SaveIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
@@ -25,7 +22,7 @@ import {
 } from "@/components/ui/popover";
 import dayjs from "dayjs";
 import { toast } from "sonner";
-import api from "../../../../lib/api";
+import  { apiPrivate, apiPublic } from "../../../../lib/api";
 import LoadingSpinner from "@/components/Loading";
 import { TrainingDuration } from "@/components/RegistationPage/PinAndTrainingValidation";
 
@@ -53,9 +50,10 @@ interface Training {
   };
 }
 
+// todo colocar observações nos treinos
+
 export default function TrainingPage() {
   const { trainingId } = useParams();
-  const router = useRouter();
 
   const [training, setTraining] = useState<Training | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -83,7 +81,7 @@ export default function TrainingPage() {
     setEditMode(false);
 
     if (trainingId) {
-      api
+      apiPrivate
         .put(`api/training/id/${trainingId}`, {
           trainingDate: training?.trainingDate,
           clientId: training?.client.clientId,
@@ -124,11 +122,11 @@ export default function TrainingPage() {
           trainingTypesResponse,
           trainingDurations,
         ] = await Promise.all([
-          api.get(`api/training/id/${trainingId}`),
-          api.get("/api/academies"),
-          api.get("/api/coaches"),
-          api.get("/api/trainingTypes"),
-          api.get("/api/durations"),
+          apiPrivate.get(`api/training/id/${trainingId}`),
+          apiPublic.get("/api/academies"),
+          apiPublic.get("/api/coaches"),
+          apiPublic.get("/api/trainingTypes"),
+          apiPublic.get("/api/durations"),
         ]);
 
         if (isMounted) {
@@ -171,7 +169,7 @@ export default function TrainingPage() {
   }
 
   return (
-    <div className="container mx-auto p-4 mt-8">
+    <div className="mx-auto p-4 mt-8">
       {training && (
         <Card>
           <CardHeader>

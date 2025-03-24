@@ -39,8 +39,8 @@ import {
 import { Toaster } from "@/components/ui/toaster";
 
 import LoadingSpinner from "@/components/Loading";
-import api from "../../../lib/api";
 import dayjs from "dayjs";
+import { apiPrivate } from "../../../lib/api";
 
 export type clientsDataTypes = {
   clientId: number; // O id agora parece ser um número
@@ -214,7 +214,7 @@ export default function ClientsTable() {
   };
 
   React.useEffect(() => {
-    api
+    apiPrivate
       .get("/api/clients")
       .then((response) => {
         setClientsData(response.data);
