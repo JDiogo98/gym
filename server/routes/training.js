@@ -18,8 +18,7 @@ const verifyJWT = require("../middleware/authMiddleware");
 router.get("/id/:id", verifyJWT, async (req, res) => {
   const { id } = req.params;
 
-  console.log(id);
-  console.log(verifyJWT);
+
 
   try {
     const training = await Training.findByPk(id, {
