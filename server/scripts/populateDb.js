@@ -80,7 +80,7 @@ async function populateDatabase() {
     const coaches = [
       {
         coachName: "Carlos Silva",
-        coachPhoneNumber: "912345678",
+        coachPhoneNumber: "+351938096814",
         coachSex: "M",
         coachBirthDate: "1985-05-15",
       },
@@ -212,15 +212,14 @@ async function populateDatabase() {
 
     const durations = [
       { durationNumber: 0.25, durationName: "15min." },
-      { durationNumber: 0.50, durationName: "30min." },
+      { durationNumber: 0.5, durationName: "30min." },
       { durationNumber: 0.75, durationName: "45min." },
-      { durationNumber: 1.00, durationName: "60min." },
+      { durationNumber: 1.0, durationName: "60min." },
       { durationNumber: 1.25, durationName: "75min." },
-      { durationNumber: 1.50, durationName: "90min." },
+      { durationNumber: 1.5, durationName: "90min." },
       { durationNumber: 1.75, durationName: "105min." },
-      { durationNumber: 2.00, durationName: "120min." },
+      { durationNumber: 2.0, durationName: "120min." },
     ];
-    
 
     const createdDurations = await Duration.bulkCreate(durations);
 

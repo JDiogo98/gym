@@ -8,6 +8,7 @@ import { PhoneInput } from "../phone-input";
 
 interface NumbersValidationProps {
   setShowPinValidation: (value: boolean) => void;
+  alternativeValidation?: boolean;
 }
 
 const NumberValidation: React.FC<NumbersValidationProps> = ({
@@ -47,7 +48,7 @@ const NumberValidation: React.FC<NumbersValidationProps> = ({
 
     try {
       if (phoneNumber.length === 13) {
-        await apiPublic.post("/api/sms/sendTrainingOtp", {
+        await apiPublic.post(`/api/sms/sendTrainingOtpCoach`, {
           phoneNumber: phoneNumber,
         });
         setShowPinValidation(true);
@@ -71,7 +72,7 @@ const NumberValidation: React.FC<NumbersValidationProps> = ({
   return (
     <div>
       <label htmlFor="phone" className="text-l">
-      Insira o seu número de telemóvel (Cliente):
+        Insira o seu número de telemóvel (Treinador):
       </label>
       <div className="my-6 w-full">
         <PhoneInput

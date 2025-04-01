@@ -34,7 +34,14 @@ apiPrivate.interceptors.response.use(
       (error.response.status === 401 || error.response.status === 403)
     ) {
       // Verifica se o usuário não está na página de login ou na página inicial
-      if (typeof window !== "undefined" && window.location.pathname !== "/"&& window.location.pathname !== "/login") {
+      if (
+        typeof window !== "undefined" &&
+        window.location.pathname !== "/" &&
+        window.location.pathname !== "/login" &&
+        window.location.pathname !== "/register" &&
+        window.location.pathname !== "/forgot-password" &&
+        window.location.pathname !== "/alternativeRegistration"
+      ) {
         // Redireciona para a página inicial usando window.location.replace()
         window.location.replace("/"); // Isso substitui a URL na pilha de navegação e impede o loop
       }
@@ -43,5 +50,4 @@ apiPrivate.interceptors.response.use(
   }
 );
 
-
-// todo colocar paginas sem redirecionamento 
+// todo colocar paginas sem redirecionamento

@@ -23,10 +23,12 @@ export const TopButtons = ({ pathname }: { pathname: string }) => {
         <div className="flex gap-2">
           <div>
             {/* <AlternativeRegistration /> */}
-            <Button variant="outline" className="">
-              <ClipboardIcon className="w-4 h-4" />
-              <span className="hidden md:flex">Registo Alternativo</span>
-            </Button>
+            <Link href="/alternativeRegistration">
+              <Button variant="outline" className="">
+                <ClipboardIcon className="w-4 h-4" />
+                <span className="hidden md:flex">Registo Alternativo</span>
+              </Button>
+            </Link>
           </div>
           {isAuth && (
             <div>

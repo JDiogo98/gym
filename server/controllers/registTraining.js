@@ -1,13 +1,13 @@
 const otpService = require("../services/otpService");
-const { sendSmsOtp } = require("../services/smsService"); 
+const { sendSmsOtp } = require("../services/smsService");
 
 // Função para solicitar OTP
 const requestOtp = async (req, res) => {
-  const { clientId, actionType } = req.body; // Pega o clientId e actionType do corpo da requisição
+  const { clientId, otpActionType } = req.body; // Pega o clientId e actionType do corpo da requisição
 
   try {
     // Gera o OTP
-    const otp = await otpService.generateOtp(clientId, actionType);
+    const otp = await otpService.generateOtp(clientId, otpActionType);
 
     // Envia o OTP para o cliente via SMS (usando o serviço SMS)
     await sendSmsOtp(clientId, otp.otpCode);

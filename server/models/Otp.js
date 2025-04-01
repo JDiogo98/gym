@@ -16,26 +16,26 @@ module.exports = (sequelize, DataTypes) => {
         },
         field: "otp_code",
       },
-      expirationDate: {
+      otpExpirationDate: {
         type: DataTypes.DATE,
         allowNull: false,
-        field: "expiration_date",
+        field: "otp_expiration_date",
       },
       status: {
         type: DataTypes.ENUM,
         values: ["pending", "used", "expired"],
         defaultValue: "pending",
-        field: "status",
+        field: "otp_status",
       },
-      attempts: {
+      otpAttempts: {
         type: DataTypes.INTEGER,
         defaultValue: 0,
-        field: "attempts",
+        field: "otp_attempts",
       },
-      actionType: {
+      otpActionType: {
         type: DataTypes.STRING,
         allowNull: true,
-        field: "action_type",
+        field: "otp_action_type",
       },
     },
     {
@@ -53,6 +53,10 @@ module.exports = (sequelize, DataTypes) => {
     OTP.belongsTo(models.Client, {
       foreignKey: "clientId",
       as: "client",
+    });
+    OTP.belongsTo(models.Coach, {
+      foreignKey: "coachId",
+      as: "coach",
     });
   };
 

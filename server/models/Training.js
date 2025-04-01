@@ -17,6 +17,16 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         field: "training_notes",
       },
+      trainingAlternative: {
+        type: DataTypes.BOOLEAN,
+        field: "training_alternative",
+        defaultValue: false,
+      },
+      traningValid: {
+        type: DataTypes.BOOLEAN,
+        field: "training_valid",
+        defaultValue: true,
+      },
     },
     {
       timestamps: true,
